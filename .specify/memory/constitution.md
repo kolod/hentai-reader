@@ -1,21 +1,30 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.0.1 → 1.0.2
-Bump rationale: PATCH — wording clarification; the rule's intent (no images, no personal data)
-is unchanged.
+Version change: 1.0.2 → 1.0.3
+Bump rationale: PATCH — records decisions already taken; no principle added or removed.
 
 Modified principles:
-  - X. Version Control & Release Discipline — fixtures may contain any site response (HTML, JSON,
-    scripts, binary index data), not only HTML/JSON; still never images, cookies, credentials or
-    personal data; large binaries stored as requested byte ranges only. Needed for Hitomi
-    (gg.js, galleries/{id}.js, .nozomi and galleriesindex ranges) — specs/001-source-contract.
+  - I. Native UI, Shared Source Logic — Windows UI framework fixed to WinUI 3 (the choice the
+    principle deferred to "the first Windows plan"; decided before it, together with building the
+    Windows app before the Android app).
+  - II. Thin, Sandboxed Source Scripts — the host API list now names `console` (debug log only)
+    and `SourceError` (contract prelude), which 001's plan carried as justified exceptions.
 Added sections: none
 Removed sections: none
 Templates requiring updates: none.
 Follow-up TODOs: none.
 
 --- History ---
+1.0.2 (2026-10-23): PATCH — wording clarification; the rule's intent (no images, no personal
+data) is unchanged.
+
+Modified principles:
+  - X. Version Control & Release Discipline — fixtures may contain any site response (HTML, JSON,
+    scripts, binary index data), not only HTML/JSON; still never images, cookies, credentials or
+    personal data; large binaries stored as requested byte ranges only. Needed for Hitomi
+    (gg.js, galleries/{id}.js, .nozomi and galleriesindex ranges) — specs/001-source-contract.
+
 1.0.1 (2026-10-23): PATCH — clarifications found while scoping the product
 (specs/product-overview.md).
 
@@ -68,8 +77,7 @@ infinite-scroll reader.
 ### I. Native UI, Shared Source Logic
 
 - The Android app MUST be written in Kotlin with Jetpack Compose. The Windows app MUST be
-  written in C# with WPF or WinUI 3 (the choice is made once, in the first Windows plan, and
-  recorded there).
+  written in C# with WinUI 3 (Windows App SDK).
 - Each UI MUST be implemented separately and MUST follow its own platform's conventions; no
   cross-platform UI toolkit is used.
 - Site logic (search, gallery metadata, page URLs) MUST NOT be implemented in Kotlin or C#. It
@@ -85,7 +93,8 @@ logic in one place means a site change is fixed once, not twice.
   to the file system, the network, or the UI.
 - Scripts obtain every capability exclusively through the host API: `http.request` (GET/POST,
   request headers, response status/headers, text or binary body), `html.select`, `json.parse`,
-  `storage.get` / `storage.set`, `sleep`.
+  `storage.get` / `storage.set`, `sleep`, plus `console` (writes only to the host's debug log)
+  and the `SourceError` type defined by the shared contract prelude.
 - HTML parsing MUST be performed by the host (Jsoup on Android, AngleSharp on Windows); the
   script receives CSS-selector results, never a DOM of its own.
 - Every source MUST implement the same contract: `search(query, page)`, `getGallery(id)`,
@@ -273,4 +282,4 @@ publishing and strict secret hygiene make the update channel trustworthy.
   - PATCH — clarifications, wording, typo fixes.
 - Each amendment updates **Last Amended**; **Ratified** stays the date of original adoption.
 
-**Version**: 1.0.2 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-23
+**Version**: 1.0.3 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-23
