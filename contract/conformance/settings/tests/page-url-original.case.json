@@ -1,0 +1,1 @@
+{ "description": "image_quality=original reaches the source; absent retry arrives as null", "settings": { "image_quality": "original" }, "call": { "fn": "getPageUrl", "args": ["@gallery", 1] } }

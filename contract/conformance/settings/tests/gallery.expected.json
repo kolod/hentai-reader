@@ -1,0 +1,47 @@
+{
+  "id": "e/1",
+  "title": "One",
+  "titleOriginal": null,
+  "cover": null,
+  "language": null,
+  "type": "asian_porn",
+  "pageCount": 2,
+  "artists": [],
+  "tags": [],
+  "uploadedAt": null,
+  "rating": null,
+  "uploader": null,
+  "webUrl": "https://example.test/g/1",
+  "pages": [
+    {
+      "index": 0,
+      "width": 200,
+      "height": 300,
+      "size": "estimated",
+      "thumbnail": {
+        "url": "https://example.test/sprite.webp",
+        "crop": {
+          "x": 0,
+          "y": 0,
+          "width": 200,
+          "height": 300
+        }
+      }
+    },
+    {
+      "index": 1,
+      "width": 200,
+      "height": 300,
+      "size": "estimated",
+      "thumbnail": {
+        "url": "https://example.test/sprite.webp",
+        "crop": {
+          "x": 200,
+          "y": 0,
+          "width": 200,
+          "height": 300
+        }
+      }
+    }
+  ]
+}

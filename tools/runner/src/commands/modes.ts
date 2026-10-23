@@ -1,8 +1,8 @@
 // Transport selection for --record; offline and live use openSource's defaults.
-import type { TestCase } from "../cases.ts";
+import { caseFixturesDir, type TestCase } from "../cases.ts";
 import type { Mode, SourceFiles } from "../source.ts";
 import type { Transport } from "../transport/types.ts";
-import { loadRedactor } from "../redaction.ts";
+import { loadRedactor, type Redactor } from "../redaction.ts";
 import { LiveTransport } from "../transport/live.ts";
 import { RecordingTransport } from "../transport/recorder.ts";
 
@@ -15,12 +15,26 @@ export async function modeTransport(files: SourceFiles, mode: Mode): Promise<Flu
   return new RecordingTransport(files.fixturesDir, new LiveTransport(), await loadRedactor(files.dir));
 }
 
-/** One recorder shared by every case of a run, so all responses land in the same pool. */
+/** One recorder per fixture pool, shared by every case of a run that uses that pool. */
 export async function caseTransport(
   files: SourceFiles,
   mode: Mode,
 ): Promise<{ forCase: (c: TestCase) => Transport | undefined; flush(): void } | undefined> {
-  const recorder = await modeTransport(files, mode);
-  if (!recorder) return undefined;
-  return { forCase: () => recorder, flush: () => recorder.flush() };
+  if (mode !== "record") return undefined;
+  const redact: Redactor | null = await loadRedactor(files.dir);
+  const recorders = new Map<string, RecordingTransport>();
+  return {
+    forCase: (c) => {
+      const dir = caseFixturesDir(files, c);
+      let recorder = recorders.get(dir);
+      if (!recorder) {
+        recorder = new RecordingTransport(dir, new LiveTransport(), redact);
+        recorders.set(dir, recorder);
+      }
+      return recorder;
+    },
+    flush: () => {
+      for (const r of recorders.values()) r.flush();
+    },
+  };
 }

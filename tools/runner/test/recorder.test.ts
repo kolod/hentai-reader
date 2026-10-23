@@ -51,7 +51,7 @@ test("identical bodies are stored once", async () => {
 
 test("the source's redactor is applied before storing and to the live response", async () => {
   const dir = mkdtempSync(join(tmpdir(), "fixtures-"));
-  const redact = (_url: string, t: string) => t.replace(/real title/g, "Gallery 1");
+  const redact = { body: (_url: string, t: string) => t.replace(/real title/g, "Gallery 1"), url: (u: string) => u };
   const recorder = new RecordingTransport(dir, new FakeTransport(() => text(200, '{"title":"real title"}', [["content-length", "22"]])), redact);
   const live = await recorder.send(req("https://a.test/g.json"));
   assert.equal(new TextDecoder().decode(live.body), '{"title":"Gallery 1"}');
@@ -59,6 +59,27 @@ test("the source's redactor is applied before storing and to the live response",
   const stored = readdirSync(join(dir, "bodies")).map((f) => readFileSync(join(dir, "bodies", f), "utf8"));
   assert.deepEqual(stored, ['{"title":"Gallery 1"}']);
   assert.equal(JSON.parse(readFileSync(join(dir, "index.json"), "utf8")).entries[0].response.headers["content-length"], undefined);
+});
+
+test("account-derived URL parts are redacted in stored keys and redirects, and still replay", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "fixtures-"));
+  const redact = { body: (_u: string, t: string) => t, url: (u: string) => u.replace(/([?&]token=)[^&]+/, "$1redacted") };
+  const live = new FakeTransport((r) =>
+    r.url.includes("token=")
+      ? text(200, "landed")
+      : { status: 302, headers: [["location", "https://a.test/next?token=member-12345"]], body: new Uint8Array() },
+  );
+  const recorder = new RecordingTransport(dir, live, redact);
+  await recorder.send(req("https://a.test/start"));
+  await recorder.send(req("https://a.test/next?token=member-12345"));
+  recorder.flush();
+  const index = readFileSync(join(dir, "index.json"), "utf8");
+  assert.doesNotMatch(index, /member-12345/);
+  const offline = new OfflineTransport(dir);
+  const hop = await offline.send(req("https://a.test/start"));
+  const location = hop.headers.find(([n]) => n === "location")?.[1] ?? "";
+  assert.equal(location, "https://a.test/next?token=redacted");
+  assert.equal(new TextDecoder().decode((await offline.send(req(location))).body), "landed");
 });
 
 test("recorded responses replay offline unchanged", async () => {

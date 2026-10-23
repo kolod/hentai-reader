@@ -41,5 +41,5 @@ test("usage errors exit 2", () => {
 test("incompatible contract version is refused by every command", () => {
   const r = cli("run", "contract/conformance/broken-contract-version", "search", '{"text":"","filters":{}}', "null");
   assert.equal(r.code, 3);
-  assert.match(r.stderr, /requires contract 2\.0, host supports 1\.0/);
+  assert.match(r.stderr, /requires contract 2\.0, host supports 1\.\d+/);
 });

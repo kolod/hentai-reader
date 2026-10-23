@@ -1,7 +1,7 @@
 // Recording transport: performs live requests and writes sanitised fixtures (FR-026,
 // contracts/fixtures-and-tests.md). Never stores cookies, credentials or image bodies; applies the
 // source's redactor (redact.mjs) to text bodies before storing them.
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { FixtureRecordingError } from "../errors.ts";
 import { fixtureKey, loadFixtureIndex, sha256Hex, type FixtureEntry } from "./offline.ts";
@@ -47,7 +47,7 @@ export class RecordingTransport implements Transport {
     if (this.redact && res.body.length > 0 && isTextBody(`.${ext}`)) {
       // The live run sees exactly what will be replayed, so live and offline results match.
       const text = new TextDecoder().decode(res.body);
-      const redacted = this.redact(req.url, text);
+      const redacted = this.redact.body(req.url, text);
       if (redacted !== text) {
         res = {
           ...res,
@@ -56,9 +56,12 @@ export class RecordingTransport implements Transport {
         };
       }
     }
+    // Account-derived URL parts are replaced in the stored key and in stored redirects alike, so
+    // the offline replay follows the same (redacted) chain; the live run keeps the real values.
+    const redactUrl = this.redact ? this.redact.url : (u: string) => u;
     const headers: Record<string, string> = {};
     for (const [name, value] of res.headers) {
-      if (KEPT_RESPONSE_HEADERS.has(name)) headers[name] = value;
+      if (KEPT_RESPONSE_HEADERS.has(name)) headers[name] = name === "location" ? redactUrl(value) : value;
     }
     let body: string | null = null;
     if (res.body.length > 0) {
@@ -67,10 +70,11 @@ export class RecordingTransport implements Transport {
     }
     const bodySha256 = req.body ? sha256Hex(req.body) : null;
     const range = req.headers.range;
-    this.entries.set(fixtureKey(req.method, req.url, range, bodySha256), {
+    const url = redactUrl(req.url);
+    this.entries.set(fixtureKey(req.method, url, range, bodySha256), {
       request: {
         method: req.method,
-        url: req.url,
+        url,
         ...(range ? { headers: { range } } : {}),
         ...(bodySha256 ? { bodySha256 } : {}),
       },
@@ -79,7 +83,10 @@ export class RecordingTransport implements Transport {
     return res;
   }
 
-  /** Writes new bodies and the merged, sorted index; sets recordedAt to now. */
+  /**
+   * Writes new bodies and the merged, sorted index; sets recordedAt to now; removes bodies the
+   * index no longer references (a re-recorded response replaces its old body).
+   */
   flush(): void {
     mkdirSync(join(this.dir, "bodies"), { recursive: true });
     for (const [path, bytes] of this.bodies) writeFileSync(join(this.dir, path), bytes);
@@ -92,6 +99,10 @@ export class RecordingTransport implements Transport {
     );
     const index = { format: 1, recordedAt: new Date().toISOString(), entries };
     writeFileSync(join(this.dir, "index.json"), `${JSON.stringify(index, null, 2)}\n`);
+    const referenced = new Set(entries.map((e) => ("body" in e.response ? e.response.body : null)));
+    for (const name of readdirSync(join(this.dir, "bodies"))) {
+      if (!referenced.has(`bodies/${name}`)) rmSync(join(this.dir, "bodies", name));
+    }
   }
 }
 

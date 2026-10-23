@@ -86,6 +86,53 @@ export async function openSource(files: SourceFiles, opts: OpenOptions): Promise
   return { files, engine, host, description, manifest };
 }
 
+// --- settings and calling convention (contract 1.1) -------------------------------------------
+
+interface SettingDef {
+  id: string;
+  values: string[];
+  default: string;
+}
+
+/** Manifest defaults merged with user overrides; unknown ids or values are usage errors. */
+export function resolveSettings(manifest: Record<string, unknown>, overrides: Record<string, string> = {}): Record<string, string> {
+  const defs = (manifest.settings ?? []) as SettingDef[];
+  const out: Record<string, string> = Object.fromEntries(defs.map((d) => [d.id, d.default]));
+  for (const [id, value] of Object.entries(overrides)) {
+    const def = defs.find((d) => d.id === id);
+    if (!def) throw new UsageError(`unknown setting '${id}' (declared: ${defs.map((d) => d.id).join(", ") || "none"})`);
+    if (!def.values.includes(value)) throw new UsageError(`setting ${id}: '${value}' not in ${def.values.join(", ")}`);
+    out[id] = value;
+  }
+  return out;
+}
+
+/** True when the source declares contract 1.1 or later (receives settings, null retry). */
+export function takesSettings(manifest: Record<string, unknown>): boolean {
+  const m = /^(\d+)\.(\d+)$/.exec(String(manifest.contract));
+  return !!m && (Number(m[1]) > 1 || Number(m[2]) >= 1);
+}
+
+/** Positional arity of each source function before the settings argument. */
+const ARITY: Record<string, number> = { search: 2, getGallery: 1, getPageUrl: 3, suggestTags: 1, getAccountStatus: 0 };
+
+/**
+ * Arguments as the contract's calling convention requires: 1.0 sources get exactly the 1.0 call
+ * (no settings, absent retry omitted); 1.1 sources get null for absent positions plus settings.
+ */
+export function callArgs(manifest: Record<string, unknown>, fn: string, args: unknown[], settings: Record<string, string>): unknown[] {
+  if (fn === "getAccountStatus" && (manifest.capabilities as { accountStatus?: boolean } | undefined)?.accountStatus !== true) {
+    throw new UsageError("getAccountStatus is not declared in manifest.capabilities");
+  }
+  if (!takesSettings(manifest)) {
+    return fn === "getPageUrl" && args.length > 2 && (args[2] === null || args[2] === undefined) ? args.slice(0, 2) : args;
+  }
+  const arity = ARITY[fn] ?? args.length;
+  const positional = args.slice(0, arity);
+  while (positional.length < arity) positional.push(null);
+  return [...positional.map((a) => (a === undefined ? null : a)), settings];
+}
+
 export function readJsonFile(path: string): unknown {
   if (!existsSync(path)) throw new UsageError(`file not found: ${path}`);
   return JSON.parse(readFileSync(path, "utf8"));

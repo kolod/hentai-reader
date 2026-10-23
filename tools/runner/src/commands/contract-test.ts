@@ -9,7 +9,7 @@ import { CookieJar } from "../host/cookies.ts";
 import type { RequestLogEntry } from "../host/http.ts";
 import type { StorageHost } from "../host/storage.ts";
 import { paths } from "../paths.ts";
-import { openSource, readJsonFile, type SourceFiles } from "../source.ts";
+import { openSource, readJsonFile, resolveSettings, takesSettings, type SourceFiles } from "../source.ts";
 import { OfflineTransport } from "../transport/offline.ts";
 
 /** Timer granularity tolerance for gap assertions. */
@@ -21,6 +21,8 @@ interface Expectations {
   refusedUrls?: string[];
   cookies?: { seed?: Record<string, string>; sentTo?: string[]; notSentTo?: string[] };
   other?: string;
+  /** 1.1: settings passed to run(), merged over the manifest defaults. */
+  settings?: Record<string, string>;
 }
 
 export async function contractTest(_args: string[], opts: CliOptions): Promise<number> {
@@ -57,7 +59,9 @@ async function runOne(dir: string): Promise<string[]> {
     // Politeness is enforced here: timing assertions depend on it.
     const transport = new OfflineTransport(join(dir, "fixtures"));
     const source = await openSource(filesFor(dir, script), { mode: "live", transport, cookies, storageRegistry });
-    const res = await source.engine.call("run", []);
+    // 1.1 tests receive the settings (expect.json values merged over the manifest defaults).
+    const args = takesSettings(source.manifest) ? [resolveSettings(source.manifest, expect.settings)] : [];
+    const res = await source.engine.call("run", args);
     if (!res.ok) {
       const e = res.error;
       problems.push(`${script}: ${e.type === "SourceError" ? `SourceError(${e.kind})` : e.name}: ${e.message}`);

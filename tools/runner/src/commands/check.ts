@@ -63,9 +63,23 @@ async function runtimeCheck(files: SourceFiles): Promise<string[]> {
 
   const fns = new Set(source.description.functions);
   for (const fn of REQUIRED) if (!fns.has(fn)) out.push(`${fn}: required export missing`);
-  const declared = (source.manifest.capabilities as { suggestTags?: boolean } | undefined)?.suggestTags === true;
-  if (declared && !fns.has("suggestTags")) out.push("suggestTags: declared in manifest.capabilities but not exported");
-  if (!declared && fns.has("suggestTags")) out.push("suggestTags: exported but not declared in manifest.capabilities");
+  const capabilities = (source.manifest.capabilities ?? {}) as Record<string, boolean | undefined>;
+  for (const [capability, fn] of [
+    ["suggestTags", "suggestTags"],
+    ["accountStatus", "getAccountStatus"],
+  ]) {
+    const declared = capabilities[capability] === true;
+    if (declared && !fns.has(fn)) out.push(`${fn}: declared in manifest.capabilities.${capability} but not exported`);
+    if (!declared && fns.has(fn)) out.push(`${fn}: exported but manifest.capabilities.${capability} is not true`);
+  }
+
+  const settings = (source.manifest.settings ?? []) as { id: string; values: string[]; default: string }[];
+  const seen = new Set<string>();
+  settings.forEach((s, i) => {
+    if (seen.has(s.id)) out.push(`manifest.settings.${i}: duplicate id '${s.id}'`);
+    seen.add(s.id);
+    if (!s.values.includes(s.default)) out.push(`manifest.settings.${i}: default '${s.default}' is not one of its values`);
+  });
 
   const cases = loadCases(files.testsDir);
   if (cases.length && out.length === 0) {

@@ -25,5 +25,13 @@ npm run runner -- contract-test
 Exit codes: `0` ok, `1` failures or violations, `2` usage error, `3` script error,
 `4` unmatched request in offline mode.
 
-`scripts/live-dimension-check.ts` verifies against the live site that page sizes returned by a
-source match the images actually served (SC-006). It reads only image headers and stores nothing.
+Contract 1.1 sources: `--setting id=value` (repeatable) on `run`; test cases may carry
+`"settings": {…}`. Logged-in runs and recordings: `--cookies cookies-<name>.txt` (Netscape format;
+`cookies*.txt` is gitignored and never committed). Runner delta for 1.1:
+`specs/002-ehentai-source/contracts/runner-cli-1.1.md`.
+
+`redact <sourceDir>` re-applies a source's `redact.mjs` to its recorded fixtures.
+
+`scripts/live-dimension-check.ts [sourceDir] [galleries] [id=value …]` verifies against the live
+site that page sizes match the images actually served (exact sizes exactly, estimated sizes within
+2 % aspect). It reads only the first 64 KiB of each image and stores nothing.

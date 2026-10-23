@@ -6,7 +6,7 @@ import type { CallResult } from "../engine.ts";
 import { EXIT, UsageError } from "../errors.ts";
 import { CookieJar } from "../host/cookies.ts";
 import { RESULT_TYPES, validate } from "../schema.ts";
-import { locateSource, openSource, readJsonFile } from "../source.ts";
+import { callArgs, locateSource, openSource, readJsonFile, resolveSettings } from "../source.ts";
 import { modeTransport } from "./modes.ts";
 
 export async function run(args: string[], opts: CliOptions): Promise<number> {
@@ -23,7 +23,7 @@ export async function run(args: string[], opts: CliOptions): Promise<number> {
     transport,
     onLog: opts.verbose ? (l) => console.error(`[console.${l.level}] ${l.text}`) : undefined,
   });
-  const { result, violations } = await callAndValidate(source, fn, fnArgs);
+  const { result, violations } = await callAndValidate(source, fn, fnArgs, parseSettings(opts.settings));
   if (opts.verbose) printRequests(source.host.requestLog);
   transport?.flush();
 
@@ -44,13 +44,22 @@ export async function run(args: string[], opts: CliOptions): Promise<number> {
   return EXIT.ok;
 }
 
-/** Calls a function and validates its result against the contract; also round-trips `sourceData`. */
+/**
+ * Calls a function following the contract's calling convention (settings for 1.1 sources) and
+ * validates its result against the contract; also round-trips `sourceData`.
+ */
 export async function callAndValidate(
-  source: { engine: { call(fn: string, args: unknown[]): Promise<CallResult> }; host: { httpHost: { isAllowed(url: string): boolean } } },
+  source: {
+    manifest: Record<string, unknown>;
+    engine: { call(fn: string, args: unknown[]): Promise<CallResult> };
+    host: { httpHost: { isAllowed(url: string): boolean } };
+  },
   fn: string,
   args: unknown[],
+  settings: Record<string, string> = {},
 ): Promise<{ result: CallResult; violations: string[] }> {
-  const result = await source.engine.call(fn, args);
+  const resolved = resolveSettings(source.manifest, settings);
+  const result = await source.engine.call(fn, callArgs(source.manifest, fn, args, resolved));
   if (!result.ok) return { result, violations: [] };
   const type = RESULT_TYPES[fn];
   const violations = type ? validate(type, result.value) : [];
@@ -91,6 +100,17 @@ function* imageUrls(value: unknown, path: string): Generator<[string, string]> {
   for (const key of ["items", "pages"]) {
     if (Array.isArray(obj[key])) yield* imageUrls(obj[key], `${path}.${key}`);
   }
+}
+
+/** `--setting id=value` flags → object. */
+export function parseSettings(flags: string[]): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const flag of flags) {
+    const eq = flag.indexOf("=");
+    if (eq <= 0) throw new UsageError(`--setting expects id=value, got '${flag}'`);
+    out[flag.slice(0, eq)] = flag.slice(eq + 1);
+  }
+  return out;
 }
 
 function parseArg(raw: string): unknown {
