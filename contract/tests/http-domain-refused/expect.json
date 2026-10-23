@@ -1,0 +1,7 @@
+{
+  "refusedUrls": [
+    "https://not-declared.test/",
+    "https://a.test.evil.test/",
+    "https://img.test/"
+  ]
+}

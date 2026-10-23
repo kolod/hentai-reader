@@ -1,0 +1,42 @@
+{
+  "format": 1,
+  "recordedAt": "2026-10-23T00:00:00.000Z",
+  "entries": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/1"
+      },
+      "response": {
+        "echo": true
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/2"
+      },
+      "response": {
+        "echo": true
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/3"
+      },
+      "response": {
+        "echo": true
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/4"
+      },
+      "response": {
+        "echo": true
+      }
+    }
+  ]
+}

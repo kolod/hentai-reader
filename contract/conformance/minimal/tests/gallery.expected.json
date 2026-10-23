@@ -1,0 +1,46 @@
+{
+  "id": "1",
+  "title": "First gallery",
+  "titleOriginal": null,
+  "cover": {
+    "url": "https://example.test/i/1/1.webp"
+  },
+  "language": "en",
+  "type": "manga",
+  "pageCount": 2,
+  "artists": [],
+  "tags": [
+    {
+      "namespace": "female",
+      "name": "glasses"
+    },
+    {
+      "namespace": "artist",
+      "name": "someone"
+    }
+  ],
+  "uploadedAt": null,
+  "rating": null,
+  "uploader": null,
+  "webUrl": "https://example.test/g/1",
+  "pages": [
+    {
+      "index": 0,
+      "width": 1280,
+      "height": 1810,
+      "size": "exact"
+    },
+    {
+      "index": 1,
+      "width": 1280,
+      "height": 900,
+      "size": "exact"
+    }
+  ],
+  "sourceData": {
+    "files": [
+      "/i/1/1.webp",
+      "/i/1/2.webp"
+    ]
+  }
+}

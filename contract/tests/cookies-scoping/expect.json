@@ -1,0 +1,13 @@
+{
+  "cookies": {
+    "seed": {
+      "a.test": "session=s1"
+    },
+    "sentTo": [
+      "a.test"
+    ],
+    "notSentTo": [
+      "c.test"
+    ]
+  }
+}

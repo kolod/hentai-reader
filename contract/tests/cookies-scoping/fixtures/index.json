@@ -1,0 +1,37 @@
+{
+  "format": 1,
+  "recordedAt": "2026-10-23T00:00:00.000Z",
+  "entries": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/set"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "set-cookie": "fresh=f1; Path=/"
+        },
+        "body": null
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/echo"
+      },
+      "response": {
+        "echo": true
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://c.test/echo"
+      },
+      "response": {
+        "echo": true
+      }
+    }
+  ]
+}

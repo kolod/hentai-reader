@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "id": "1",
+      "title": "First gallery",
+      "cover": {
+        "url": "https://example.test/t/1.webp"
+      },
+      "language": "en",
+      "type": "manga",
+      "pageCount": 2,
+      "artists": [],
+      "tags": [],
+      "webUrl": "https://example.test/g/1"
+    },
+    {
+      "id": "2",
+      "title": "Second gallery",
+      "cover": {
+        "url": "https://example.test/t/2.webp"
+      },
+      "language": "en",
+      "type": "manga",
+      "pageCount": 1,
+      "artists": [],
+      "tags": [],
+      "webUrl": "https://example.test/g/2"
+    }
+  ],
+  "nextCursor": "2"
+}

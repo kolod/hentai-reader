@@ -1,0 +1,83 @@
+{
+  "format": 1,
+  "recordedAt": "2026-10-23T00:00:00.000Z",
+  "entries": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/missing"
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/plain"
+        },
+        "body": "bodies/nope.txt"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/broken"
+      },
+      "response": {
+        "status": 500,
+        "headers": {},
+        "body": null
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/old"
+      },
+      "response": {
+        "status": 302,
+        "headers": {
+          "location": "/new"
+        },
+        "body": null
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/new"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/plain"
+        },
+        "body": "bodies/new.txt"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://a.test/form",
+        "bodySha256": "1f206b11c23e28cc250ded7fc0098d3823a8467a54340f1ac4e535cb8544493f"
+      },
+      "response": {
+        "status": 303,
+        "headers": {
+          "location": "https://a.test/done"
+        },
+        "body": null
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/done"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/plain"
+        },
+        "body": "bodies/done.txt"
+      }
+    }
+  ]
+}

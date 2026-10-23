@@ -1,0 +1,22 @@
+{
+  "format": 1,
+  "recordedAt": "2026-10-23T12:00:00.000Z",
+  "entries": [
+    {
+      "request": { "method": "GET", "url": "https://example.test/g/1" },
+      "response": { "status": 200, "headers": { "content-type": "text/html; charset=utf-8" }, "body": "bodies/gallery-1.html" }
+    },
+    {
+      "request": { "method": "GET", "url": "https://example.test/g/404" },
+      "response": { "status": 404, "headers": { "content-type": "text/html; charset=utf-8" }, "body": null }
+    },
+    {
+      "request": { "method": "GET", "url": "https://example.test/list?page=1" },
+      "response": { "status": 200, "headers": { "content-type": "text/html; charset=utf-8" }, "body": "bodies/list-1.html" }
+    },
+    {
+      "request": { "method": "GET", "url": "https://example.test/list?page=2" },
+      "response": { "status": 200, "headers": { "content-type": "text/html; charset=utf-8" }, "body": "bodies/list-2.html" }
+    }
+  ]
+}

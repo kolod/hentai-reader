@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "recordedAt": "2026-10-23T00:00:00.000Z",
+  "entries": [
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://a.test/form",
+        "bodySha256": "c973ee733973558f1ef4afce0dc1baaee846b409aa2e1834aec32ebd726aa70a"
+      },
+      "response": {
+        "echo": true
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://a.test/bytes",
+        "bodySha256": "bacdef9c76b37eb70caaf81ea41ecddd56d625b72e453de5eabbd59745279847"
+      },
+      "response": {
+        "echo": true
+      }
+    }
+  ]
+}

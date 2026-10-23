@@ -1,0 +1,4 @@
+{
+  "description": "gallery with exact page sizes",
+  "call": { "fn": "getGallery", "args": ["1"] }
+}

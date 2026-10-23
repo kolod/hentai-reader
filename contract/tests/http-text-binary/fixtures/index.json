@@ -1,0 +1,58 @@
+{
+  "format": 1,
+  "recordedAt": "2026-10-23T00:00:00.000Z",
+  "entries": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/utf8"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/plain; charset=utf-8"
+        },
+        "body": "bodies/utf8.txt"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/latin1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/plain; charset=iso-8859-1"
+        },
+        "body": "bodies/latin1.txt"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/nocharset"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/plain"
+        },
+        "body": "bodies/nocharset.txt"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/blob"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/octet-stream"
+        },
+        "body": "bodies/blob.bin"
+      }
+    }
+  ]
+}

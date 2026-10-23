@@ -1,0 +1,4 @@
+{
+  "description": "retry hint switches to the mirror",
+  "call": { "fn": "getPageUrl", "args": ["@gallery", 0, { "attempt": 1, "status": 503, "previous": { "url": "https://example.test/i/1/1.webp" } }] }
+}

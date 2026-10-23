@@ -1,0 +1,4 @@
+{
+  "description": "page URL from a gallery returned by another case",
+  "call": { "fn": "getPageUrl", "args": ["@gallery", 1] }
+}

@@ -1,0 +1,4 @@
+{
+  "description": "last page has no next cursor",
+  "call": { "fn": "search", "args": [{ "text": "", "filters": { "sort": "latest" } }, "2"] }
+}

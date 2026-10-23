@@ -1,0 +1,7 @@
+{
+  "url": "https://mirror.example.test/i/1/1.webp",
+  "headers": {
+    "referer": "https://example.test/"
+  },
+  "format": "webp"
+}

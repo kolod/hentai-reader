@@ -1,0 +1,38 @@
+{
+  "format": 1,
+  "recordedAt": "2026-10-23T00:00:00.000Z",
+  "entries": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/blob",
+        "headers": {
+          "range": "bytes=0-3"
+        }
+      },
+      "response": {
+        "status": 206,
+        "headers": {
+          "content-range": "bytes 0-3/8"
+        },
+        "body": "bodies/part1.bin"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://a.test/blob",
+        "headers": {
+          "range": "bytes=4-7"
+        }
+      },
+      "response": {
+        "status": 206,
+        "headers": {
+          "content-range": "bytes 4-7/8"
+        },
+        "body": "bodies/part2.bin"
+      }
+    }
+  ]
+}

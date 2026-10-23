@@ -1,0 +1,4 @@
+{
+  "description": "first page has items and a cursor",
+  "call": { "fn": "search", "args": [{ "text": "", "filters": {} }, null] }
+}

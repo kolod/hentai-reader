@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "id": "3",
+      "title": "Third gallery",
+      "cover": null,
+      "language": "en",
+      "type": "manga",
+      "pageCount": 1,
+      "artists": [],
+      "tags": [],
+      "webUrl": "https://example.test/g/3"
+    }
+  ],
+  "nextCursor": null
+}
