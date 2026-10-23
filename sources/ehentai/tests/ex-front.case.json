@@ -1,0 +1,6 @@
+{
+  "description": "US5-1: with site=exhentai the front page comes from ExHentai",
+  "fixtures": "logged-in",
+  "settings": { "site": "exhentai" },
+  "call": { "fn": "search", "args": [{ "text": "", "filters": {} }, null] }
+}

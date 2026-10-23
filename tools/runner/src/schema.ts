@@ -11,7 +11,8 @@ export type ContractType =
   | "Gallery"
   | "PageImage"
   | "RetryHint"
-  | "TagSuggestion[]";
+  | "TagSuggestion[]"
+  | "AccountStatus";
 
 /** Which contract type each source function returns. */
 export const RESULT_TYPES: Record<string, ContractType> = {
@@ -19,6 +20,7 @@ export const RESULT_TYPES: Record<string, ContractType> = {
   getGallery: "Gallery",
   getPageUrl: "PageImage",
   suggestTags: "TagSuggestion[]",
+  getAccountStatus: "AccountStatus",
 };
 
 let ajv: Ajv | null = null;

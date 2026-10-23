@@ -1,0 +1,1 @@
+{ "description": "account status capability", "settings": { "site": "exhentai" }, "call": { "fn": "getAccountStatus", "args": [] } }

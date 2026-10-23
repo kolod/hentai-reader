@@ -1,0 +1,4 @@
+{
+  "description": "US1-1: the cursor from the front page returns the following galleries",
+  "call": { "fn": "search", "args": [{ "text": "", "filters": {} }, "@search-front.nextCursor"] }
+}

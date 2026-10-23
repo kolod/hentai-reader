@@ -1,0 +1,4 @@
+{
+  "description": "US3-1: last page of the gallery",
+  "call": { "fn": "getPageUrl", "args": ["@gallery-basic", 11] }
+}

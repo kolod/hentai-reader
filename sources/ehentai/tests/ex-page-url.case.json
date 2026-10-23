@@ -1,0 +1,6 @@
+{
+  "description": "US5-1: an ExHentai page image",
+  "fixtures": "logged-in",
+  "settings": { "site": "exhentai" },
+  "call": { "fn": "getPageUrl", "args": ["@ex-gallery", 0] }
+}

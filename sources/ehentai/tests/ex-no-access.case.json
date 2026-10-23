@@ -1,0 +1,7 @@
+{
+  "description": "US5-2 (hand-made fixture): a login without ExHentai access gets an empty page → LoginRequired",
+  "fixtures": "no-ex",
+  "settings": { "site": "exhentai" },
+  "call": { "fn": "search", "args": [{ "text": "", "filters": {} }, null] },
+  "expectError": { "kind": "LoginRequired" }
+}

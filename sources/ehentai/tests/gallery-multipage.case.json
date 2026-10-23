@@ -1,0 +1,4 @@
+{
+  "description": "US2-2: a gallery spread over three thumbnail pages, all pages in order",
+  "call": { "fn": "getGallery", "args": ["e/4276113/4dd99722a8"] }
+}

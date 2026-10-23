@@ -1,0 +1,4 @@
+{
+  "description": "US3-2: a retry hint asks the site for the page via another server (nl key)",
+  "call": { "fn": "getPageUrl", "args": ["@gallery-basic", 0, { "attempt": 1, "status": 503, "previous": "@page-url" }] }
+}

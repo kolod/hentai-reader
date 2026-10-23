@@ -19,6 +19,7 @@ Options:
   --record         Use the real network and record fixtures
   --storage <file> Seed per-source storage from a JSON object
   --cookies <file> Seed cookies from a Netscape cookies.txt (live/record only)
+  --setting id=v   Source setting for contract 1.1 sources (repeatable; run)
   --case <name>    Only this test case (test, contract-test)
   --update         Rewrite snapshots (test)
   --json           Machine-readable output
@@ -29,6 +30,7 @@ export interface CliOptions {
   mode: "offline" | "live" | "record";
   storage?: string;
   cookies?: string;
+  settings: string[];
   case?: string;
   update: boolean;
   json: boolean;
@@ -45,6 +47,7 @@ async function main(argv: string[]): Promise<number> {
       record: { type: "boolean" },
       storage: { type: "string" },
       cookies: { type: "string" },
+      setting: { type: "string", multiple: true },
       case: { type: "string" },
       update: { type: "boolean" },
       json: { type: "boolean" },
@@ -63,6 +66,7 @@ async function main(argv: string[]): Promise<number> {
     mode: values.live ? "live" : values.record ? "record" : "offline",
     storage: values.storage,
     cookies: values.cookies,
+    settings: values.setting ?? [],
     case: values.case,
     update: values.update ?? false,
     json: values.json ?? false,

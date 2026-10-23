@@ -1,0 +1,5 @@
+{
+  "description": "Edge case: an id without site and token is InvalidInput",
+  "call": { "fn": "getGallery", "args": ["4276122"] },
+  "expectError": { "kind": "InvalidInput" }
+}

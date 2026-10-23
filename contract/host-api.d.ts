@@ -11,6 +11,8 @@
  *   concurrently on it. Module-level caches are allowed but must not be relied on.
  * - Limits: 60 s wall-clock per call, 128 MiB engine memory.
  * - All dates exchanged with the host are ISO 8601 strings.
+ * - (1.1) Hosts fetch every ImageRequest with the source's cookie jar (domain-scoped exactly as
+ *   for http.request), through the same politeness limiter, following redirects.
  */
 
 // ---------------------------------------------------------------------------------------------
@@ -142,16 +144,30 @@ export interface SourceErrorOptions {
 // Source module exports
 // ---------------------------------------------------------------------------------------------
 
-/** Shape of a source module's exports. */
+/**
+ * Shape of a source module's exports.
+ *
+ * Calling convention (1.1):
+ * - A source whose `manifest.contract` is "1.0" is called exactly as in 1.0: no `settings`
+ *   argument, and `retry` omitted when there is no retry.
+ * - A source declaring "1.1" always receives `settings` as the last argument — the user's stored
+ *   values merged over the manifest defaults, only ids the manifest declares — and `retry` is
+ *   `null` when there is no retry.
+ */
 export interface SourceModule {
   manifest: SourceManifest;
   /** Empty text and no filters = front feed. `cursor` is null for the first page. */
-  search(query: SearchQuery, cursor: string | null): Promise<SearchPage>;
-  getGallery(id: string): Promise<Gallery>;
-  /** `retry` is present when a previous attempt for this page failed. */
-  getPageUrl(gallery: Gallery, index: number, retry?: RetryHint): Promise<PageImage>;
+  search(query: SearchQuery, cursor: string | null, settings?: SettingValues): Promise<SearchPage>;
+  getGallery(id: string, settings?: SettingValues): Promise<Gallery>;
+  /** `retry` is present (1.0) or non-null (1.1) when a previous attempt for this page failed. */
+  getPageUrl(gallery: Gallery, index: number, retry?: RetryHint | null, settings?: SettingValues): Promise<PageImage>;
   /** Required iff `manifest.capabilities.suggestTags` is true. */
-  suggestTags?(prefix: string): Promise<TagSuggestion[]>;
+  suggestTags?(prefix: string, settings?: SettingValues): Promise<TagSuggestion[]>;
+  /**
+   * (1.1) Required iff `manifest.capabilities.accountStatus` is true. Hosts call it only on
+   * user-visible demand (settings screen, before a large download), never on a timer.
+   */
+  getAccountStatus?(settings?: SettingValues): Promise<AccountStatus>;
 }
 
 export interface SourceManifest {
@@ -166,9 +182,36 @@ export interface SourceManifest {
   };
   login: "none" | "optional" | "required";
   filters: FilterDefinition[];
+  /** (1.1) User-facing settings; each id at most once, `default` ∈ `values`. */
+  settings?: SettingDefinition[];
   capabilities: {
     suggestTags: boolean;
+    /** (1.1) The source exports `getAccountStatus`. */
+    accountStatus?: boolean;
   };
+}
+
+// ---------------------------------------------------------------------------------------------
+// Settings and account status (1.1)
+// ---------------------------------------------------------------------------------------------
+
+/** Well-known vocabulary — UI labels for these live in app string resources (Constitution IX). */
+export type SettingDefinition =
+  | { id: "image_quality"; values: ("resampled" | "original")[]; default: "resampled" | "original" }
+  | { id: "site"; values: ("e-hentai" | "exhentai")[]; default: "e-hentai" | "exhentai" };
+
+/** Current setting values passed to 1.1 sources. */
+export interface SettingValues {
+  image_quality?: "resampled" | "original";
+  site?: "e-hentai" | "exhentai";
+}
+
+export interface AccountStatus {
+  loggedIn: boolean;
+  /** Present when the site shows it to this user. */
+  imageLimit?: { used: number; max: number; resetsAt: string | null };
+  /** Access to an ExHentai-style mirror, when the source can tell; null = unknown. */
+  exhentai?: boolean | null;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -196,7 +239,8 @@ export type GalleryType =
   | "western"
   | "non_h"
   | "cosplay"
-  | "misc";
+  | "misc"
+  | "asian_porn";
 
 /** ISO 639-1 code, e.g. "en", "ja", "zh", "ko". */
 export type LanguageCode = string;
@@ -249,6 +293,8 @@ export interface ImageRequest {
   url: string;
   /** Headers required to fetch the image, e.g. { referer: "https://hitomi.la/" }. */
   headers?: Record<string, string>;
+  /** (1.1) The image is a cell of a sprite sheet; the host shows only this rectangle (px). */
+  crop?: { x: number; y: number; width: number; height: number };
 }
 
 export interface GallerySummary {

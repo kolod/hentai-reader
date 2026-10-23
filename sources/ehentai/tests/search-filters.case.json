@@ -1,0 +1,4 @@
+{
+  "description": "US1-2: female:glasses in Doujinshi or Manga with minimum rating 4",
+  "call": { "fn": "search", "args": [{ "text": "female:glasses$", "filters": { "type": ["doujinshi", "manga"], "min_rating": 4 } }, null] }
+}

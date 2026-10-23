@@ -1,0 +1,1 @@
+{ "description": "default image_quality", "call": { "fn": "getPageUrl", "args": ["@gallery", 0] } }

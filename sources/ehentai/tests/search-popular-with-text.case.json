@@ -1,0 +1,5 @@
+{
+  "description": "Edge case: popular lists cannot be filtered",
+  "call": { "fn": "search", "args": [{ "text": "female:glasses", "filters": { "sort": "popular_month" } }, null] },
+  "expectError": { "kind": "InvalidInput" }
+}

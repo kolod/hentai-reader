@@ -1,0 +1,4 @@
+{
+  "description": "Edge case: a search without results is an empty last page",
+  "call": { "fn": "search", "args": [{ "text": "zzqqxxnonexistenttag12345", "filters": {} }, null] }
+}

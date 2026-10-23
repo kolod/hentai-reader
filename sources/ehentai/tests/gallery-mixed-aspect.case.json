@@ -1,0 +1,4 @@
+{
+  "description": "US2-1: thumbnail cells carry each page aspect (portrait pages and a landscape spread)",
+  "call": { "fn": "getGallery", "args": ["e/4276116/3c805d4da0"] }
+}

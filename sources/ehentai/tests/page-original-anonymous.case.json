@@ -1,0 +1,6 @@
+{
+  "description": "US3-4: original quality without login is LoginRequired",
+  "settings": { "image_quality": "original" },
+  "call": { "fn": "getPageUrl", "args": ["@gallery-basic", 0] },
+  "expectError": { "kind": "LoginRequired" }
+}

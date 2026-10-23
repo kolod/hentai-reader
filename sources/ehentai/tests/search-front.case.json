@@ -1,0 +1,4 @@
+{
+  "description": "US1-1: empty query is the front page, with a next cursor",
+  "call": { "fn": "search", "args": [{ "text": "", "filters": {} }, null] }
+}

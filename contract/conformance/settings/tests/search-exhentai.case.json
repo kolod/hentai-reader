@@ -1,0 +1,1 @@
+{ "description": "setting site=exhentai reaches the source", "settings": { "site": "exhentai" }, "call": { "fn": "search", "args": [{ "text": "", "filters": {} }, null] } }

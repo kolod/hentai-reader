@@ -4,6 +4,7 @@ import type { CliOptions } from "../cli.ts";
 import { EXIT, UsageError } from "../errors.ts";
 import { loadRedactor, redactPool } from "../redaction.ts";
 import { locateSource } from "../source.ts";
+import { fixturePools } from "../fixture-audit.ts";
 
 export async function redact(args: string[], _opts: CliOptions): Promise<number> {
   const [dir] = args;
@@ -11,7 +12,8 @@ export async function redact(args: string[], _opts: CliOptions): Promise<number>
   const files = locateSource(dir);
   const redactor = await loadRedactor(files.dir);
   if (!redactor) throw new UsageError(`${files.dir} has no redact.mjs`);
-  const changed = redactPool(files.fixturesDir, redactor);
+  let changed = 0;
+  for (const pool of fixturePools(files.fixturesDir)) changed += redactPool(pool, redactor);
   console.log(`${changed} fixture bod${changed === 1 ? "y" : "ies"} redacted; run \`test ${dir} --update\` and review the snapshots`);
   return EXIT.ok;
 }

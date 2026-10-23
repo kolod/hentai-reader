@@ -1,0 +1,4 @@
+{
+  "description": "US4-1: without login cookies the account is not logged in and has no limit figures",
+  "call": { "fn": "getAccountStatus", "args": [] }
+}

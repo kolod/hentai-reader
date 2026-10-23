@@ -1,0 +1,5 @@
+{
+  "description": "US2-3: a wrong token is NotFound",
+  "call": { "fn": "getGallery", "args": ["e/4276122/0000000000"] },
+  "expectError": { "kind": "NotFound" }
+}

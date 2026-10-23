@@ -18,6 +18,14 @@ else replaced with neutral placeholders. Recording applies it automatically; `ch
 stored body would change when redacted again; `source-runner redact` re-applies it after the rules
 change.
 
+## Settings, accounts and logged-in recordings (contract 1.1)
+
+A 1.1 source may declare `manifest.settings` (e.g. E-Hentai's `image_quality`, `site`) and the
+`accountStatus` capability. Recording logged-in cases needs a cookie file passed with `--cookies`;
+the redactor must drop every page part that can show account data, and before committing, search
+the fixtures and snapshots for your own member id and user name **in the terminal only** — never
+write those values into a file in the repository.
+
 ## Adding a source
 
 1. Copy `contract/conformance/minimal` to `sources/<id>/`, rename the script to `<id>.js`, set

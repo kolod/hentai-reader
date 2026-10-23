@@ -1,0 +1,5 @@
+{
+  "description": "US4-2: with login cookies the account is logged in; limit figures only when the site states them; ExHentai access reported",
+  "fixtures": "logged-in",
+  "call": { "fn": "getAccountStatus", "args": [] }
+}

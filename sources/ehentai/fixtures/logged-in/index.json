@@ -1,0 +1,556 @@
+{
+  "format": 1,
+  "recordedAt": "2026-10-23T19:48:00.032Z",
+  "entries": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/home.php"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/1d907701b379e25e.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/s/e9e8d1d10e/4276122-1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/e193ca4eabeae45d.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/17236bc4ca4c035b.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276378/174baa1d06/"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/a5eb6281521b7fea.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/a71e111b5a335b48.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/98a095952a9cb78d.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=10"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/dedfe51628630c12.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=11"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/ad61d76336284587.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=12"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/475e1978383bc170.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=13"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/82a37d5aa6e9b2e4.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=14"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/0068a0d8cfc3794f.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=15"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/327451ba8a4bdb68.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=16"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/b640a1f20fa34054.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=17"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/8a3cc6c7f6fc9d93.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=18"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/15dde6f6259d9b9c.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=19"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/721d9b514902f4c7.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=2"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/f0196530e98e1989.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=20"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/54526e3ca8a44cb2.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=21"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/4e654bd86bc61cfc.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=22"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/5696e904bfd816ee.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=23"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/acddc3c5288f4c4e.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=24"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/4d88498271d2a976.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=25"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/424b9b5a281b628a.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=26"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/62a41a86883a6a7b.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=27"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/caa0bb3534dd2ecd.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=28"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/971a06eaaafb65af.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=29"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/3d76c6d3d2b77af6.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=3"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/42a9a74fb6fe06be.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=30"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/5b200a77864f94eb.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=31"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/273961aa835620a3.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=32"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/61e755971719a053.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=4"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/90d463c67830e3bb.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=5"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/72b9f33e5d9ccf86.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=6"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/ff21242de14f114c.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=7"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/b9c7ff40fb9c150c.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=8"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/ccc269f326b98fa2.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/g/4276379/cbc4a00ee9/?p=9"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/30a65f387f6da71f.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/s/e8210a9a93/4276379-1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/63fb030e1ef0bfc0.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://s.exhentai.org/api.php",
+        "bodySha256": "34b9ebfb7073dc497b54a81a101e2fac74f065f194780022f7335be293a626ff"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/a7fac1dd2a74359d.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://s.exhentai.org/api.php",
+        "bodySha256": "42500a3a73232c058b36f0eeafae41fcf0733f4854a5cdf774f66a75355a5fb9"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/71f1df6b1fbc99c7.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://s.exhentai.org/api.php",
+        "bodySha256": "59b58c768d2aaf95a7efb1757f8a31c57d382579b2982a37358b7b0bb464db5d"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/baf5246961673908.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://s.exhentai.org/api.php",
+        "bodySha256": "65f9d8e62af42a1c6934725c6497bf4856cbf82302fd727e734f13967e9505d4"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/a73e3104668e5483.html"
+      }
+    }
+  ]
+}

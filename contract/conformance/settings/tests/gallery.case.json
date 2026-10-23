@@ -1,0 +1,1 @@
+{ "description": "estimated sizes and cropped sprite thumbnails", "call": { "fn": "getGallery", "args": ["e/1"] } }

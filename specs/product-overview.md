@@ -95,6 +95,10 @@ Findings that the contract spec must resolve:
    (autocomplete, popular feed).
 7. **Page dimensions on E-Hentai** — decided (option A), see below. Gallery metadata must mark
    each page's size as `exact` or `estimated`.
+8. **Resampled/original, ExHentai, remaining image limit** — decided in
+   [002-ehentai-source](002-ehentai-source/spec.md) (contract 1.1): source *settings*
+   (`image_quality`, `site` — ExHentai is a setting of the one E-Hentai source) and the optional
+   *account status* capability for limit figures.
 
 ## Decision: E-Hentai Page Dimensions
 

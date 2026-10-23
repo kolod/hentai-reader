@@ -1,0 +1,4 @@
+{
+  "description": "US2-1: full metadata, every page estimated with a cropped thumbnail",
+  "call": { "fn": "getGallery", "args": ["e/4276122/3ba8d7e78a"] }
+}

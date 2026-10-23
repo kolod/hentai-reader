@@ -1,0 +1,5 @@
+{
+  "description": "Edge case: a malformed cursor is InvalidInput",
+  "call": { "fn": "search", "args": [{ "text": "", "filters": {} }, "next-page"] },
+  "expectError": { "kind": "InvalidInput" }
+}

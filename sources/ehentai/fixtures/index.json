@@ -1,0 +1,505 @@
+{
+  "format": 1,
+  "recordedAt": "2026-10-23T19:47:19.038Z",
+  "entries": [
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "4bbab4cb68c97c8e34cca7786ff01003a58e8104a38c1bdbc3254b8496f63d3b"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/13f4c8c59a227f1c.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "51339512b6a1fc755c075771241d2cc050aefb6cb4b6351a274e1fdde9cf9925"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/b456b508a37b19bd.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "6722e11cf44c6b8884be1f21f147e40bb612a2d8d35ba4e98de16803394be4c5"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/a904be5c5deaa086.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "02db76dc575e0769942de99c9c8de5d4270748183ed87012720f6212bad3f327"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/0d33bafc6de3079c.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "178d8d2954f7ab9f0599dc4fed8affd9cc565392b9f86b1b9d55a38430bdf891"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/7a88ea0e7dc75b3b.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "82d2ba77020c4fd42a5be56a86f201663723e36a78a5b9d33bdec7e1ab0deeb3"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/d4057a9ffb54df10.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "182b48fdbff1b12125992a7ed08a475427b1b668049d828d0bfa98e87fed5cce"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/1c65671e96662c2a.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "99edbff188c1040f4fb02e32984085a8d679842790a6ef058f9217276ae12aff"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/ec43b7e0bda7e643.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "6edff04726022c22d8855421e110fc4909fde595032ac6e24bd5f617ffb64e03"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/e84ec64e8824de83.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "248f59c502b36c89841ce3dd66d0b6b9fc1adfb720a01a2d741d54980e05b531"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/55b776970f01d54e.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "536776e91c9456d3b73cc24f08feee7c04bf9691c9848b4b4e4579f27855dcd9"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/68fcdc9972046cef.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "7b28c62bc225d354998fe9d012f00a2331f424e3ceb35a711c72150f4efb62d9"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/4ae7ab849fe3ab8b.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "27efa6a18ccce6daf58b64970e4d5f20b3fb9f481a88dec80e907eb86a50c3bb"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-length": "99",
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/861d0850a6dd81c3.html"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "b91a68579a8dec38684d03b7b1778936959015916fa217cdc92ea15b169c6d92"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/860cbf44f43d57d6.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/a8adf285f97bbc26.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/?f_search=female%3Aglasses%24&f_cats=1017&f_srdd=4"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/225cd8baf805e4d6.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/?f_search=handmade-http-429"
+      },
+      "response": {
+        "status": 429,
+        "headers": {
+          "content-type": "text/html",
+          "retry-after": "120"
+        },
+        "body": null
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/?f_search=handmade-ip-ban"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/9215f338cc8ba8bf.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/?f_search=language%3Aenglish%24&f_spf=20&f_spt=40"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/2a7bc271a21bd299.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/?f_search=zzqqxxnonexistenttag12345"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/2b67edb1e4305568.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/?next=4276099"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/111993f7c6fd4ced.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/bounce_login.php?b=d&bt=1-1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/aa47c278a8459146.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/g/1/abcdefabcd/"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/3f2454c9fc478012.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/g/1/abcdefabcd/?nw=always"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/ccc95a08822cef44.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/g/4276113/4dd99722a8/"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/b2f576667c869605.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/g/4276113/4dd99722a8/?p=1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/635fc98196dcae7e.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/g/4276113/4dd99722a8/?p=2"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/01291ed09d01f998.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/g/4276116/3c805d4da0/"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/3eb753ea4ddcd5cc.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/g/4276122/3ba8d7e78a/"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/08f8544dbb6eff68.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/home.php"
+      },
+      "response": {
+        "status": 302,
+        "headers": {
+          "content-length": "0",
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://e-hentai.org/bounce_login.php?b=d&bt=1-1"
+        },
+        "body": null
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/s/8a63e3f3d8/4276122-12"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/0ccbb6c3fa9e0ad3.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/s/aaaaaaaaaa/2-1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/8ef2f7b9414fd524.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/s/bbbbbbbbbb/2-2"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/759b54797b8a6ce8.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/s/e9e8d1d10e/4276122-1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/71d64192047b550e.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/s/e9e8d1d10e/4276122-1?nl=44256-497995"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/dcb71422558ee2ee.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/toplist.php?tl=15"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/d1e0fbd0a479f9b1.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/toplist.php?tl=15&p=1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/fce0a61e19677329.html"
+      }
+    }
+  ]
+}
