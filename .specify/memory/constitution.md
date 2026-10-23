@@ -1,9 +1,23 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.0.0 → 1.0.1
-Bump rationale: PATCH — clarifications found while scoping the product
-(specs/product-overview.md); no principle added or removed.
+Version change: 1.0.1 → 1.0.2
+Bump rationale: PATCH — wording clarification; the rule's intent (no images, no personal data)
+is unchanged.
+
+Modified principles:
+  - X. Version Control & Release Discipline — fixtures may contain any site response (HTML, JSON,
+    scripts, binary index data), not only HTML/JSON; still never images, cookies, credentials or
+    personal data; large binaries stored as requested byte ranges only. Needed for Hitomi
+    (gg.js, galleries/{id}.js, .nozomi and galleriesindex ranges) — specs/001-source-contract.
+Added sections: none
+Removed sections: none
+Templates requiring updates: none.
+Follow-up TODOs: none.
+
+--- History ---
+1.0.1 (2026-10-23): PATCH — clarifications found while scoping the product
+(specs/product-overview.md).
 
 Modified principles:
   - II. Thin, Sandboxed Source Scripts — host API `http.get` clarified as `http.request`
@@ -11,12 +25,7 @@ Modified principles:
     indexes and E-Hentai api.php/login POSTs.
   - IV. Reading Smoothness First — sources that expose exact dimensions only per page may reserve
     slots from an aspect estimate refined inside the preload window, with scroll anchoring.
-Added sections: none
-Removed sections: none
-Templates requiring updates: none (no template references these rules).
-Follow-up TODOs: none.
 
---- History ---
 1.0.0 (2026-10-23): initial ratification.
 
 Modified principles (template slot → new title):
@@ -217,7 +226,9 @@ and platform-native localization keep both apps consistent and correct in every 
 - The apps MUST download script updates exclusively from `sources-dist`.
 - The repository MUST NEVER contain: signing keys (keystores, certificates), cookies, logins or
   passwords, local IDE settings, build artifacts, downloaded galleries or images.
-- Test fixtures MUST contain only HTML/JSON site responses, no images, with personal data removed.
+- Test fixtures MUST contain only site responses (HTML, JSON, scripts, binary index data) and
+  MUST NEVER contain images, cookies, credentials, or other personal data. Large binary
+  resources are stored only as the byte ranges actually requested.
 - `.gitignore` MUST cover Android, .NET, and Node from the first commit.
 - A separate CHANGELOG MUST be kept per component and updated with every release.
 
@@ -262,4 +273,4 @@ publishing and strict secret hygiene make the update channel trustworthy.
   - PATCH — clarifications, wording, typo fixes.
 - Each amendment updates **Last Amended**; **Ratified** stays the date of original adoption.
 
-**Version**: 1.0.1 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-23
+**Version**: 1.0.2 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-23
