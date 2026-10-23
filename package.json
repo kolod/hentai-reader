@@ -1,0 +1,17 @@
+{
+  "name": "hentai-reader",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "workspaces": [
+    "contract",
+    "tools/runner"
+  ],
+  "scripts": {
+    "runner": "node tools/runner/src/cli.ts",
+    "schema": "npm run schema -w contract",
+    "test": "node --test \"tools/runner/test/*.test.ts\" && npm run runner -- contract-test && npm run runner -- test contract/conformance/minimal && npm run runner -- test sources/hitomi"
+  }
+}

@@ -75,3 +75,6 @@ dist/
 
 # --- Logs ---
 *.log
+
+# --- Generated ---
+contract/schema/
