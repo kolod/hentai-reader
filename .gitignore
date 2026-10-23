@@ -1,0 +1,77 @@
+# --- Secrets (Constitution X: never commit) ---
+*.jks
+*.keystore
+keystore.properties
+*.pfx
+*.p12
+*.snk
+*.pem
+*.key
+.env
+.env.*
+cookies*.txt
+*.cookies
+
+# --- Downloaded content (never commit) ---
+*.cbz
+downloads/
+# Fixtures hold HTML/JSON only — no images
+**/fixtures/**/*.png
+**/fixtures/**/*.jpg
+**/fixtures/**/*.jpeg
+**/fixtures/**/*.gif
+**/fixtures/**/*.webp
+**/fixtures/**/*.avif
+
+# --- Local IDE / tool settings ---
+.vscode/
+.idea/
+.vs/
+*.iml
+*.user
+*.suo
+*.swp
+.DS_Store
+Thumbs.db
+.claude/settings.local.json
+.remember/
+
+# --- Android / Gradle ---
+.gradle/
+build/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+output-metadata.json
+
+# --- .NET ---
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rm64/
+*.nupkg
+*.msix
+*.appx
+AppPackages/
+BundleArtifacts/
+TestResults/
+*.trx
+
+# --- Node ---
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.npm/
+coverage/
+dist/
+
+# --- Logs ---
+*.log

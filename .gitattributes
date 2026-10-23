@@ -1,0 +1,17 @@
+* text=auto
+
+# Source scripts are published with SHA-256 hashes (Constitution III);
+# fixed line endings keep the hash identical on every checkout.
+sources/**/*.js text eol=lf
+sources/**/*.json text eol=lf
+contract/**/*.d.ts text eol=lf
+
+# Recorded site responses must stay byte-exact
+**/fixtures/** -text
+
+*.png binary
+*.jpg binary
+*.webp binary
+*.jar binary
+*.dll binary
+*.exe binary
