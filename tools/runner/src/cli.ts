@@ -11,6 +11,7 @@ Commands:
   test <sourceDir>               Run the source's test cases against snapshots
   check <sourceDir>              Conformance check (static types, manifest, exports, fixtures)
   contract-test                  Run the host contract suite against the reference host
+  redact <sourceDir>             Re-apply the source's redact.mjs to its recorded fixtures
 
 Options:
   --offline        Replay recorded fixtures, no network (default)
@@ -77,6 +78,8 @@ async function main(argv: string[]): Promise<number> {
       return (await import("./commands/check.ts")).check(rest, opts);
     case "contract-test":
       return (await import("./commands/contract-test.ts")).contractTest(rest, opts);
+    case "redact":
+      return (await import("./commands/redact.ts")).redact(rest, opts);
     default:
       throw new UsageError(`unknown command '${command}'\n\n${USAGE}`);
   }

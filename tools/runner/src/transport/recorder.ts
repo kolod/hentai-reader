@@ -1,10 +1,12 @@
 // Recording transport: performs live requests and writes sanitised fixtures (FR-026,
-// contracts/fixtures-and-tests.md). Never stores cookies, credentials or image bodies.
+// contracts/fixtures-and-tests.md). Never stores cookies, credentials or image bodies; applies the
+// source's redactor (redact.mjs) to text bodies before storing them.
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { FixtureRecordingError } from "../errors.ts";
 import { fixtureKey, loadFixtureIndex, sha256Hex, type FixtureEntry } from "./offline.ts";
 import { isImage } from "./sniff.ts";
+import { isTextBody, type Redactor } from "../redaction.ts";
 import type { RawRequest, RawResponse, Transport } from "./types.ts";
 
 const KEPT_RESPONSE_HEADERS = new Set([
@@ -23,9 +25,12 @@ export class RecordingTransport implements Transport {
   private readonly entries = new Map<string, FixtureEntry>();
   private readonly bodies = new Map<string, Uint8Array>();
 
-  constructor(fixturesDir: string, live: Transport) {
+  private readonly redact: Redactor | null;
+
+  constructor(fixturesDir: string, live: Transport, redact: Redactor | null = null) {
     this.dir = fixturesDir;
     this.live = live;
+    this.redact = redact;
     for (const entry of loadFixtureIndex(fixturesDir).entries) {
       const r = entry.request;
       this.entries.set(fixtureKey(r.method, r.url, r.headers?.range, r.bodySha256), entry);
@@ -33,10 +38,23 @@ export class RecordingTransport implements Transport {
   }
 
   async send(req: RawRequest): Promise<RawResponse> {
-    const res = await this.live.send(req);
+    let res = await this.live.send(req);
     const contentType = res.headers.find(([n]) => n === "content-type")?.[1] ?? "";
     if (/^image\//i.test(contentType) || isImage(res.body)) {
       throw new FixtureRecordingError(`refusing to record image data from ${req.url} (Constitution X)`);
+    }
+    const ext = extension(contentType);
+    if (this.redact && res.body.length > 0 && isTextBody(`.${ext}`)) {
+      // The live run sees exactly what will be replayed, so live and offline results match.
+      const text = new TextDecoder().decode(res.body);
+      const redacted = this.redact(req.url, text);
+      if (redacted !== text) {
+        res = {
+          ...res,
+          headers: res.headers.filter(([n]) => n !== "content-length"),
+          body: new TextEncoder().encode(redacted),
+        };
+      }
     }
     const headers: Record<string, string> = {};
     for (const [name, value] of res.headers) {
@@ -44,7 +62,7 @@ export class RecordingTransport implements Transport {
     }
     let body: string | null = null;
     if (res.body.length > 0) {
-      body = `bodies/${sha256Hex(res.body).slice(0, 16)}.${extension(contentType)}`;
+      body = `bodies/${sha256Hex(res.body).slice(0, 16)}.${ext}`;
       this.bodies.set(body, res.body);
     }
     const bodySha256 = req.body ? sha256Hex(req.body) : null;

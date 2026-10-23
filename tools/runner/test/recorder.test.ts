@@ -49,6 +49,18 @@ test("identical bodies are stored once", async () => {
   assert.equal(JSON.parse(readFileSync(join(dir, "index.json"), "utf8")).entries.length, 2);
 });
 
+test("the source's redactor is applied before storing and to the live response", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "fixtures-"));
+  const redact = (_url: string, t: string) => t.replace(/real title/g, "Gallery 1");
+  const recorder = new RecordingTransport(dir, new FakeTransport(() => text(200, '{"title":"real title"}', [["content-length", "22"]])), redact);
+  const live = await recorder.send(req("https://a.test/g.json"));
+  assert.equal(new TextDecoder().decode(live.body), '{"title":"Gallery 1"}');
+  recorder.flush();
+  const stored = readdirSync(join(dir, "bodies")).map((f) => readFileSync(join(dir, "bodies", f), "utf8"));
+  assert.deepEqual(stored, ['{"title":"Gallery 1"}']);
+  assert.equal(JSON.parse(readFileSync(join(dir, "index.json"), "utf8")).entries[0].response.headers["content-length"], undefined);
+});
+
 test("recorded responses replay offline unchanged", async () => {
   const bin = new Uint8Array([0, 1, 2, 255]);
   const { dir, recorder } = setup((r) =>

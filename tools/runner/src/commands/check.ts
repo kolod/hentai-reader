@@ -10,6 +10,7 @@ import { paths } from "../paths.ts";
 import { validate } from "../schema.ts";
 import { ContractVersionError, locateSource, openSource, type SourceFiles } from "../source.ts";
 import { auditFixtures } from "../fixture-audit.ts";
+import { loadRedactor } from "../redaction.ts";
 
 const REQUIRED = ["search", "getGallery", "getPageUrl"];
 
@@ -17,7 +18,11 @@ export async function check(args: string[], opts: CliOptions): Promise<number> {
   const [dir] = args;
   if (!dir) throw new UsageError("check <sourceDir>");
   const files = locateSource(dir);
-  const violations = [...staticCheck(files), ...(await runtimeCheck(files)), ...auditFixtures(files.fixturesDir)];
+  const violations = [
+    ...staticCheck(files),
+    ...(await runtimeCheck(files)),
+    ...auditFixtures(files.fixturesDir, await loadRedactor(files.dir)),
+  ];
 
   if (opts.json) {
     console.log(JSON.stringify({ source: files.name, violations }, null, 2));

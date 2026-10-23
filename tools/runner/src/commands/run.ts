@@ -15,7 +15,7 @@ export async function run(args: string[], opts: CliOptions): Promise<number> {
   const files = locateSource(dir);
   const fnArgs = rawArgs.map(parseArg);
   const cookies = opts.cookies ? cookieJar(opts.cookies, opts.mode) : undefined;
-  const transport = modeTransport(files, opts.mode);
+  const transport = await modeTransport(files, opts.mode);
   const source = await openSource(files, {
     mode: opts.mode,
     storage: opts.storage ? (readJsonFile(resolve(opts.storage)) as Record<string, string>) : undefined,

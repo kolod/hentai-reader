@@ -1,12 +1,14 @@
-// Fixture hygiene (Constitution X, SC-007): size limit, no image bodies, no credentials.
+// Fixture hygiene (Constitution X, SC-007): size limit, no image bodies, no credentials, body
+// references intact, and — when the source has a redactor — no unredacted site content.
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { isImage } from "./transport/sniff.ts";
+import { unredacted, type Redactor } from "./redaction.ts";
 
 export const FIXTURE_LIMIT_BYTES = 5 * 1024 * 1024;
 const FORBIDDEN_KEYS = /"(cookie|set-cookie|authorization)"\s*:/i;
 
-export function auditFixtures(fixturesDir: string): string[] {
+export function auditFixtures(fixturesDir: string, redact: Redactor | null = null): string[] {
   if (!existsSync(fixturesDir)) return [];
   const out: string[] = [];
   let total = 0;
@@ -41,6 +43,11 @@ export function auditFixtures(fixturesDir: string): string[] {
   if (existsSync(bodiesDir)) {
     for (const name of readdirSync(bodiesDir)) {
       if (!referenced.has(`bodies/${name}`)) out.push(`fixtures: unreferenced body: bodies/${name}`);
+    }
+  }
+  if (redact) {
+    for (const body of unredacted(fixturesDir, redact)) {
+      out.push(`fixtures: not redacted: ${body} — run \`source-runner redact\``);
     }
   }
   return out;

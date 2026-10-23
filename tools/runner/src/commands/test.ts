@@ -23,7 +23,7 @@ export async function test(args: string[], opts: CliOptions): Promise<number> {
   let results: CaseResult[];
 
   if (opts.mode === "record") {
-    const recorder = caseTransport(files, "record")!;
+    const recorder = (await caseTransport(files, "record"))!;
     const live = await runCases(files, cases, { mode: "record", update: false, compareSnapshots: false, transport: recorder.forCase, cookies });
     recorder.flush();
     const replay = await runCases(files, cases, { mode: "offline", update: opts.update });
