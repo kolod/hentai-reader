@@ -1,0 +1,5 @@
+{
+  "description": "Edge case (hand-made fixture): the temporary IP ban page is RateLimited with retry-after 3552 s",
+  "call": { "fn": "search", "args": [{ "text": "handmade-ip-ban", "filters": {} }, null] },
+  "expectError": { "kind": "RateLimited" }
+}

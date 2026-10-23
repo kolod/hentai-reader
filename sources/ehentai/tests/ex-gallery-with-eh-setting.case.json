@@ -1,0 +1,6 @@
+{
+  "description": "US5-3: a gallery found on ExHentai is still fetched from ExHentai with site=e-hentai",
+  "fixtures": "logged-in",
+  "settings": { "site": "e-hentai" },
+  "call": { "fn": "getGallery", "args": ["@ex-front.items.24.id"] }
+}

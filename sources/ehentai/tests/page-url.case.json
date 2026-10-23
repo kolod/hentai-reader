@@ -1,0 +1,4 @@
+{
+  "description": "US3-1: image request and exact size of the first page",
+  "call": { "fn": "getPageUrl", "args": ["@gallery-basic", 0] }
+}

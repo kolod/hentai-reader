@@ -1,0 +1,5 @@
+{
+  "description": "US4-3: cookies the site rejects mean not logged in (recorded with invalid cookies)",
+  "fixtures": "expired",
+  "call": { "fn": "getAccountStatus", "args": [] }
+}

@@ -1,0 +1,19 @@
+{
+  "format": 1,
+  "recordedAt": "2026-10-23T20:00:00.000Z",
+  "entries": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://exhentai.org/"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": null
+      }
+    }
+  ]
+}

@@ -12,6 +12,6 @@
   "scripts": {
     "runner": "node tools/runner/src/cli.ts",
     "schema": "npm run schema -w contract",
-    "test": "node --test \"tools/runner/test/*.test.ts\" && npm run runner -- contract-test && npm run runner -- test contract/conformance/minimal && npm run runner -- test sources/hitomi"
+    "test": "node --test \"tools/runner/test/*.test.ts\" && npm run runner -- contract-test && npm run runner -- test contract/conformance/minimal && npm run runner -- test contract/conformance/settings && npm run runner -- test sources/hitomi && npm run runner -- test sources/ehentai"
   }
 }

@@ -1,0 +1,4 @@
+{
+  "description": "US2-4 (hand-made fixture): a content warning is acknowledged and the gallery returned",
+  "call": { "fn": "getGallery", "args": ["e/1/abcdefabcd"] }
+}

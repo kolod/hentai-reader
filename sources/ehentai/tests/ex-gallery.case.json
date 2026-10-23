@@ -1,0 +1,6 @@
+{
+  "description": "US5-1: an ExHentai gallery",
+  "fixtures": "logged-in",
+  "settings": { "site": "exhentai" },
+  "call": { "fn": "getGallery", "args": ["@ex-front.items.24.id"] }
+}

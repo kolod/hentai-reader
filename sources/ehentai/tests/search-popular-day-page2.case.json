@@ -1,0 +1,4 @@
+{
+  "description": "US1-5: the toplist pages with its own cursor",
+  "call": { "fn": "search", "args": [{ "text": "", "filters": { "sort": "popular_day" } }, "p:1"] }
+}

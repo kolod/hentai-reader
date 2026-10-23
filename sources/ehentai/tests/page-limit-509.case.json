@@ -1,0 +1,5 @@
+{
+  "description": "US3-5 (hand-made fixture): the limit placeholder image is RateLimited",
+  "call": { "fn": "getPageUrl", "args": [{ "id": "e/2/abcdefabcd", "title": "Gallery 2", "titleOriginal": null, "cover": null, "language": null, "type": null, "pageCount": 2, "artists": [], "tags": [], "uploadedAt": null, "rating": null, "uploader": null, "webUrl": "https://e-hentai.org/g/2/abcdefabcd/", "pages": [{ "index": 0, "width": 200, "height": 283, "size": "estimated" }, { "index": 1, "width": 200, "height": 283, "size": "estimated" }], "sourceData": { "pages": [["aaaaaaaaaa", 1], ["bbbbbbbbbb", 2]] } }, 0] },
+  "expectError": { "kind": "RateLimited" }
+}

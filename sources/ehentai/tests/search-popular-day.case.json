@@ -1,0 +1,4 @@
+{
+  "description": "US1-5: popular yesterday (toplist)",
+  "call": { "fn": "search", "args": [{ "text": "", "filters": { "sort": "popular_day" } }, null] }
+}

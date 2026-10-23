@@ -1,0 +1,6 @@
+{
+  "description": "US3-3 / US4: original quality when logged in returns the original request and its exact size",
+  "fixtures": "logged-in",
+  "settings": { "image_quality": "original" },
+  "call": { "fn": "getPageUrl", "args": ["@gallery-basic", 0] }
+}

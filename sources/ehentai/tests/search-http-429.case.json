@@ -1,0 +1,5 @@
+{
+  "description": "Edge case (hand-made fixture): HTTP 429 is RateLimited",
+  "call": { "fn": "search", "args": [{ "text": "handmade-http-429", "filters": {} }, null] },
+  "expectError": { "kind": "RateLimited" }
+}
