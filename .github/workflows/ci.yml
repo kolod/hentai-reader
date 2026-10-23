@@ -1,0 +1,36 @@
+# Keeps main green (Constitution X): contract, runner and every source script are checked and
+# tested offline on each push and pull request. No network access is needed.
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  sources:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run schema
+      - name: Runner unit tests
+        run: node --test "tools/runner/test/*.test.ts"
+      - name: Host contract suite
+        run: npm run runner -- contract-test
+      - name: Conformance reference source
+        run: |
+          npm run runner -- check contract/conformance/minimal
+          npm run runner -- test contract/conformance/minimal
+      - name: Source scripts (check + offline tests)
+        run: |
+          for dir in sources/*/; do
+            [ -f "$dir$(basename "$dir").js" ] || continue
+            echo "::group::$dir"
+            npm run runner -- check "$dir"
+            npm run runner -- test "$dir"
+            echo "::endgroup::"
+          done
