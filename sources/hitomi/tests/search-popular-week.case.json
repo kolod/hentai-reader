@@ -1,0 +1,4 @@
+{
+  "description": "US3-1: sort popular_week returns the popular-this-week list (Range read only)",
+  "call": { "fn": "search", "args": [{ "text": "", "filters": { "sort": "popular_week" } }, null] }
+}

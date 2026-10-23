@@ -1,0 +1,5 @@
+{
+  "description": "US4-4: a missing gallery is NotFound",
+  "call": { "fn": "getGallery", "args": ["999999999"] },
+  "expectError": { "kind": "NotFound" }
+}

@@ -1,0 +1,5 @@
+{
+  "description": "US4-3: a retry hint drops the cached gg.js and fetches a fresh one",
+  "storage": { "gg": "{\"text\":\"gg = { m: function (g) { return 0; }, s: function (h) { var m = /(..)(.)$/.exec(h); return parseInt(m[2] + m[1], 16).toString(10); }, b: \\\"1000000000/\\\" };\",\"fetchedAt\":9999999999999}" },
+  "call": { "fn": "getPageUrl", "args": ["@gallery-basic", 0, { "attempt": 1, "status": 404, "previous": { "url": "https://w1.gold-usergeneratedcontent.net/1000000000/0/x.webp" } }] }
+}

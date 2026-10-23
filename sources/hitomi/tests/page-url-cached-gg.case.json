@@ -1,0 +1,5 @@
+{
+  "description": "US4-3 (control): without a retry hint a cached gg.js is used as-is",
+  "storage": { "gg": "{\"text\":\"gg = { m: function (g) { return 0; }, s: function (h) { var m = /(..)(.)$/.exec(h); return parseInt(m[2] + m[1], 16).toString(10); }, b: \\\"1000000000/\\\" };\",\"fetchedAt\":9999999999999}" },
+  "call": { "fn": "getPageUrl", "args": ["@gallery-basic", 0] }
+}

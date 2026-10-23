@@ -1,0 +1,4 @@
+{
+  "description": "US3: tag + language + gallery type filter",
+  "call": { "fn": "search", "args": [{ "text": "female:apron", "filters": { "language": "en", "type": ["manga"] } }, null] }
+}

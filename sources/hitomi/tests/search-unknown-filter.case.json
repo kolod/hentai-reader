@@ -1,0 +1,5 @@
+{
+  "description": "Edge case: a filter the manifest does not declare is InvalidInput",
+  "call": { "fn": "search", "args": [{ "text": "", "filters": { "min_rating": 3 } }, null] },
+  "expectError": { "kind": "InvalidInput" }
+}

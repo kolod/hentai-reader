@@ -1,0 +1,5 @@
+{
+  "description": "Edge case: a foreign cursor is InvalidInput",
+  "call": { "fn": "search", "args": [{ "text": "", "filters": {} }, "page-2"] },
+  "expectError": { "kind": "InvalidInput" }
+}

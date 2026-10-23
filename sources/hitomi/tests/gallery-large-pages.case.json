@@ -1,0 +1,4 @@
+{
+  "description": "US4-1: originals over 2880 px are served downscaled, so their size is estimated (≤1 px error)",
+  "call": { "fn": "getGallery", "args": ["1032612"] }
+}

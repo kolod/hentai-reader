@@ -1,0 +1,5 @@
+{
+  "description": "Edge case: page index beyond the gallery is InvalidInput",
+  "call": { "fn": "getPageUrl", "args": ["@gallery-basic", 9999] },
+  "expectError": { "kind": "InvalidInput" }
+}

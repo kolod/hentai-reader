@@ -1,0 +1,4 @@
+{
+  "description": "US3-6: tag suggestions for a namespaced prefix",
+  "call": { "fn": "suggestTags", "args": ["female:gla"] }
+}

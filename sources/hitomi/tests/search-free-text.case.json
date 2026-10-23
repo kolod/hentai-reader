@@ -1,0 +1,4 @@
+{
+  "description": "US3-3: free text is looked up in the galleries index",
+  "call": { "fn": "search", "args": [{ "text": "shindol", "filters": {} }, null] }
+}

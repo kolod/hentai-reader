@@ -1,0 +1,4 @@
+{
+  "description": "US4-2: WebP image request with the required Referer",
+  "call": { "fn": "getPageUrl", "args": ["@gallery-basic", 0] }
+}

@@ -1,0 +1,4 @@
+{
+  "description": "US3-2: female:glasses, excluding male:muscle, English only",
+  "call": { "fn": "search", "args": [{ "text": "female:glasses -male:muscle", "filters": { "language": "en" } }, null] }
+}

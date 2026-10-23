@@ -1,0 +1,501 @@
+{
+  "id": "4237984",
+  "title": "Gallery 4237984",
+  "cover": {
+    "url": "https://atn.gold-usergeneratedcontent.net/webpbigtn/4/b5/fd5a29e5a3c672d497ae610a3babe8942d31e98e77376c97ee1a2f5c0ab53b54.webp",
+    "headers": {
+      "referer": "https://hitomi.la/"
+    }
+  },
+  "language": "es",
+  "type": "doujinshi",
+  "pageCount": 28,
+  "artists": [
+    "shindol"
+  ],
+  "tags": [
+    {
+      "namespace": "artist",
+      "name": "shindol"
+    },
+    {
+      "namespace": "group",
+      "name": "group 1"
+    },
+    {
+      "namespace": "parody",
+      "name": "parody 1"
+    },
+    {
+      "namespace": "character",
+      "name": "character 1"
+    },
+    {
+      "namespace": "character",
+      "name": "character 2"
+    },
+    {
+      "namespace": "character",
+      "name": "character 3"
+    },
+    {
+      "namespace": "character",
+      "name": "character 4"
+    },
+    {
+      "namespace": "female",
+      "name": "redacted 1"
+    },
+    {
+      "namespace": "female",
+      "name": "redacted 2"
+    },
+    {
+      "namespace": "female",
+      "name": "redacted 3"
+    },
+    {
+      "namespace": "other",
+      "name": "redacted 4"
+    },
+    {
+      "namespace": "other",
+      "name": "redacted 5"
+    },
+    {
+      "namespace": "other",
+      "name": "redacted 6"
+    },
+    {
+      "namespace": "male",
+      "name": "redacted 7"
+    },
+    {
+      "namespace": "male",
+      "name": "redacted 8"
+    },
+    {
+      "namespace": "female",
+      "name": "redacted 9"
+    },
+    {
+      "namespace": "female",
+      "name": "redacted 10"
+    },
+    {
+      "namespace": "female",
+      "name": "redacted 11"
+    },
+    {
+      "namespace": "other",
+      "name": "redacted 12"
+    },
+    {
+      "namespace": "female",
+      "name": "redacted 13"
+    }
+  ],
+  "webUrl": "https://hitomi.la/galleries/4237984.html",
+  "titleOriginal": null,
+  "uploadedAt": "2026-10-07T10:21:00-05:00",
+  "rating": null,
+  "uploader": null,
+  "pages": [
+    {
+      "index": 0,
+      "width": 1280,
+      "height": 1857,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/4/b5/fd5a29e5a3c672d497ae610a3babe8942d31e98e77376c97ee1a2f5c0ab53b54.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "001.webp"
+    },
+    {
+      "index": 1,
+      "width": 1280,
+      "height": 1861,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://btn.gold-usergeneratedcontent.net/webpsmalltn/8/12/26604abffb11fd9d734c797db942ebfd306669b42a66ec3dac8efe3186923128.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "002.webp"
+    },
+    {
+      "index": 2,
+      "width": 1280,
+      "height": 1862,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://btn.gold-usergeneratedcontent.net/webpsmalltn/f/5c/5a6ae6237b0e3e8844767fc80fe116ca4a01ddc4a3ca416ea263be06a928f5cf.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "003.webp"
+    },
+    {
+      "index": 3,
+      "width": 1280,
+      "height": 1859,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/b/75/0670067ca7241202067af0b3f2d9f8f0fd1f02b3ddc27863a47c5005ddeb975b.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "004.webp"
+    },
+    {
+      "index": 4,
+      "width": 1280,
+      "height": 1865,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/3/44/6ada5437b002f2c969b829cf398d14ef0a80ba199e9b02f35bd5ffad5a7b7443.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "005.webp"
+    },
+    {
+      "index": 5,
+      "width": 1280,
+      "height": 1860,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://btn.gold-usergeneratedcontent.net/webpsmalltn/6/e9/46faaf4ed996f22c873b7f6f64ee917587b7bdd0ab46427a4042ed8a6936fe96.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "006.webp"
+    },
+    {
+      "index": 6,
+      "width": 1280,
+      "height": 1861,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/4/62/6a2a8d27d31c12d62dda3950cec50a5da69ac6dfc6bc729961cae227bb6a6624.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "007.webp"
+    },
+    {
+      "index": 7,
+      "width": 1280,
+      "height": 1864,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/3/40/2bea63032b3369b323e1c8d3c0ae840db0b89c055957952ed359dbc192db0403.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "008.webp"
+    },
+    {
+      "index": 8,
+      "width": 1280,
+      "height": 1861,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://btn.gold-usergeneratedcontent.net/webpsmalltn/f/1c/63852ea45d579c03fb076a9de835d00f88ab217c8035910609ab73ef0848b1cf.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "009.webp"
+    },
+    {
+      "index": 9,
+      "width": 1280,
+      "height": 1867,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://btn.gold-usergeneratedcontent.net/webpsmalltn/a/f3/4d0fb9adbd6799e635a12dfe1b03f29e659305ecdc030055a3cdd64fef862f3a.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "010.webp"
+    },
+    {
+      "index": 10,
+      "width": 1280,
+      "height": 1861,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/6/d9/0e3f166ddd88d37c8eeb40386d1a8ad7e2f53ab0621566d0e97055f8ff887d96.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "011.webp"
+    },
+    {
+      "index": 11,
+      "width": 1280,
+      "height": 1863,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://btn.gold-usergeneratedcontent.net/webpsmalltn/b/8d/d096d2af26b751a5dd5a69fa0cf884e817c835f84fe3dbb52f53b74f4de868db.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "012.webp"
+    },
+    {
+      "index": 12,
+      "width": 1280,
+      "height": 1861,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/0/a8/c7fca876b19ec9254649d312744b995f7f8ca3f1f0e15bb8cfa0ec5c41bc6a80.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "013.webp"
+    },
+    {
+      "index": 13,
+      "width": 1280,
+      "height": 1864,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://btn.gold-usergeneratedcontent.net/webpsmalltn/0/a3/cca15619a4c315b5ec202c16263b29515561a22d61b6ddbe2362cfc423ab9a30.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "014.webp"
+    },
+    {
+      "index": 14,
+      "width": 1280,
+      "height": 1859,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/6/7f/30fc87f13c7c42d26e69e5060133d076a85532a4425b88a38c3f7a2db5c4b7f6.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "015.webp"
+    },
+    {
+      "index": 15,
+      "width": 1280,
+      "height": 1866,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://btn.gold-usergeneratedcontent.net/webpsmalltn/3/c5/b963598b06c3fc66f3f9098f63712da7fe528f2cdb90cc9451069a5682e96c53.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "016.webp"
+    },
+    {
+      "index": 16,
+      "width": 1280,
+      "height": 1857,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/7/6c/1bfc2a005a7b1b57291be7e1b0bf8227def4590ce7979c61e5b1281bddb176c7.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "017.webp"
+    },
+    {
+      "index": 17,
+      "width": 1280,
+      "height": 1867,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/5/60/37e93f8c15983b1b167f098984b7efd4fd0226bfda7a456ae9c47679cb50c605.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "018.webp"
+    },
+    {
+      "index": 18,
+      "width": 1280,
+      "height": 1861,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/f/18/4bb650cb17ada8445edcf55d09841b2c0f734c8378fb04103797219285a9c18f.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "019.webp"
+    },
+    {
+      "index": 19,
+      "width": 1280,
+      "height": 1859,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/e/7e/3daca99c72e8ebd0d89d6c6b724f19d70a2e0f5e3f5dbbb62f7f92eb51eff7ee.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "020.webp"
+    },
+    {
+      "index": 20,
+      "width": 1280,
+      "height": 1865,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://btn.gold-usergeneratedcontent.net/webpsmalltn/7/e4/83cae884ec2edef4766263895dbcef3c016e3d8c2ff581fe874b03cffc6aee47.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "021.webp"
+    },
+    {
+      "index": 21,
+      "width": 1280,
+      "height": 1864,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://btn.gold-usergeneratedcontent.net/webpsmalltn/1/12/3e49cbb17069d7c31ab2d3111ca1e9cc4c56eda8c9f682dd8f85701a2f222121.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "022.webp"
+    },
+    {
+      "index": 22,
+      "width": 1280,
+      "height": 1866,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/6/c4/d5df7bc9e2786a76fef68bca8e5810b661ab2c2e597251985f96735f0bb2ec46.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "023.webp"
+    },
+    {
+      "index": 23,
+      "width": 1280,
+      "height": 1864,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/0/03/e35d71edda87d937c1d3386215656521fd654eaa176973a827f3197ec76d4030.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "024.webp"
+    },
+    {
+      "index": 24,
+      "width": 1280,
+      "height": 1853,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/3/63/391f968ddc110b04887eae6375befcaeb2e4a4a90ace2c2f8e25a2f4f958f633.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "025.webp"
+    },
+    {
+      "index": 25,
+      "width": 1280,
+      "height": 1866,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/f/07/48544bd48f9a97c2ab3351bdb2c2ad62c8152e9f1d8b5d1b28a59113b964607f.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "026.webp"
+    },
+    {
+      "index": 26,
+      "width": 1280,
+      "height": 1865,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://btn.gold-usergeneratedcontent.net/webpsmalltn/1/89/372c0d86ed15d5e682f19b9a5b1e4baa7048eaf81c2a689593dadb34657ba891.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "027.webp"
+    },
+    {
+      "index": 27,
+      "width": 1280,
+      "height": 1868,
+      "size": "exact",
+      "thumbnail": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpsmalltn/4/06/6f40c7ad85ea493221889cd36481031152e1be80fb6ec2b90d104bf872612064.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "fileName": "028.webp"
+    }
+  ],
+  "sourceData": {
+    "hashes": [
+      "fd5a29e5a3c672d497ae610a3babe8942d31e98e77376c97ee1a2f5c0ab53b54",
+      "26604abffb11fd9d734c797db942ebfd306669b42a66ec3dac8efe3186923128",
+      "5a6ae6237b0e3e8844767fc80fe116ca4a01ddc4a3ca416ea263be06a928f5cf",
+      "0670067ca7241202067af0b3f2d9f8f0fd1f02b3ddc27863a47c5005ddeb975b",
+      "6ada5437b002f2c969b829cf398d14ef0a80ba199e9b02f35bd5ffad5a7b7443",
+      "46faaf4ed996f22c873b7f6f64ee917587b7bdd0ab46427a4042ed8a6936fe96",
+      "6a2a8d27d31c12d62dda3950cec50a5da69ac6dfc6bc729961cae227bb6a6624",
+      "2bea63032b3369b323e1c8d3c0ae840db0b89c055957952ed359dbc192db0403",
+      "63852ea45d579c03fb076a9de835d00f88ab217c8035910609ab73ef0848b1cf",
+      "4d0fb9adbd6799e635a12dfe1b03f29e659305ecdc030055a3cdd64fef862f3a",
+      "0e3f166ddd88d37c8eeb40386d1a8ad7e2f53ab0621566d0e97055f8ff887d96",
+      "d096d2af26b751a5dd5a69fa0cf884e817c835f84fe3dbb52f53b74f4de868db",
+      "c7fca876b19ec9254649d312744b995f7f8ca3f1f0e15bb8cfa0ec5c41bc6a80",
+      "cca15619a4c315b5ec202c16263b29515561a22d61b6ddbe2362cfc423ab9a30",
+      "30fc87f13c7c42d26e69e5060133d076a85532a4425b88a38c3f7a2db5c4b7f6",
+      "b963598b06c3fc66f3f9098f63712da7fe528f2cdb90cc9451069a5682e96c53",
+      "1bfc2a005a7b1b57291be7e1b0bf8227def4590ce7979c61e5b1281bddb176c7",
+      "37e93f8c15983b1b167f098984b7efd4fd0226bfda7a456ae9c47679cb50c605",
+      "4bb650cb17ada8445edcf55d09841b2c0f734c8378fb04103797219285a9c18f",
+      "3daca99c72e8ebd0d89d6c6b724f19d70a2e0f5e3f5dbbb62f7f92eb51eff7ee",
+      "83cae884ec2edef4766263895dbcef3c016e3d8c2ff581fe874b03cffc6aee47",
+      "3e49cbb17069d7c31ab2d3111ca1e9cc4c56eda8c9f682dd8f85701a2f222121",
+      "d5df7bc9e2786a76fef68bca8e5810b661ab2c2e597251985f96735f0bb2ec46",
+      "e35d71edda87d937c1d3386215656521fd654eaa176973a827f3197ec76d4030",
+      "391f968ddc110b04887eae6375befcaeb2e4a4a90ace2c2f8e25a2f4f958f633",
+      "48544bd48f9a97c2ab3351bdb2c2ad62c8152e9f1d8b5d1b28a59113b964607f",
+      "372c0d86ed15d5e682f19b9a5b1e4baa7048eaf81c2a689593dadb34657ba891",
+      "6f40c7ad85ea493221889cd36481031152e1be80fb6ec2b90d104bf872612064"
+    ]
+  }
+}

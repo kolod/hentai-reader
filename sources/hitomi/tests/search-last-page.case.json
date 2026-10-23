@@ -1,0 +1,4 @@
+{
+  "description": "US3-4: a result set smaller than one page has no next cursor",
+  "call": { "fn": "search", "args": [{ "text": "female:robot_girl", "filters": { "language": "en" } }, null] }
+}

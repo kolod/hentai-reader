@@ -1,0 +1,4 @@
+{
+  "description": "US3-1: the cursor from the first page returns the next page",
+  "call": { "fn": "search", "args": [{ "text": "", "filters": {} }, "o:25"] }
+}

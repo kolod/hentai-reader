@@ -1,0 +1,85 @@
+{
+  "items": [
+    {
+      "id": "2246",
+      "title": "Gallery 2246",
+      "cover": {
+        "url": "https://atn.gold-usergeneratedcontent.net/webpbigtn/5/c9/ba4c0732e9da91b7a4349d9cf8c1a367abc03d8305f824cf85a4de61d2c19c95.webp",
+        "headers": {
+          "referer": "https://hitomi.la/"
+        }
+      },
+      "language": "en",
+      "type": "manga",
+      "pageCount": 167,
+      "artists": [
+        "artist 1"
+      ],
+      "tags": [
+        {
+          "namespace": "female",
+          "name": "redacted 1"
+        },
+        {
+          "namespace": "female",
+          "name": "redacted 2"
+        },
+        {
+          "namespace": "female",
+          "name": "redacted 3"
+        },
+        {
+          "namespace": "other",
+          "name": "redacted 4"
+        },
+        {
+          "namespace": "female",
+          "name": "redacted 5"
+        },
+        {
+          "namespace": "female",
+          "name": "glasses"
+        },
+        {
+          "namespace": "other",
+          "name": "redacted 7"
+        },
+        {
+          "namespace": "female",
+          "name": "redacted 8"
+        },
+        {
+          "namespace": "female",
+          "name": "redacted 9"
+        },
+        {
+          "namespace": "female",
+          "name": "redacted 10"
+        },
+        {
+          "namespace": "female",
+          "name": "redacted 11"
+        },
+        {
+          "namespace": "other",
+          "name": "redacted 12"
+        },
+        {
+          "namespace": "female",
+          "name": "redacted 13"
+        },
+        {
+          "namespace": "other",
+          "name": "redacted 14"
+        },
+        {
+          "namespace": "other",
+          "name": "redacted 15"
+        }
+      ],
+      "webUrl": "https://hitomi.la/galleries/2246.html"
+    }
+  ],
+  "nextCursor": null,
+  "total": 1
+}

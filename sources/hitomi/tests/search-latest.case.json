@@ -1,0 +1,4 @@
+{
+  "description": "US3-1: empty query is the latest feed, with a next cursor",
+  "call": { "fn": "search", "args": [{ "text": "", "filters": {} }, null] }
+}
