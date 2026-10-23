@@ -1,8 +1,23 @@
 <!--
 Sync Impact Report
 ==================
-Version change: (template, unversioned) → 1.0.0
-Bump rationale: initial ratification; all placeholders replaced with concrete principles.
+Version change: 1.0.0 → 1.0.1
+Bump rationale: PATCH — clarifications found while scoping the product
+(specs/product-overview.md); no principle added or removed.
+
+Modified principles:
+  - II. Thin, Sandboxed Source Scripts — host API `http.get` clarified as `http.request`
+    (GET/POST, headers, status, binary bodies); needed for Hitomi Range requests on .nozomi
+    indexes and E-Hentai api.php/login POSTs.
+  - IV. Reading Smoothness First — sources that expose exact dimensions only per page may reserve
+    slots from an aspect estimate refined inside the preload window, with scroll anchoring.
+Added sections: none
+Removed sections: none
+Templates requiring updates: none (no template references these rules).
+Follow-up TODOs: none.
+
+--- History ---
+1.0.0 (2026-10-23): initial ratification.
 
 Modified principles (template slot → new title):
   - [PRINCIPLE_1_NAME] → I. Native UI, Shared Source Logic
@@ -59,8 +74,9 @@ logic in one place means a site change is fixed once, not twice.
 - Source scripts MUST be written in JavaScript and run in QuickJS (Android) and Jint (Windows).
 - A script knows only the structure of its site and returns data. It MUST NOT have direct access
   to the file system, the network, or the UI.
-- Scripts obtain every capability exclusively through the host API: `http.get`, `html.select`,
-  `json.parse`, `storage.get` / `storage.set`, `sleep`.
+- Scripts obtain every capability exclusively through the host API: `http.request` (GET/POST,
+  request headers, response status/headers, text or binary body), `html.select`, `json.parse`,
+  `storage.get` / `storage.set`, `sleep`.
 - HTML parsing MUST be performed by the host (Jsoup on Android, AngleSharp on Windows); the
   script receives CSS-selector results, never a DOM of its own.
 - Every source MUST implement the same contract: `search(query, page)`, `getGallery(id)`,
@@ -92,6 +108,10 @@ Reading smoothness is the number-one UX priority.
 - The page strip MUST have no padding and no visible seams between pages.
 - The width and height of every page MUST be stored in metadata BEFORE the image is loaded; space
   for each page MUST be reserved up front so the strip never jumps.
+- Where a source exposes exact dimensions only per page (E-Hentai), the slot MAY be reserved from
+  an aspect-ratio estimate (e.g. its thumbnail), provided the exact size is obtained while the
+  page is still in the preload window, before it becomes visible. A correction above the
+  viewport MUST NOT move the visible content (scroll anchoring).
 - Images MUST be decoded at screen width, not at original resolution; 3–5 pages ahead MUST be
   preloaded.
 - Networking, image decoding, and script execution MUST NEVER run on the UI thread.
@@ -242,4 +262,4 @@ publishing and strict secret hygiene make the update channel trustworthy.
   - PATCH — clarifications, wording, typo fixes.
 - Each amendment updates **Last Amended**; **Ratified** stays the date of original adoption.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-23
+**Version**: 1.0.1 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-23
