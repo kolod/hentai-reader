@@ -70,6 +70,13 @@ sources/<id>/
 - `args`: JSON arguments; a string `"@<case-name>"` substitutes the snapshot result of another
   case (e.g. `getPageUrl` uses the `Gallery` from a `getGallery` case).
 - `storage`: optional seed for per-source storage.
+- `settings` (contract 1.1, feature 002): optional source settings merged over the manifest
+  defaults; passed only to sources declaring contract ≥ 1.1. `fn` may also be `getAccountStatus`.
+- `fixtures` (feature 002): optional pool name; the case records and replays from
+  `fixtures/<name>/` (own `index.json` + `bodies/`). Used when a case makes the same requests as
+  another but the responses differ by account state (e.g. `"logged-in"`). Every pool is audited.
+- `@case.path` references (feature 002) pick a field of the referenced result
+  (`"@search-front.nextCursor"`) and may appear at any depth inside arguments.
 - `expectError`: `null`, or `{ "kind": "NotFound" }` — then no snapshot is written and the case
   passes iff a `SourceError` of that kind is thrown.
 - Snapshot `<name>.expected.json` holds the exact result; also validated against the schema.
