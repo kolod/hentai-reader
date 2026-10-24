@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="HentaiReader.App.Pages.GalleryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:HentaiReader.App.Controls">
+    <Grid Padding="16,12,16,0" RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <InfoBar x:Name="ErrorBar" Severity="Error" IsClosable="False" />
+
+        <Grid Grid.Row="1" ColumnSpacing="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border CornerRadius="4" Width="200" Height="280" VerticalAlignment="Top"
+                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
+                <Image x:Name="Cover" Stretch="UniformToFill" />
+            </Border>
+            <StackPanel Grid.Column="1" Spacing="6">
+                <TextBlock x:Name="TitleText" Style="{StaticResource SubtitleTextBlockStyle}" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
+                <TextBlock x:Name="OriginalTitleText" Opacity="0.75" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
+                <TextBlock x:Name="MetaText" Opacity="0.75" TextWrapping="Wrap" />
+                <HyperlinkButton x:Name="OpenInBrowser" Padding="0" Click="OpenInBrowser_Click" />
+                <StackPanel x:Name="TagGroups" Spacing="4" />
+                <ProgressRing x:Name="Progress" IsActive="True" HorizontalAlignment="Left" />
+            </StackPanel>
+        </Grid>
+
+        <GridView
+            x:Name="PagesGrid"
+            Grid.Row="2"
+            SelectionMode="None"
+            ContainerContentChanging="PagesGrid_ContainerContentChanging">
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem" BasedOn="{StaticResource DefaultGridViewItemStyle}">
+                    <Setter Property="Margin" Value="0,0,8,8" />
+                    <Setter Property="VerticalContentAlignment" Value="Top" />
+                </Style>
+            </GridView.ItemContainerStyle>
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <controls:SpriteThumbnail />
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+    </Grid>
+</Page>

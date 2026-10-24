@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_Title" xml:space="preserve">
+    <value>Hentai Reader</value>
+  </data>
+  <data name="Nav_Sources" xml:space="preserve">
+    <value>ソース</value>
+  </data>
+  <data name="Nav_Settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Source_Unavailable" xml:space="preserve">
+    <value>利用できません: {0}</value>
+  </data>
+  <data name="Search_Placeholder" xml:space="preserve">
+    <value>ソースの構文で検索（例: female:glasses）</value>
+  </data>
+  <data name="Search_Button" xml:space="preserve">
+    <value>検索</value>
+  </data>
+  <data name="Search_Filters" xml:space="preserve">
+    <value>フィルター</value>
+  </data>
+  <data name="Search_ResetFilters" xml:space="preserve">
+    <value>フィルターをリセット</value>
+  </data>
+  <data name="Search_Any" xml:space="preserve">
+    <value>すべて</value>
+  </data>
+  <data name="Search_From" xml:space="preserve">
+    <value>最小</value>
+  </data>
+  <data name="Search_To" xml:space="preserve">
+    <value>最大</value>
+  </data>
+  <data name="Search_Loading" xml:space="preserve">
+    <value>読み込み中…</value>
+  </data>
+  <data name="Search_End" xml:space="preserve">
+    <value>これ以上の結果はありません</value>
+  </data>
+  <data name="Search_Empty" xml:space="preserve">
+    <value>見つかりませんでした</value>
+  </data>
+  <data name="Search_Retry" xml:space="preserve">
+    <value>再試行</value>
+  </data>
+  <data name="Search_CopyDetails" xml:space="preserve">
+    <value>詳細をコピー</value>
+  </data>
+  <data name="Search_ResultCount_other" xml:space="preserve">
+    <value>{0} 件</value>
+  </data>
+  <data name="Gallery_PageCount_other" xml:space="preserve">
+    <value>{0} ページ</value>
+  </data>
+  <data name="Gallery_Back" xml:space="preserve">
+    <value>戻る</value>
+  </data>
+  <data name="Gallery_Loading" xml:space="preserve">
+    <value>ギャラリーを読み込み中…</value>
+  </data>
+  <data name="Gallery_Rating" xml:space="preserve">
+    <value>評価</value>
+  </data>
+  <data name="Gallery_Uploader" xml:space="preserve">
+    <value>投稿者</value>
+  </data>
+  <data name="Gallery_Uploaded" xml:space="preserve">
+    <value>投稿日</value>
+  </data>
+  <data name="Gallery_Language" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="Gallery_Type" xml:space="preserve">
+    <value>カテゴリー</value>
+  </data>
+  <data name="Gallery_Pages" xml:space="preserve">
+    <value>ページ</value>
+  </data>
+  <data name="Gallery_Tags" xml:space="preserve">
+    <value>タグ</value>
+  </data>
+  <data name="Gallery_OpenInBrowser" xml:space="preserve">
+    <value>ブラウザーで開く</value>
+  </data>
+  <data name="Filter_sort" xml:space="preserve">
+    <value>並べ替え</value>
+  </data>
+  <data name="Filter_language" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="Filter_type" xml:space="preserve">
+    <value>カテゴリー</value>
+  </data>
+  <data name="Filter_min_rating" xml:space="preserve">
+    <value>最低評価</value>
+  </data>
+  <data name="Filter_pages" xml:space="preserve">
+    <value>ページ数</value>
+  </data>
+  <data name="Sort_latest" xml:space="preserve">
+    <value>新着順</value>
+  </data>
+  <data name="Sort_popular_day" xml:space="preserve">
+    <value>今日の人気</value>
+  </data>
+  <data name="Sort_popular_week" xml:space="preserve">
+    <value>今週の人気</value>
+  </data>
+  <data name="Sort_popular_month" xml:space="preserve">
+    <value>今月の人気</value>
+  </data>
+  <data name="Sort_popular_year" xml:space="preserve">
+    <value>今年の人気</value>
+  </data>
+  <data name="Sort_rating" xml:space="preserve">
+    <value>高評価順</value>
+  </data>
+  <data name="Type_doujinshi" xml:space="preserve">
+    <value>同人誌</value>
+  </data>
+  <data name="Type_manga" xml:space="preserve">
+    <value>漫画</value>
+  </data>
+  <data name="Type_artist_cg" xml:space="preserve">
+    <value>作家 CG</value>
+  </data>
+  <data name="Type_game_cg" xml:space="preserve">
+    <value>ゲーム CG</value>
+  </data>
+  <data name="Type_image_set" xml:space="preserve">
+    <value>画像セット</value>
+  </data>
+  <data name="Type_anime" xml:space="preserve">
+    <value>アニメ</value>
+  </data>
+  <data name="Type_western" xml:space="preserve">
+    <value>海外</value>
+  </data>
+  <data name="Type_non_h" xml:space="preserve">
+    <value>非エロ</value>
+  </data>
+  <data name="Type_cosplay" xml:space="preserve">
+    <value>コスプレ</value>
+  </data>
+  <data name="Type_misc" xml:space="preserve">
+    <value>その他</value>
+  </data>
+  <data name="Type_asian_porn" xml:space="preserve">
+    <value>アジアンポルノ</value>
+  </data>
+  <data name="Setting_image_quality" xml:space="preserve">
+    <value>画像の品質</value>
+  </data>
+  <data name="Setting_image_quality_resampled" xml:space="preserve">
+    <value>縮小版（高速、制限の消費が少ない）</value>
+  </data>
+  <data name="Setting_image_quality_original" xml:space="preserve">
+    <value>オリジナル</value>
+  </data>
+  <data name="Setting_site" xml:space="preserve">
+    <value>サイト</value>
+  </data>
+  <data name="Setting_site_e_hentai" xml:space="preserve">
+    <value>E-Hentai</value>
+  </data>
+  <data name="Setting_site_exhentai" xml:space="preserve">
+    <value>ExHentai</value>
+  </data>
+  <data name="Error_RateLimited_Title" xml:space="preserve">
+    <value>サイトがリクエストを制限しています</value>
+  </data>
+  <data name="Error_RateLimited_Body" xml:space="preserve">
+    <value>再試行するまで、このソースへのリクエストは停止されます。</value>
+  </data>
+  <data name="Error_RateLimited_After" xml:space="preserve">
+    <value>約 {0} 分待つよう求められています。</value>
+  </data>
+  <data name="Error_LoginRequired_Title" xml:space="preserve">
+    <value>ログインが必要です</value>
+  </data>
+  <data name="Error_LoginRequired_Body" xml:space="preserve">
+    <value>このコンテンツにはサイトへのログインが必要です。</value>
+  </data>
+  <data name="Error_NotFound_Title" xml:space="preserve">
+    <value>見つかりません</value>
+  </data>
+  <data name="Error_NotFound_Body" xml:space="preserve">
+    <value>ギャラリーが存在しないか、削除されました。</value>
+  </data>
+  <data name="Error_SiteChanged_Title" xml:space="preserve">
+    <value>サイトが変更されました</value>
+  </data>
+  <data name="Error_SiteChanged_Body" xml:space="preserve">
+    <value>ソースがサイトを解析できなくなりました。更新が必要です。</value>
+  </data>
+  <data name="Error_InvalidInput_Title" xml:space="preserve">
+    <value>リクエストが受け付けられません</value>
+  </data>
+  <data name="Error_InvalidInput_Body" xml:space="preserve">
+    <value>ソースがこの検索またはフィルターを拒否しました。</value>
+  </data>
+  <data name="Error_Network_Title" xml:space="preserve">
+    <value>ネットワークの問題</value>
+  </data>
+  <data name="Error_Network_Body" xml:space="preserve">
+    <value>接続を確認して、もう一度お試しください。</value>
+  </data>
+  <data name="Error_ScriptError_Title" xml:space="preserve">
+    <value>ソースでエラーが発生しました</value>
+  </data>
+  <data name="Error_ScriptError_Body" xml:space="preserve">
+    <value>ソースのスクリプト内で問題が発生しました。</value>
+  </data>
+  <data name="Namespace_artist" xml:space="preserve">
+    <value>作家</value>
+  </data>
+  <data name="Namespace_group" xml:space="preserve">
+    <value>サークル</value>
+  </data>
+  <data name="Namespace_parody" xml:space="preserve">
+    <value>原作</value>
+  </data>
+  <data name="Namespace_character" xml:space="preserve">
+    <value>キャラクター</value>
+  </data>
+  <data name="Namespace_female" xml:space="preserve">
+    <value>女性</value>
+  </data>
+  <data name="Namespace_male" xml:space="preserve">
+    <value>男性</value>
+  </data>
+  <data name="Namespace_mixed" xml:space="preserve">
+    <value>混合</value>
+  </data>
+  <data name="Namespace_other" xml:space="preserve">
+    <value>その他</value>
+  </data>
+  <data name="Namespace_language" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="Namespace_cosplayer" xml:space="preserve">
+    <value>コスプレイヤー</value>
+  </data>
+  <data name="Namespace_reclass" xml:space="preserve">
+    <value>再分類</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>表示言語</value>
+  </data>
+  <data name="Settings_LanguageSystem" xml:space="preserve">
+    <value>システムの言語</value>
+  </data>
+  <data name="Settings_LanguageRestart" xml:space="preserve">
+    <value>言語を切り替えるとアプリが再起動します。</value>
+  </data>
+  <data name="Gate_Title" xml:space="preserve">
+    <value>成人向けコンテンツ</value>
+  </data>
+  <data name="Gate_Body" xml:space="preserve">
+    <value>このアプリは成人向けのコンテンツのみを表示します。お住まいの国で成人である場合のみ続行してください。</value>
+  </data>
+  <data name="Gate_Confirm" xml:space="preserve">
+    <value>成人です</value>
+  </data>
+  <data name="Gate_Decline" xml:space="preserve">
+    <value>終了</value>
+  </data>
+</root>

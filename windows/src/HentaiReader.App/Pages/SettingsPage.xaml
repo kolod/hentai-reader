@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="HentaiReader.App.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel Padding="24,16" Spacing="12" MaxWidth="640" HorizontalAlignment="Left">
+        <TextBlock x:Name="TitleText" Style="{StaticResource TitleTextBlockStyle}" />
+        <ComboBox x:Name="LanguageBox" MinWidth="280" DisplayMemberPath="Text" />
+        <TextBlock x:Name="RestartNote" Opacity="0.7" TextWrapping="Wrap" />
+    </StackPanel>
+</Page>
