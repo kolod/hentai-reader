@@ -107,7 +107,7 @@ smoke test.
 **Independent test**: [quickstart.md §4](quickstart.md).
 
 - [X] T023 [US5] Extend `W/build/Test-InstallerSmoke.ps1`: silent upgrade from the `0.0.1` build to `<v>` keeps install folder and scope (uninstall key under HKCU, same `InstallLocation`) and data; record measured exit codes (downgrade, app running, cancel n/a) and update [contracts/installer-cli.md](contracts/installer-cli.md) if they differ
-- [ ] T024 [US5] Run `Build-Installer.ps1 -SmokeTest` locally end to end; then push and confirm the CI `installer` job is green with artifacts attached
+- [X] T024 [US5] Run `Build-Installer.ps1 -SmokeTest` locally end to end; then push and confirm the CI `installer` job is green with artifacts attached
 
 ---
 
