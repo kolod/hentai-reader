@@ -15,6 +15,10 @@ updates:
     groups:
       npm-minor-patch:
         update-types: ["minor", "patch"]
+    ignore:
+      # Types follow the minimum Node version (package.json engines >=24); bump both together by hand.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
 
   # Windows host: projects referenced by windows/HentaiReader.slnx.
   - package-ecosystem: "nuget"

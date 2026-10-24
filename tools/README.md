@@ -5,7 +5,7 @@
 Runs source scripts outside the apps, inside QuickJS (WebAssembly) with a reference host that
 implements the contract. Full reference: `specs/001-source-contract/contracts/runner-cli.md`.
 
-Requires Node.js 22.18+. From the repository root:
+Requires Node.js 24+. From the repository root:
 
 ```text
 npm ci
