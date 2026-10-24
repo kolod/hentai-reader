@@ -6,6 +6,10 @@ sources/**/*.js text eol=lf
 sources/**/*.json text eol=lf
 contract/**/*.d.ts text eol=lf
 
+# npm rewrites the shebang line of package bin files to LF on every install;
+# keeping the whole file LF stops it from showing up as modified.
+tools/runner/src/cli.ts text eol=lf
+
 # Recorded site responses must stay byte-exact
 **/fixtures/** -text
 
