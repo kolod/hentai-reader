@@ -175,7 +175,12 @@ try {
     else {
         Invoke-Step 'Source and runner tests' {
             Push-Location $Root
-            try { Invoke-Native npm @('test', '--silent') } finally { Pop-Location }
+            try {
+                # The contract JSON schemas are generated, not committed; a clean clone has none.
+                Invoke-Native npm @('run', 'schema', '--silent')
+                Invoke-Native npm @('test', '--silent')
+            }
+            finally { Pop-Location }
         }
         Invoke-Step 'Windows tests' {
             Invoke-Native dotnet @('test', '--project', (Join-Path $Windows 'tests/HentaiReader.Host.Tests'), '-c', 'Release', '--no-build')
