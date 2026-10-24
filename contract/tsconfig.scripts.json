@@ -12,7 +12,6 @@
     "types": [],
     "module": "es2020",
     "moduleResolution": "bundler",
-    "baseUrl": ".",
     "paths": {
       "@contract": ["./host-api.d.ts"]
     }

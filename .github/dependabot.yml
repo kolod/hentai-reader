@@ -19,6 +19,9 @@ updates:
       # Types follow the minimum Node version (package.json engines >=24); bump both together by hand.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      # TypeScript 7 (native compiler) has no stable JS API; `runner check` uses ts.createProgram.
+      - dependency-name: "typescript"
+        versions: [">=7"]
 
   # Windows host: projects referenced by windows/HentaiReader.slnx.
   - package-ecosystem: "nuget"
