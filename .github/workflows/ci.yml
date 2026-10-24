@@ -26,7 +26,7 @@ jobs:
       windows: ${{ github.event_name == 'workflow_dispatch' || steps.filter.outputs.windows == 'true' }}
       installer: ${{ github.event_name == 'workflow_dispatch' || steps.filter.outputs.installer == 'true' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: dorny/paths-filter@v4
         id: filter
         with:
@@ -63,8 +63,8 @@ jobs:
     if: needs.changes.outputs.sources == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -95,8 +95,8 @@ jobs:
     if: needs.changes.outputs.windows == 'true'
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
       - name: Build (host, tests, WinUI app)
@@ -111,11 +111,11 @@ jobs:
     if: needs.changes.outputs.installer == 'true'
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -124,7 +124,7 @@ jobs:
         run: pwsh windows/build/Build-Installer.ps1 -BootstrapTools -SmokeTest
       - name: Upload installer, portable ZIP and reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: hentai-reader-windows
           path: artifacts/installer/
