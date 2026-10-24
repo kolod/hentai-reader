@@ -4,6 +4,27 @@ All notable changes to this component. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+## [0.2.0] - Unreleased
+
+### Added
+
+- Installer `HentaiReader-Setup-<v>-x64.exe` (Inno Setup 7.1.0, 45 MB): install for the current
+  user (default, no administrator rights) or for all users; six installer languages following the
+  Windows display language; adult content notice on the welcome page; in-place silent upgrades,
+  downgrade refusal, waits for a running app; uninstall keeps `%LOCALAPPDATA%\HentaiReader` and says
+  so.
+- Portable ZIP of the same verified files (70 MB).
+- `windows/build/Build-Installer.ps1`: one command for build, tests, publish, content verification
+  (`windows/installer/distribution-rules.json`), installer, manifest check, ZIP and an optional
+  install/upgrade/repair/downgrade/uninstall smoke test; CI job `installer`.
+- App icon, `THIRD-PARTY-NOTICES.md`, single version source (`<Version>` in
+  `windows/Directory.Build.props`, assemblies now report 0.2.0).
+
+### Changed
+
+- Distribution without debug symbols, `createdump.exe` and the unused Windows App SDK AI, ML, Search
+  and Widgets components: 461 files / 176 MB instead of 527 files / 233 MB.
+
 ## [0.1.0] - Unreleased
 
 ### Added

@@ -1,0 +1,47 @@
+{
+  "$schema": "../../specs/004-windows-installer/contracts/distribution-rules.schema.json",
+  "schemaVersion": 1,
+  "languages": ["en-US", "de-DE", "fr-FR", "es-ES", "ja-JP", "uk-UA"],
+  "allowedExtensions": [".dll", ".exe", ".winmd", ".pri", ".mui", ".json", ".js", ".png", ".ico", ".html", ".md"],
+  "forbidden": [
+    "**/*.pdb",
+    "**/*.xml",
+    "**/*Tests*.dll",
+    "**/xunit*.dll",
+    "**/Microsoft.Testing.*.dll",
+    "**/createdump.exe",
+    "**/onnxruntime*.dll",
+    "**/DirectML.dll",
+    "**/Microsoft.ML.*",
+    "**/Microsoft.Windows.AI.*",
+    "**/Microsoft.Asg.*",
+    "**/workloads*.json",
+    "**/ref/**",
+    "**/obj/**",
+    "**/fixtures/**",
+    "**/*.fixture.json",
+    "**/cookies*",
+    "**/*.har",
+    "**/preferences.json",
+    "**/storage.json"
+  ],
+  "required": [
+    "HentaiReader.exe",
+    "HentaiReader.dll",
+    "HentaiReader.Host.dll",
+    "HentaiReader.runtimeconfig.json",
+    "HentaiReader.deps.json",
+    "HentaiReader.pri",
+    "Sources/{source}/{source}.js",
+    "Assets/AppIcon.ico",
+    "THIRD-PARTY-NOTICES.md",
+    "coreclr.dll",
+    "Microsoft.ui.xaml.dll",
+    "Jint.dll",
+    "AngleSharp.dll"
+  ],
+  "nativeMachine": {
+    "x64": "0x8664"
+  },
+  "priResourceProbe": "Resources/App_Title"
+}

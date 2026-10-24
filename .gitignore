@@ -78,3 +78,9 @@ dist/
 
 # --- Generated ---
 contract/schema/
+
+# --- Windows distribution (feature 004) ---
+# The Gradle rule "build/" above must not hide the Windows build scripts.
+!windows/build/
+artifacts/
+.tools/

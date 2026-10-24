@@ -1,0 +1,2 @@
+# Installer custom messages whose value may equal the English text (key=language per line).
+# Empty: every message is translated.
