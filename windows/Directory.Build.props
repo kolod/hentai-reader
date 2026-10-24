@@ -5,6 +5,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- The one version of the Windows app: assemblies, installer, file names, windows-vX.Y.Z tag. -->
+    <Version>0.2.0</Version>
+    <Authors>kolod</Authors>
+    <Product>Hentai Reader</Product>
     <!-- Repository root: contract/, sources/ and fixtures are linked from there, never copied. -->
     <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))</RepoRoot>
   </PropertyGroup>

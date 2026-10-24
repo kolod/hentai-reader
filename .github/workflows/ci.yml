@@ -49,3 +49,27 @@ jobs:
         run: dotnet build windows/HentaiReader.slnx -c Release -p:Platform=x64
       - name: Host unit tests and parity suite
         run: dotnet test --project windows/tests/HentaiReader.Host.Tests -c Release
+
+  # The whole Windows distribution (004): tests, publish, content verification, installer,
+  # portable ZIP and a real silent install / upgrade / downgrade / uninstall on the runner.
+  installer:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build, verify and smoke-test the installer
+        run: pwsh windows/build/Build-Installer.ps1 -BootstrapTools -SmokeTest
+      - name: Upload installer, portable ZIP and reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hentai-reader-windows
+          path: artifacts/installer/
+          if-no-files-found: warn

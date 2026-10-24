@@ -17,10 +17,19 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <!-- Source-generated P/Invoke into the system ICU (Localization/Plural.cs). -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.5.1" />
+    <!-- The meta-package brings AI, ML, Search and Widgets components (~50 MB) the app never uses.
+         ExcludeAssets does not flow to dependencies, so the ML runtime is excluded on its own
+         (specs/004-windows-installer research R2). Versions = those the meta-package resolves. -->
+    <PackageReference Include="Microsoft.WindowsAppSDK.AI" Version="2.5.5" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.ML" Version="2.1.94" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Search" Version="2.5.5" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Widgets" Version="2.0.5" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.Windows.AI.MachineLearning" Version="2.1.74" ExcludeAssets="all" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2705" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.13" />
@@ -33,5 +42,15 @@
   <ItemGroup>
     <!-- Built-in copy of every source script (Constitution III), linked from sources/. -->
     <Content Include="$(RepoRoot)sources\*\*.js" Link="Sources\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\AppIcon.ico" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+
+  <!-- Distribution holds no debug symbols (package symbols included) and no crash-dump helper;
+       developers keep .pdb files in bin/ (FR-005). -->
+  <Target Name="RemoveNonDistributableFiles" AfterTargets="ComputeResolvedFilesToPublishList">
+    <ItemGroup>
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.pdb' or '%(Filename)%(Extension)' == 'createdump.exe'" />
+    </ItemGroup>
+  </Target>
 </Project>
