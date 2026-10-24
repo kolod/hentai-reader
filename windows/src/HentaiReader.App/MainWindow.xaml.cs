@@ -23,6 +23,8 @@ public sealed partial class MainWindow : Window
         _startSourceId = startSourceId;
         Title = Strings.Get("App_Title");
         AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico"));
+        // The system title bar of an unpackaged window stays light; follow the app's light/dark mode.
+        AppWindow.TitleBar.PreferredTheme = Microsoft.UI.Windowing.TitleBarTheme.UseDefaultAppMode;
         Nav.PaneTitle = Strings.Get("Nav_Sources");
         Closed += (_, _) => _sources.Dispose();
     }

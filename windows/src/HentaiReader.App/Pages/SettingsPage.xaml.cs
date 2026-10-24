@@ -45,6 +45,9 @@ public sealed partial class SettingsPage : Page
         if (!_ready || _args is null || LanguageBox.SelectedItem is not Option option || option.Tag == _args.Preferences.Language) return;
         _args.Preferences.Language = option.Tag;
         _args.Preferences.Save();
-        AppInstance.Restart(_args.CurrentSourceId is null ? "" : $"--source={_args.CurrentSourceId}");
+        // The new process waits for this one to release the single-instance mutex (--restart).
+        SingleInstance.Release();
+        var arguments = SingleInstance.RestartFlag + (_args.CurrentSourceId is null ? "" : $" --source={_args.CurrentSourceId}");
+        AppInstance.Restart(arguments);
     }
 }

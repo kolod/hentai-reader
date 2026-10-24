@@ -7,29 +7,8 @@ namespace HentaiReader.App;
 
 public partial class App : Application
 {
-    /// <summary>
-    /// Held while the app runs so the installer can ask to close it first (Inno Setup
-    /// <c>AppMutex</c>, feature 004). The global name covers other sessions of an all-users
-    /// installation. Several instances may run; this is not a single-instance lock.
-    /// </summary>
-    public const string RunningMutexName = "HentaiReader.Running";
-
-    // Referenced for the process lifetime; never disposed before exit.
-    internal readonly Mutex?[] RunningMutexes = [TryCreateMutex(RunningMutexName), TryCreateMutex(@"Global\" + RunningMutexName)];
     private MainWindow? _window;
     private readonly Preferences _preferences = Preferences.Load();
-
-    private static Mutex? TryCreateMutex(string name)
-    {
-        try
-        {
-            return new Mutex(false, name);
-        }
-        catch (Exception e) when (e is UnauthorizedAccessException or IOException or WaitHandleCannotBeOpenedException)
-        {
-            return null;
-        }
-    }
 
     public App()
     {
@@ -44,7 +23,16 @@ public partial class App : Application
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        var startSource = Environment.GetCommandLineArgs()
+        var commandLine = Environment.GetCommandLineArgs();
+        // A second launch shows the running window instead of opening another one.
+        if (!SingleInstance.TryAcquire(restarting: commandLine.Contains(SingleInstance.RestartFlag)))
+        {
+            SingleInstance.ActivateOther();
+            Exit();
+            return;
+        }
+
+        var startSource = commandLine
             .FirstOrDefault(a => a.StartsWith("--source=", StringComparison.Ordinal))?["--source=".Length..];
         _window = new MainWindow(_preferences, startSource);
         _window.Activate();

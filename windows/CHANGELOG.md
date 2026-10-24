@@ -4,6 +4,15 @@ All notable changes to this component. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+## [0.2.1] - Unreleased
+
+### Fixed
+
+- The window title bar follows the app's light or dark mode instead of always being light.
+- Only one instance runs per Windows session: starting the app again brings the open window to
+  the front (same `HentaiReader.Running` mutex the installer waits on). A language change restarts
+  the app without being taken for a second instance.
+
 ## [0.2.0] - Unreleased
 
 ### Added
