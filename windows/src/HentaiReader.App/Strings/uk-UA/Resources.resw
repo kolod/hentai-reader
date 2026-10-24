@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_Title" xml:space="preserve">
+    <value>Hentai Reader</value>
+  </data>
+  <data name="Nav_Sources" xml:space="preserve">
+    <value>Джерела</value>
+  </data>
+  <data name="Nav_Settings" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
+  <data name="Source_Unavailable" xml:space="preserve">
+    <value>Недоступне: {0}</value>
+  </data>
+  <data name="Search_Placeholder" xml:space="preserve">
+    <value>Пошук у синтаксисі джерела, напр. female:glasses</value>
+  </data>
+  <data name="Search_Button" xml:space="preserve">
+    <value>Знайти</value>
+  </data>
+  <data name="Search_Filters" xml:space="preserve">
+    <value>Фільтри</value>
+  </data>
+  <data name="Search_ResetFilters" xml:space="preserve">
+    <value>Скинути фільтри</value>
+  </data>
+  <data name="Search_Any" xml:space="preserve">
+    <value>Будь-яка</value>
+  </data>
+  <data name="Search_From" xml:space="preserve">
+    <value>Від</value>
+  </data>
+  <data name="Search_To" xml:space="preserve">
+    <value>До</value>
+  </data>
+  <data name="Search_Loading" xml:space="preserve">
+    <value>Завантаження…</value>
+  </data>
+  <data name="Search_End" xml:space="preserve">
+    <value>Більше результатів немає</value>
+  </data>
+  <data name="Search_Empty" xml:space="preserve">
+    <value>Нічого не знайдено</value>
+  </data>
+  <data name="Search_Retry" xml:space="preserve">
+    <value>Повторити</value>
+  </data>
+  <data name="Search_CopyDetails" xml:space="preserve">
+    <value>Копіювати подробиці</value>
+  </data>
+  <data name="Search_ResultCount_one" xml:space="preserve">
+    <value>{0} результат</value>
+  </data>
+  <data name="Search_ResultCount_few" xml:space="preserve">
+    <value>{0} результати</value>
+  </data>
+  <data name="Search_ResultCount_many" xml:space="preserve">
+    <value>{0} результатів</value>
+  </data>
+  <data name="Search_ResultCount_other" xml:space="preserve">
+    <value>{0} результату</value>
+  </data>
+  <data name="Gallery_PageCount_one" xml:space="preserve">
+    <value>{0} сторінка</value>
+  </data>
+  <data name="Gallery_PageCount_few" xml:space="preserve">
+    <value>{0} сторінки</value>
+  </data>
+  <data name="Gallery_PageCount_many" xml:space="preserve">
+    <value>{0} сторінок</value>
+  </data>
+  <data name="Gallery_PageCount_other" xml:space="preserve">
+    <value>{0} сторінки</value>
+  </data>
+  <data name="Gallery_Back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="Gallery_Loading" xml:space="preserve">
+    <value>Завантаження галереї…</value>
+  </data>
+  <data name="Gallery_Rating" xml:space="preserve">
+    <value>Рейтинг</value>
+  </data>
+  <data name="Gallery_Uploader" xml:space="preserve">
+    <value>Завантажив</value>
+  </data>
+  <data name="Gallery_Uploaded" xml:space="preserve">
+    <value>Додано</value>
+  </data>
+  <data name="Gallery_Language" xml:space="preserve">
+    <value>Мова</value>
+  </data>
+  <data name="Gallery_Type" xml:space="preserve">
+    <value>Категорія</value>
+  </data>
+  <data name="Gallery_Pages" xml:space="preserve">
+    <value>Сторінки</value>
+  </data>
+  <data name="Gallery_Tags" xml:space="preserve">
+    <value>Теги</value>
+  </data>
+  <data name="Gallery_OpenInBrowser" xml:space="preserve">
+    <value>Відкрити в браузері</value>
+  </data>
+  <data name="Filter_sort" xml:space="preserve">
+    <value>Сортування</value>
+  </data>
+  <data name="Filter_language" xml:space="preserve">
+    <value>Мова</value>
+  </data>
+  <data name="Filter_type" xml:space="preserve">
+    <value>Категорія</value>
+  </data>
+  <data name="Filter_min_rating" xml:space="preserve">
+    <value>Мінімальний рейтинг</value>
+  </data>
+  <data name="Filter_pages" xml:space="preserve">
+    <value>Сторінки</value>
+  </data>
+  <data name="Sort_latest" xml:space="preserve">
+    <value>Найновіші</value>
+  </data>
+  <data name="Sort_popular_day" xml:space="preserve">
+    <value>Популярне сьогодні</value>
+  </data>
+  <data name="Sort_popular_week" xml:space="preserve">
+    <value>Популярне за тиждень</value>
+  </data>
+  <data name="Sort_popular_month" xml:space="preserve">
+    <value>Популярне за місяць</value>
+  </data>
+  <data name="Sort_popular_year" xml:space="preserve">
+    <value>Популярне за рік</value>
+  </data>
+  <data name="Sort_rating" xml:space="preserve">
+    <value>Найвищий рейтинг</value>
+  </data>
+  <data name="Type_doujinshi" xml:space="preserve">
+    <value>Додзінсі</value>
+  </data>
+  <data name="Type_manga" xml:space="preserve">
+    <value>Манга</value>
+  </data>
+  <data name="Type_artist_cg" xml:space="preserve">
+    <value>Арт художника</value>
+  </data>
+  <data name="Type_game_cg" xml:space="preserve">
+    <value>Арт із гри</value>
+  </data>
+  <data name="Type_image_set" xml:space="preserve">
+    <value>Набір зображень</value>
+  </data>
+  <data name="Type_anime" xml:space="preserve">
+    <value>Аніме</value>
+  </data>
+  <data name="Type_western" xml:space="preserve">
+    <value>Західне</value>
+  </data>
+  <data name="Type_non_h" xml:space="preserve">
+    <value>Не хентай</value>
+  </data>
+  <data name="Type_cosplay" xml:space="preserve">
+    <value>Косплей</value>
+  </data>
+  <data name="Type_misc" xml:space="preserve">
+    <value>Різне</value>
+  </data>
+  <data name="Type_asian_porn" xml:space="preserve">
+    <value>Азійське порно</value>
+  </data>
+  <data name="Setting_image_quality" xml:space="preserve">
+    <value>Якість зображень</value>
+  </data>
+  <data name="Setting_image_quality_resampled" xml:space="preserve">
+    <value>Зменшені (швидше, менше витрачають ліміт)</value>
+  </data>
+  <data name="Setting_image_quality_original" xml:space="preserve">
+    <value>Оригінальні</value>
+  </data>
+  <data name="Setting_site" xml:space="preserve">
+    <value>Сайт</value>
+  </data>
+  <data name="Setting_site_e_hentai" xml:space="preserve">
+    <value>E-Hentai</value>
+  </data>
+  <data name="Setting_site_exhentai" xml:space="preserve">
+    <value>ExHentai</value>
+  </data>
+  <data name="Error_RateLimited_Title" xml:space="preserve">
+    <value>Сайт обмежує запити</value>
+  </data>
+  <data name="Error_RateLimited_Body" xml:space="preserve">
+    <value>Запити до цього джерела призупинено, доки ви не повторите.</value>
+  </data>
+  <data name="Error_RateLimited_After" xml:space="preserve">
+    <value>Сайт просить зачекати приблизно {0} хв.</value>
+  </data>
+  <data name="Error_LoginRequired_Title" xml:space="preserve">
+    <value>Потрібен вхід</value>
+  </data>
+  <data name="Error_LoginRequired_Body" xml:space="preserve">
+    <value>Для цього вмісту потрібно увійти на сайті.</value>
+  </data>
+  <data name="Error_NotFound_Title" xml:space="preserve">
+    <value>Не знайдено</value>
+  </data>
+  <data name="Error_NotFound_Body" xml:space="preserve">
+    <value>Галерея не існує або її видалено.</value>
+  </data>
+  <data name="Error_SiteChanged_Title" xml:space="preserve">
+    <value>Сайт змінився</value>
+  </data>
+  <data name="Error_SiteChanged_Body" xml:space="preserve">
+    <value>Джерело більше не розуміє сайт і потребує оновлення.</value>
+  </data>
+  <data name="Error_InvalidInput_Title" xml:space="preserve">
+    <value>Запит не прийнято</value>
+  </data>
+  <data name="Error_InvalidInput_Body" xml:space="preserve">
+    <value>Джерело відхилило цей пошук або фільтр.</value>
+  </data>
+  <data name="Error_Network_Title" xml:space="preserve">
+    <value>Проблема з мережею</value>
+  </data>
+  <data name="Error_Network_Body" xml:space="preserve">
+    <value>Перевірте з'єднання і спробуйте ще раз.</value>
+  </data>
+  <data name="Error_ScriptError_Title" xml:space="preserve">
+    <value>Збій джерела</value>
+  </data>
+  <data name="Error_ScriptError_Body" xml:space="preserve">
+    <value>У скрипті джерела сталася помилка.</value>
+  </data>
+  <data name="Namespace_artist" xml:space="preserve">
+    <value>Художник</value>
+  </data>
+  <data name="Namespace_group" xml:space="preserve">
+    <value>Група</value>
+  </data>
+  <data name="Namespace_parody" xml:space="preserve">
+    <value>Пародія</value>
+  </data>
+  <data name="Namespace_character" xml:space="preserve">
+    <value>Персонаж</value>
+  </data>
+  <data name="Namespace_female" xml:space="preserve">
+    <value>Жіночі</value>
+  </data>
+  <data name="Namespace_male" xml:space="preserve">
+    <value>Чоловічі</value>
+  </data>
+  <data name="Namespace_mixed" xml:space="preserve">
+    <value>Змішані</value>
+  </data>
+  <data name="Namespace_other" xml:space="preserve">
+    <value>Інше</value>
+  </data>
+  <data name="Namespace_language" xml:space="preserve">
+    <value>Мова</value>
+  </data>
+  <data name="Namespace_cosplayer" xml:space="preserve">
+    <value>Косплеєр</value>
+  </data>
+  <data name="Namespace_reclass" xml:space="preserve">
+    <value>Перекласифіковано</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Мова інтерфейсу</value>
+  </data>
+  <data name="Settings_LanguageSystem" xml:space="preserve">
+    <value>Мова системи</value>
+  </data>
+  <data name="Settings_LanguageRestart" xml:space="preserve">
+    <value>Щоб змінити мову, застосунок перезапуститься.</value>
+  </data>
+  <data name="Gate_Title" xml:space="preserve">
+    <value>Вміст для дорослих</value>
+  </data>
+  <data name="Gate_Body" xml:space="preserve">
+    <value>Цей застосунок показує вміст лише для дорослих. Продовжуйте, тільки якщо ви повнолітні за законами вашої країни.</value>
+  </data>
+  <data name="Gate_Confirm" xml:space="preserve">
+    <value>Мені є 18</value>
+  </data>
+  <data name="Gate_Decline" xml:space="preserve">
+    <value>Вийти</value>
+  </data>
+</root>

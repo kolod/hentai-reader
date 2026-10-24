@@ -4,6 +4,15 @@ All notable changes to this component. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+## [1.1.1] - Unreleased
+
+### Changed
+
+- `SearchQuery.text`: documented convention that every source understands
+  `<namespace>:<name>` with `_` for spaces (hosts build tag searches this way). Hitomi 0.1.0 and
+  E-Hentai 0.1.0 already comply; no shape change.
+- `host-glue.js` (moved from the runner) is shared by every host; not contract surface.
+
 ## [1.1.0] - Unreleased
 
 Backward compatible: sources declaring `contract: "1.0"` run unchanged.

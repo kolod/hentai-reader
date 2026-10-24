@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_Title" xml:space="preserve">
+    <value>Hentai Reader</value>
+  </data>
+  <data name="Nav_Sources" xml:space="preserve">
+    <value>Quellen</value>
+  </data>
+  <data name="Nav_Settings" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="Source_Unavailable" xml:space="preserve">
+    <value>Nicht verfügbar: {0}</value>
+  </data>
+  <data name="Search_Placeholder" xml:space="preserve">
+    <value>In der Syntax der Quelle suchen, z. B. female:glasses</value>
+  </data>
+  <data name="Search_Button" xml:space="preserve">
+    <value>Suchen</value>
+  </data>
+  <data name="Search_Filters" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Search_ResetFilters" xml:space="preserve">
+    <value>Filter zurücksetzen</value>
+  </data>
+  <data name="Search_Any" xml:space="preserve">
+    <value>Beliebig</value>
+  </data>
+  <data name="Search_From" xml:space="preserve">
+    <value>Von</value>
+  </data>
+  <data name="Search_To" xml:space="preserve">
+    <value>Bis</value>
+  </data>
+  <data name="Search_Loading" xml:space="preserve">
+    <value>Wird geladen…</value>
+  </data>
+  <data name="Search_End" xml:space="preserve">
+    <value>Keine weiteren Ergebnisse</value>
+  </data>
+  <data name="Search_Empty" xml:space="preserve">
+    <value>Nichts gefunden</value>
+  </data>
+  <data name="Search_Retry" xml:space="preserve">
+    <value>Erneut versuchen</value>
+  </data>
+  <data name="Search_CopyDetails" xml:space="preserve">
+    <value>Details kopieren</value>
+  </data>
+  <data name="Search_ResultCount_one" xml:space="preserve">
+    <value>{0} Ergebnis</value>
+  </data>
+  <data name="Search_ResultCount_other" xml:space="preserve">
+    <value>{0} Ergebnisse</value>
+  </data>
+  <data name="Gallery_PageCount_one" xml:space="preserve">
+    <value>{0} Seite</value>
+  </data>
+  <data name="Gallery_PageCount_other" xml:space="preserve">
+    <value>{0} Seiten</value>
+  </data>
+  <data name="Gallery_Back" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
+  <data name="Gallery_Loading" xml:space="preserve">
+    <value>Galerie wird geladen…</value>
+  </data>
+  <data name="Gallery_Rating" xml:space="preserve">
+    <value>Bewertung</value>
+  </data>
+  <data name="Gallery_Uploader" xml:space="preserve">
+    <value>Hochgeladen von</value>
+  </data>
+  <data name="Gallery_Uploaded" xml:space="preserve">
+    <value>Hochgeladen am</value>
+  </data>
+  <data name="Gallery_Language" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="Gallery_Type" xml:space="preserve">
+    <value>Kategorie</value>
+  </data>
+  <data name="Gallery_Pages" xml:space="preserve">
+    <value>Seiten</value>
+  </data>
+  <data name="Gallery_Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="Gallery_OpenInBrowser" xml:space="preserve">
+    <value>Im Browser öffnen</value>
+  </data>
+  <data name="Filter_sort" xml:space="preserve">
+    <value>Sortieren nach</value>
+  </data>
+  <data name="Filter_language" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="Filter_type" xml:space="preserve">
+    <value>Kategorie</value>
+  </data>
+  <data name="Filter_min_rating" xml:space="preserve">
+    <value>Mindestbewertung</value>
+  </data>
+  <data name="Filter_pages" xml:space="preserve">
+    <value>Seiten</value>
+  </data>
+  <data name="Sort_latest" xml:space="preserve">
+    <value>Neueste</value>
+  </data>
+  <data name="Sort_popular_day" xml:space="preserve">
+    <value>Heute beliebt</value>
+  </data>
+  <data name="Sort_popular_week" xml:space="preserve">
+    <value>Diese Woche beliebt</value>
+  </data>
+  <data name="Sort_popular_month" xml:space="preserve">
+    <value>Diesen Monat beliebt</value>
+  </data>
+  <data name="Sort_popular_year" xml:space="preserve">
+    <value>Dieses Jahr beliebt</value>
+  </data>
+  <data name="Sort_rating" xml:space="preserve">
+    <value>Am besten bewertet</value>
+  </data>
+  <data name="Type_doujinshi" xml:space="preserve">
+    <value>Dōjinshi</value>
+  </data>
+  <data name="Type_manga" xml:space="preserve">
+    <value>Manga</value>
+  </data>
+  <data name="Type_artist_cg" xml:space="preserve">
+    <value>Künstler-CG</value>
+  </data>
+  <data name="Type_game_cg" xml:space="preserve">
+    <value>Spiel-CG</value>
+  </data>
+  <data name="Type_image_set" xml:space="preserve">
+    <value>Bildersammlung</value>
+  </data>
+  <data name="Type_anime" xml:space="preserve">
+    <value>Anime</value>
+  </data>
+  <data name="Type_western" xml:space="preserve">
+    <value>Westlich</value>
+  </data>
+  <data name="Type_non_h" xml:space="preserve">
+    <value>Nicht-Hentai</value>
+  </data>
+  <data name="Type_cosplay" xml:space="preserve">
+    <value>Cosplay</value>
+  </data>
+  <data name="Type_misc" xml:space="preserve">
+    <value>Verschiedenes</value>
+  </data>
+  <data name="Type_asian_porn" xml:space="preserve">
+    <value>Asiatische Pornografie</value>
+  </data>
+  <data name="Setting_image_quality" xml:space="preserve">
+    <value>Bildqualität</value>
+  </data>
+  <data name="Setting_image_quality_resampled" xml:space="preserve">
+    <value>Verkleinert (schneller, verbraucht weniger vom Bildlimit)</value>
+  </data>
+  <data name="Setting_image_quality_original" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="Setting_site" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="Setting_site_e_hentai" xml:space="preserve">
+    <value>E-Hentai</value>
+  </data>
+  <data name="Setting_site_exhentai" xml:space="preserve">
+    <value>ExHentai</value>
+  </data>
+  <data name="Error_RateLimited_Title" xml:space="preserve">
+    <value>Die Website begrenzt Anfragen</value>
+  </data>
+  <data name="Error_RateLimited_Body" xml:space="preserve">
+    <value>Anfragen an diese Quelle sind pausiert, bis Sie es erneut versuchen.</value>
+  </data>
+  <data name="Error_RateLimited_After" xml:space="preserve">
+    <value>Die Website bittet, etwa {0} Minuten zu warten.</value>
+  </data>
+  <data name="Error_LoginRequired_Title" xml:space="preserve">
+    <value>Anmeldung erforderlich</value>
+  </data>
+  <data name="Error_LoginRequired_Body" xml:space="preserve">
+    <value>Für diese Inhalte ist eine Anmeldung auf der Website nötig.</value>
+  </data>
+  <data name="Error_NotFound_Title" xml:space="preserve">
+    <value>Nicht gefunden</value>
+  </data>
+  <data name="Error_NotFound_Body" xml:space="preserve">
+    <value>Die Galerie existiert nicht oder wurde entfernt.</value>
+  </data>
+  <data name="Error_SiteChanged_Title" xml:space="preserve">
+    <value>Die Website hat sich geändert</value>
+  </data>
+  <data name="Error_SiteChanged_Body" xml:space="preserve">
+    <value>Die Quelle versteht die Website nicht mehr und braucht ein Update.</value>
+  </data>
+  <data name="Error_InvalidInput_Title" xml:space="preserve">
+    <value>Anfrage nicht angenommen</value>
+  </data>
+  <data name="Error_InvalidInput_Body" xml:space="preserve">
+    <value>Die Quelle hat diese Suche oder diesen Filter abgelehnt.</value>
+  </data>
+  <data name="Error_Network_Title" xml:space="preserve">
+    <value>Netzwerkproblem</value>
+  </data>
+  <data name="Error_Network_Body" xml:space="preserve">
+    <value>Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.</value>
+  </data>
+  <data name="Error_ScriptError_Title" xml:space="preserve">
+    <value>Fehler in der Quelle</value>
+  </data>
+  <data name="Error_ScriptError_Body" xml:space="preserve">
+    <value>Im Skript der Quelle ist ein Fehler aufgetreten.</value>
+  </data>
+  <data name="Namespace_artist" xml:space="preserve">
+    <value>Künstler</value>
+  </data>
+  <data name="Namespace_group" xml:space="preserve">
+    <value>Gruppe</value>
+  </data>
+  <data name="Namespace_parody" xml:space="preserve">
+    <value>Parodie</value>
+  </data>
+  <data name="Namespace_character" xml:space="preserve">
+    <value>Figur</value>
+  </data>
+  <data name="Namespace_female" xml:space="preserve">
+    <value>Weiblich</value>
+  </data>
+  <data name="Namespace_male" xml:space="preserve">
+    <value>Männlich</value>
+  </data>
+  <data name="Namespace_mixed" xml:space="preserve">
+    <value>Gemischt</value>
+  </data>
+  <data name="Namespace_other" xml:space="preserve">
+    <value>Sonstiges</value>
+  </data>
+  <data name="Namespace_language" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="Namespace_cosplayer" xml:space="preserve">
+    <value>Cosplayer</value>
+  </data>
+  <data name="Namespace_reclass" xml:space="preserve">
+    <value>Neu eingeordnet</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Sprache der Benutzeroberfläche</value>
+  </data>
+  <data name="Settings_LanguageSystem" xml:space="preserve">
+    <value>Systemsprache</value>
+  </data>
+  <data name="Settings_LanguageRestart" xml:space="preserve">
+    <value>Zum Wechseln der Sprache wird die App neu gestartet.</value>
+  </data>
+  <data name="Gate_Title" xml:space="preserve">
+    <value>Inhalte für Erwachsene</value>
+  </data>
+  <data name="Gate_Body" xml:space="preserve">
+    <value>Diese App zeigt ausschließlich Inhalte für Erwachsene. Fahren Sie nur fort, wenn Sie in Ihrem Land volljährig sind.</value>
+  </data>
+  <data name="Gate_Confirm" xml:space="preserve">
+    <value>Ich bin volljährig</value>
+  </data>
+  <data name="Gate_Decline" xml:space="preserve">
+    <value>Verlassen</value>
+  </data>
+</root>

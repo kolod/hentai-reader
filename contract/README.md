@@ -7,6 +7,7 @@ provides (Constitution II). Android, Windows and the console runner all implemen
 |------|---------|
 | `host-api.d.ts` | Host capabilities, source exports, data shapes, error kinds |
 | `prelude.js` | `SourceError`, evaluated by every host before a source |
+| `host-glue.js` | Shared host shim: builds the contract globals on a small private bridge each host implements ([protocol](../specs/003-windows-host/contracts/host-bridge.md)); not contract surface, but every host changes with it |
 | `package.json` | `version` **is** the contract version (tag `contract-vX.Y.Z`) |
 | `tsconfig.scripts.json` | Static check for `// @ts-check` source scripts |
 | `schema/` | JSON Schemas generated from the `.d.ts` (`npm run schema`, not committed) |
@@ -35,4 +36,14 @@ throws on failure), `fixtures/` (recorded responses, plus `echo` and `delayMs` h
 `cookies`, `other`, `settings` for 1.1 tests). A host passes when `run()` resolves inside its own engine and every
 assertion holds. Format details: `specs/001-source-contract/contracts/fixtures-and-tests.md`.
 
-Reference host: `npm run runner -- contract-test`.
+Reference host: `npm run runner -- contract-test`. Windows host: `dotnet test --project windows/tests/HentaiReader.Host.Tests` runs the same suite in Jint.
+
+## Hosts
+
+| Host | Engine / HTML | Status |
+|------|---------------|--------|
+| `tools/runner` | QuickJS (WASM) / cheerio | reference |
+| `windows/src/HentaiReader.Host` | Jint / AngleSharp | 1.1.1 |
+| Android | QuickJS / Jsoup | planned |
+
+Both current hosts evaluate the same `prelude.js` and `host-glue.js`.

@@ -11,11 +11,14 @@ import {
 import { paths } from "./paths.ts";
 
 const PRELUDE = readFileSync(paths.prelude, "utf8");
-const GLUE = readFileSync(new URL("./glue.js", import.meta.url), "utf8");
+const GLUE = readFileSync(paths.hostGlue, "utf8");
 
 export const DEFAULT_LIMITS = { callTimeoutMs: 60_000, memoryBytes: 128 * 1024 * 1024 };
 
-/** Host side of the private bridge consumed by glue.js. Every method returns a JSON envelope. */
+/**
+ * Host side of the private bridge consumed by contract/host-glue.js (protocol:
+ * specs/003-windows-host/contracts/host-bridge.md). Every method returns a JSON envelope.
+ */
 export interface HostBridge {
   http(meta: string, body: Uint8Array | undefined): Promise<{ env: string; bytes?: Uint8Array }>;
   htmlSelect(markup: string, elementId: number, selector: string): string;
@@ -83,7 +86,7 @@ export class Engine {
 
     installBridge(ctx, runtime, opts.bridge, opts.frozenNow);
     evalGlobal(ctx, PRELUDE, "prelude.js").dispose();
-    const bind = evalGlobal(ctx, GLUE, "glue.js");
+    const bind = evalGlobal(ctx, GLUE, "host-glue.js");
 
     runtime.setInterruptHandler(shouldInterruptAfterDeadline(Date.now() + limits.callTimeoutMs));
     const loaded = ctx.evalCode(opts.source, opts.sourceName, { type: "module" });

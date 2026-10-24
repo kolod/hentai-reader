@@ -123,7 +123,7 @@ Options:
 1. `001-source-contract` — host API `.d.ts`, console runner, Hitomi script. ✅
 2. `002-ehentai-source` — E-Hentai/ExHentai script, contract 1.1. ✅
 3. `003-windows-host` — WinUI 3 app shell, Jint + AngleSharp host passing the contract suite and
-   replaying the source fixtures, browse/search/gallery screens, 6-language localisation.
+   replaying the source fixtures, browse/search/gallery screens, 6-language localisation. ✅
 4. `004-windows-reader` — seamless reader (online), source settings, E-Hentai login.
 5. `005-cbz-downloads` — download queue, CBZ + metadata, library (Windows first).
 6. `006-android-app` — Android host (QuickJS + Jsoup) and UI at parity.
