@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/kolod/hentai-reader/specs/004-windows-installer/distribution-rules.schema.json",
+  "title": "Windows distribution rules",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "languages", "allowedExtensions", "forbidden", "required", "nativeMachine", "priResourceProbe"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "languages": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z]{2}-[A-Z]{2}$" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "allowedExtensions": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^\\.[a-z0-9]+$" },
+      "uniqueItems": true
+    },
+    "forbidden": {
+      "description": "Globs relative to the publish root with '/' separators; '**' matches any depth.",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "required": {
+      "description": "Paths relative to the publish root; '{source}' expands to every /sources/<id> that holds <id>.js.",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "nativeMachine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x64"],
+      "properties": { "x64": { "type": "string", "pattern": "^0x[0-9A-Fa-f]{4}$" } }
+    },
+    "priResourceProbe": {
+      "description": "Named resource in HentaiReader.pri that must have a candidate for every language.",
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
