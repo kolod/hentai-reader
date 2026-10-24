@@ -1,8 +1,11 @@
-// Runner-internal glue, evaluated as global code after contract/prelude.js and before the source.
-// Builds the contract globals on top of the private __hostBridge, then deletes the bridge so the
-// source can reach the host only through the contract. Every bridge call returns a JSON envelope
-// `{ value }` or `{ error: { kind, message, options } }`, so no exceptions cross the boundary.
-// The value of this script is the `bind(exports)` function used by the engine.
+// Host glue shared by every host (runner, Windows, Android), evaluated as global code after
+// contract/prelude.js and before the source. Builds the contract globals on top of the private
+// __hostBridge, then deletes the bridge so the source can reach the host only through the
+// contract. Every bridge call returns a JSON envelope `{ value }` or
+// `{ error: { kind, message, options } }`, so no exceptions cross the boundary.
+// The value of this script is the `bind(exports)` function used by the host.
+// Bridge protocol: specs/003-windows-host/contracts/host-bridge.md. Not contract surface — but
+// every host changes together with it.
 (function () {
   "use strict";
   const bridge = globalThis.__hostBridge;

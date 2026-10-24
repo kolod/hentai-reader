@@ -253,7 +253,11 @@ export type FilterDefinition =
   | { id: "pages"; kind: "range"; min: number; max: number };
 
 export interface SearchQuery {
-  /** Free text; may contain the source's own tag syntax, e.g. `female:glasses -male:muscle`. */
+  /**
+   * Free text; may contain the source's own tag syntax, e.g. `female:glasses -male:muscle`.
+   * (1.1.1) Every source MUST also understand `<namespace>:<name>` with spaces in the name written
+   * as `_` (e.g. `female:big_breasts`, `other:full_color`) — hosts build tag searches this way.
+   */
   text: string;
   /** Only ids declared in the manifest; unknown ids/values → SourceError("InvalidInput"). */
   filters: {

@@ -11,6 +11,7 @@ export const paths = {
   contractTypes: join(contract, "host-api.d.ts"),
   contractPackage: join(contract, "package.json"),
   prelude: join(contract, "prelude.js"),
+  hostGlue: join(contract, "host-glue.js"),
   schema: join(contract, "schema", "contract.schema.json"),
   scriptsTsconfig: join(contract, "tsconfig.scripts.json"),
   contractTests: join(contract, "tests"),
