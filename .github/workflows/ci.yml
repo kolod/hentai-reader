@@ -1,14 +1,66 @@
 # Keeps main green (Constitution X): contract, runner and every source script are checked and
 # tested offline on each push and pull request; the Windows host must replay the same recordings
 # with identical results (003 parity suite). No network access is needed.
+# Each job runs only when a path it builds from changed; a manual run checks everything.
 name: ci
 
 on:
   push:
+    branches: [main]
   pull_request:
+  workflow_dispatch:
+
+# A newer push to a PR supersedes its running check; every main commit keeps its own result.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      sources: ${{ github.event_name == 'workflow_dispatch' || steps.filter.outputs.sources == 'true' }}
+      windows: ${{ github.event_name == 'workflow_dispatch' || steps.filter.outputs.windows == 'true' }}
+      installer: ${{ github.event_name == 'workflow_dispatch' || steps.filter.outputs.installer == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          # The Windows host embeds contract/ and bundles sources/, so both rebuild it too.
+          filters: |
+            ci: &ci
+              - .github/workflows/ci.yml
+            shared: &shared
+              - contract/**
+              - sources/**
+            node: &node
+              - tools/**
+              - package.json
+              - package-lock.json
+            dotnet: &dotnet
+              - windows/**
+              - global.json
+            sources:
+              - *ci
+              - *shared
+              - *node
+            windows:
+              - *ci
+              - *shared
+              - *dotnet
+            installer:
+              - *ci
+              - *shared
+              - *node
+              - *dotnet
+
   sources:
+    needs: changes
+    if: needs.changes.outputs.sources == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,6 +91,8 @@ jobs:
           done
 
   windows:
+    needs: changes
+    if: needs.changes.outputs.windows == 'true'
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,6 +107,8 @@ jobs:
   # The whole Windows distribution (004): tests, publish, content verification, installer,
   # portable ZIP and a real silent install / upgrade / downgrade / uninstall on the runner.
   installer:
+    needs: changes
+    if: needs.changes.outputs.installer == 'true'
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
