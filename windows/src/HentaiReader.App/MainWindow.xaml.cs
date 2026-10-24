@@ -22,6 +22,7 @@ public sealed partial class MainWindow : Window
         _preferences = preferences;
         _startSourceId = startSourceId;
         Title = Strings.Get("App_Title");
+        AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico"));
         Nav.PaneTitle = Strings.Get("Nav_Sources");
         Closed += (_, _) => _sources.Dispose();
     }
