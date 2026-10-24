@@ -13,6 +13,7 @@ public partial class App : Application
     public App()
     {
         // The language override must be in place before any resource loads (research R6).
+        AppServices.Initialize(_preferences);
         var language = _preferences.EffectiveLanguage();
         Microsoft.Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = language;
         Strings.Language = language;

@@ -110,6 +110,35 @@ public sealed partial class SourceSession : IHostBridge, IDisposable
         return result;
     }
 
+    /// <summary>
+    /// Downloads the image of a contract ImageRequest (<c>{url, headers}</c>) with the source's
+    /// cookies and limiter. HTTP 429/509 puts the session into <see cref="SessionState.Limited"/>
+    /// like a RateLimited script result; while limited nothing is requested.
+    /// </summary>
+    public async Task<byte[]> FetchImageAsync(JsonNode request, CancellationToken token = default)
+    {
+        if (State == SessionState.Limited) throw new SourceLimitedException(RetryAfterSeconds);
+        var url = request["url"]?.GetValue<string>() ?? throw new ArgumentException("ImageRequest without url", nameof(request));
+        var headers = new Dictionary<string, string>();
+        if (request["headers"] is JsonObject h)
+        {
+            foreach (var (k, v) in h)
+            {
+                if (v is JsonValue value && value.TryGetValue<string>(out var text)) headers[k] = text;
+            }
+        }
+        try
+        {
+            return await Http.FetchImageAsync(url, headers, token);
+        }
+        catch (ImageRateLimitException e)
+        {
+            State = SessionState.Limited;
+            RetryAfterSeconds = e.RetryAfterSeconds;
+            throw new SourceLimitedException(e.RetryAfterSeconds);
+        }
+    }
+
     /// <summary>The reader explicitly retries after a rate limit (FR-013).</summary>
     public void ClearLimit()
     {
@@ -137,4 +166,11 @@ public sealed partial class SourceSession : IHostBridge, IDisposable
     public Exception? Fatal => _fatal;
 
     public void Dispose() => _engine?.Dispose();
+}
+
+/// <summary>The source is rate-limited: nothing is requested until the user retries (FR-021).</summary>
+public sealed class SourceLimitedException(double? retryAfterSeconds)
+    : Exception("the source is rate-limited; retry explicitly")
+{
+    public double? RetryAfterSeconds { get; } = retryAfterSeconds;
 }

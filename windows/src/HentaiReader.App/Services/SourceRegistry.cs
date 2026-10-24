@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Nodes;
 using HentaiReader.Host.Engine;
 using HentaiReader.Host.Http;
 using HentaiReader.Host.Sources;
@@ -15,6 +16,16 @@ public sealed class SourceEntry
     public SourceSession? Session { get; set; }
     public string? UnavailableReason { get; set; }
     public bool IsAvailable => Session is not null;
+
+    /// <summary>The user's values of the declared settings (FR-026).</summary>
+    public SourceSettingsStore? Settings { get; set; }
+
+    /// <summary>The source's cookie jar (sign-in and sign-out, FR-028/FR-030).</summary>
+    public CookieJar? Cookies { get; set; }
+
+    /// <summary>Calls a source function with the stored settings (manifest defaults for the rest).</summary>
+    public Task<CallResult> CallAsync(string fn, IReadOnlyList<JsonNode?> args, CancellationToken token = default) =>
+        Session!.CallAsync(fn, args, Settings?.Values, token);
 }
 
 /// <summary>
@@ -26,7 +37,7 @@ public sealed class SourceRegistry : IDisposable
     private readonly LiveTransport _transport = new();
     public List<SourceEntry> Entries { get; } = new();
 
-    public async Task LoadAsync(string bundleDirectory)
+    public async Task LoadAsync(string bundleDirectory, Preferences preferences)
     {
         foreach (var bundle in SourceCatalog.Load(bundleDirectory))
         {
@@ -35,8 +46,10 @@ public sealed class SourceRegistry : IDisposable
             {
                 var dir = AppPaths.SourceData(bundle.Id);
                 Directory.CreateDirectory(dir);
-                var options = new SessionOptions(_transport, EnforcePoliteness: true, new SourceStorage(Path.Combine(dir, "storage.json")), LoadCookies(dir));
+                entry.Cookies = LoadCookies(dir);
+                var options = new SessionOptions(_transport, EnforcePoliteness: true, new SourceStorage(Path.Combine(dir, "storage.json")), entry.Cookies);
                 entry.Session = await SourceSession.OpenAsync(bundle.Script, Path.GetFileName(bundle.ScriptPath), options);
+                entry.Settings = new SourceSettingsStore(preferences, bundle.Id, entry.Session.Manifest["settings"] as JsonArray);
                 entry.Name = entry.Session.Manifest["name"]?.GetValue<string>() ?? bundle.Id;
             }
             catch (Exception e) when (e is LoadException or SettingsException or IOException)

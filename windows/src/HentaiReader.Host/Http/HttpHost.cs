@@ -108,9 +108,24 @@ public sealed class HttpHost
     public async Task<byte[]> FetchImageAsync(string url, IReadOnlyDictionary<string, string>? headers, CancellationToken token = default)
     {
         var raw = new RawRequest("GET", url, headers?.ToDictionary(h => h.Key.ToLowerInvariant(), h => h.Value) ?? new(), null, DefaultTimeout);
+#if DEBUG
+        // Manual check of the limit path (specs/005-windows-reader T033); never compiled into Release.
+        if (Environment.GetEnvironmentVariable("HENTAIREADER_FAULT") == "image509")
+            throw new ImageRateLimitException(509, null, url);
+#endif
         var (_, response) = await PerformAsync(raw, token);
-        if (response.Status is < 200 or >= 300) throw new HttpRequestException($"HTTP {response.Status} for {url}");
+        // HTTP 429/509 is a limit signal (Constitution VI), for images as for script requests.
+        if (response.Status is 429 or 509)
+            throw new ImageRateLimitException(response.Status, RetryAfter(response), url);
+        if (response.Status is < 200 or >= 300) throw new HttpRequestException($"HTTP {response.Status} for {url}", null, (System.Net.HttpStatusCode)response.Status);
         return response.Body;
+    }
+
+    /// <summary>Retry-After in seconds (delta form), or null when absent or a date.</summary>
+    private static double? RetryAfter(RawResponse response)
+    {
+        var value = response.Headers.FirstOrDefault(h => h.Key == "retry-after").Value;
+        return double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var seconds) && seconds >= 0 ? seconds : null;
     }
 
     private static (RawRequest, string) Validate(JsonObject meta, byte[]? bodyBytes)
@@ -217,4 +232,12 @@ public sealed class HttpHost
     }
 
     private static long Now() => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+}
+
+/// <summary>An image request answered with HTTP 429 or 509: the site limits this client.</summary>
+public sealed class ImageRateLimitException(int status, double? retryAfterSeconds, string url)
+    : Exception($"HTTP {status} for {url}")
+{
+    public int Status { get; } = status;
+    public double? RetryAfterSeconds { get; } = retryAfterSeconds;
 }

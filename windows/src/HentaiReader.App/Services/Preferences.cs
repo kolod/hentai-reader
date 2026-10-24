@@ -12,6 +12,15 @@ public sealed class Preferences
     public bool AdultConfirmed { get; set; }
     public string? LastSourceId { get; set; }
 
+    /// <summary>Pages kept loaded ahead of the view (3–5, FR-008).</summary>
+    public int PreloadPages { get; set; } = 4;
+    /// <summary>Maximum reading column width in DIP (600–2000, FR-011).</summary>
+    public int ReadingWidth { get; set; } = 1000;
+    /// <summary>Disk cache limit for page images in MB (256–10240, FR-023).</summary>
+    public int CacheLimitMb { get; set; } = 1024;
+    /// <summary>Per-source setting values (sourceId → settingId → value), FR-026.</summary>
+    public Dictionary<string, Dictionary<string, string>> SourceSettings { get; set; } = new();
+
     private static string FilePath => Path.Combine(AppPaths.Data, "preferences.json");
 
     public static Preferences Load()
@@ -58,4 +67,8 @@ public static class AppPaths
         ? custom
         : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HentaiReader");
     public static string SourceData(string id) => Path.Combine(Data, "sources", id);
+    public static string Progress => Path.Combine(Data, "progress.json");
+    public static string PageCache => Path.Combine(Data, "cache", "pages");
+    /// <summary>Throw-away embedded browser profiles for sign-in (deleted after use).</summary>
+    public static string WebView => Path.Combine(Data, "webview");
 }

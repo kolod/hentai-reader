@@ -29,22 +29,22 @@ window) form the MVP; US3–US7 add progress, navigation/full screen, failures, 
 
 ## Phase 1: Setup
 
-- [ ] T001 Create folders `H/Reading/`, `A/Reader/`, `T/Reading/`, `T/Storage/`; add `HENTAIREADER_DATA`-aware path helpers for `progress.json` and `cache/pages/` to `A/Services/Preferences.cs` (`AppPaths.Progress`, `AppPaths.PageCache`)
-- [ ] T002 [P] Add the English keys for all new UI text (reader toolbar, page indicator `Reader_PageOf` with plurals where counts appear, go-to-page dialog, slot errors, limit banner, full screen, Continue / Read from start / progress `Gallery_Progress`, read marker, reader settings, cache size/clear, sources section, account states, image limit, sign in / paste / sign out, login dialog, ExHentai refusal) to the scratchpad `en-US.json` and regenerate `A/Strings/en-US/Resources.resw` (keys named per [contracts/reader-ui.md](contracts/reader-ui.md))
+- [X] T001 Create folders `H/Reading/`, `A/Reader/`, `T/Reading/`, `T/Storage/`; add `HENTAIREADER_DATA`-aware path helpers for `progress.json` and `cache/pages/` to `A/Services/Preferences.cs` (`AppPaths.Progress`, `AppPaths.PageCache`)
+- [X] T002 [P] Add the English keys for all new UI text (reader toolbar, page indicator `Reader_PageOf` with plurals where counts appear, go-to-page dialog, slot errors, limit banner, full screen, Continue / Read from start / progress `Gallery_Progress`, read marker, reader settings, cache size/clear, sources section, account states, image limit, sign in / paste / sign out, login dialog, ExHentai refusal) to the scratchpad `en-US.json` and regenerate `A/Strings/en-US/Resources.resw` (keys named per [contracts/reader-ui.md](contracts/reader-ui.md))
 
 ---
 
 ## Phase 2: Foundational (block all stories)
 
-- [ ] T003 [P] Implement `H/Reading/StripGeometry.cs` per [data-model](data-model.md#strip-geometry-pure): page sizes, column width `W = min(viewport, readingWidth) × zoom`, heights `W·h/w`, prefix-sum tops, `PageAt(y)` (binary search), `ScrollFor(page, offset)`, `PositionAt(y)` → (page, offset 0–1), `SetPageSize(i, w, h)` returning the height delta and whether the page lies above a given offset
-- [ ] T004 [P] Unit tests `T/Reading/StripGeometryTests.cs`: equal width for pages of any resolution/proportion (FR-004a), tops/total, lookup at boundaries, position round trip across width and zoom changes, delta of a correction above vs below the viewport, 2:3 default for unknown sizes
-- [ ] T005 [P] Implement `H/Reading/LoadPlanner.cs` per [data-model](data-model.md#load-window-pure): visible / ahead (≥ N pages **and** ≥ H) / behind (≥ 1 page **and** ≥ H/2), ordered list and the set to keep decoded
-- [ ] T006 [P] Unit tests `T/Reading/LoadPlannerTests.cs`: portrait case with 7 landscape pages visible (all visible first, ahead still ≥ 1 screen), tall pages where N pages exceed H, start/end of gallery, N = 3/4/5, jump target ordering
-- [ ] T007 [P] Implement `H/Storage/PageCache.cs` per [data-model](data-model.md#page-cache-cachepages): key/fingerprint hashing, `TryGet`, `PutAsync` (atomic file write), LRU eviction to a limit, debounced `index.json` flush, index rebuild on missing/corrupt index, `Clear`, `SizeBytes`; thread-safe
-- [ ] T008 [P] Unit tests `T/Storage/PageCacheTests.cs`: hit/miss, fingerprint separates settings, eviction order and limit, rebuild from folder, clear keeps unrelated files, concurrent puts
-- [ ] T009 [P] Implement `A/Services/SourceSettingsStore.cs` and extend `A/Services/Preferences.cs` with `PreloadPages` (4), `ReadingWidth` (1000), `CacheLimitMb` (1024), `SourceSettings` (drop ids/values the manifest does not declare on load); pass stored settings to every `CallAsync` (`A/ViewModels/SearchViewModel.cs`, `A/Pages/GalleryPage.xaml.cs`)
-- [ ] T010 Image limits in the host: `H/Http/HttpHost.cs` `FetchImageAsync` maps HTTP 429/509 to a typed rate-limit exception with `Retry-After`; `H/Sources/SourceSession.cs` gains `FetchImageAsync(request)` that sets `Limited` on it and refuses while `Limited`; unit tests `T/Http/ImageLimitTests.cs` (429 and 509 → Limited, Retry-After parsed, refusal while Limited, `ClearLimit` resumes)
-- [ ] T011 Window-level input plumbing in `A/MainWindow.xaml(.cs)`: one handler for Back (Alt+Left, mouse XButton1, Back button) dispatching to the current page; a hook for pages to claim Escape; `NavigationView.IsPaneVisible` control used by full screen
+- [X] T003 [P] Implement `H/Reading/StripGeometry.cs` per [data-model](data-model.md#strip-geometry-pure): page sizes, column width `W = min(viewport, readingWidth) × zoom`, heights `W·h/w`, prefix-sum tops, `PageAt(y)` (binary search), `ScrollFor(page, offset)`, `PositionAt(y)` → (page, offset 0–1), `SetPageSize(i, w, h)` returning the height delta and whether the page lies above a given offset
+- [X] T004 [P] Unit tests `T/Reading/StripGeometryTests.cs`: equal width for pages of any resolution/proportion (FR-004a), tops/total, lookup at boundaries, position round trip across width and zoom changes, delta of a correction above vs below the viewport, 2:3 default for unknown sizes
+- [X] T005 [P] Implement `H/Reading/LoadPlanner.cs` per [data-model](data-model.md#load-window-pure): visible / ahead (≥ N pages **and** ≥ H) / behind (≥ 1 page **and** ≥ H/2), ordered list and the set to keep decoded
+- [X] T006 [P] Unit tests `T/Reading/LoadPlannerTests.cs`: portrait case with 7 landscape pages visible (all visible first, ahead still ≥ 1 screen), tall pages where N pages exceed H, start/end of gallery, N = 3/4/5, jump target ordering
+- [X] T007 [P] Implement `H/Storage/PageCache.cs` per [data-model](data-model.md#page-cache-cachepages): key/fingerprint hashing, `TryGet`, `PutAsync` (atomic file write), LRU eviction to a limit, debounced `index.json` flush, index rebuild on missing/corrupt index, `Clear`, `SizeBytes`; thread-safe
+- [X] T008 [P] Unit tests `T/Storage/PageCacheTests.cs`: hit/miss, fingerprint separates settings, eviction order and limit, rebuild from folder, clear keeps unrelated files, concurrent puts
+- [X] T009 [P] Implement `A/Services/SourceSettingsStore.cs` and extend `A/Services/Preferences.cs` with `PreloadPages` (4), `ReadingWidth` (1000), `CacheLimitMb` (1024), `SourceSettings` (drop ids/values the manifest does not declare on load); pass stored settings to every `CallAsync` (`A/ViewModels/SearchViewModel.cs`, `A/Pages/GalleryPage.xaml.cs`)
+- [X] T010 Image limits in the host: `H/Http/HttpHost.cs` `FetchImageAsync` maps HTTP 429/509 to a typed rate-limit exception with `Retry-After`; `H/Sources/SourceSession.cs` gains `FetchImageAsync(request)` that sets `Limited` on it and refuses while `Limited`; unit tests `T/Http/ImageLimitTests.cs` (429 and 509 → Limited, Retry-After parsed, refusal while Limited, `ClearLimit` resumes)
+- [X] T011 Window-level input plumbing in `A/MainWindow.xaml(.cs)`: one handler for Back (Alt+Left, mouse XButton1, Back button) dispatching to the current page; a hook for pages to claim Escape; `NavigationView.IsPaneVisible` control used by full screen
 
 **Checkpoint**: `dotnet test` green with the new unit tests; app unchanged for the user except settings now reaching scripts.
 
@@ -56,12 +56,12 @@ window) form the MVP; US3–US7 add progress, navigation/full screen, failures, 
 
 **Independent test**: [quickstart.md §3](quickstart.md) steps 1–4 on one Hitomi and one E-Hentai gallery.
 
-- [ ] T012 [US1] `A/Reader/StripLayout.cs`: `VirtualizingLayout` over `StripGeometry` (measure/arrange realized items at their tops, exact width, no spacing; extent = total height; realization from the repeater's realization rect)
-- [ ] T013 [US1] `A/Reader/PageSlot.cs`: control with placeholder background of the expected size, `Image` (stretch to width), progress ring after 300 ms, error text + Retry button; automation name `Page {n} of {total}`
-- [ ] T014 [US1] `A/Reader/ReaderSession.cs`: page states per [data-model](data-model.md#reading-session-memory-only); planner loop on scroll/resize/zoom (cancel requests that left the window); for each page: cache hit → decode; else `getPageUrl` (stored settings) → apply exact size via `StripGeometry.SetPageSize` before decoding → `SourceSession.FetchImageAsync` → `PageCache.PutAsync` → decode at `W × scale` (cap 32 MP); release bitmaps outside the keep set; all off the UI thread except bitmap creation
-- [ ] T015 [US1] `A/Pages/ReaderPage.xaml(.cs)`: `ScrollViewer` (vertical anchoring, `VerticalAnchorRatio = 0`) with `ItemsRepeater` + `StripLayout` + `PageSlot` template, centred column with maximum width from preferences, scroll/size events to the session, keys Space/Shift+Space/PgUp/PgDn/Home/End/Up/Down per [contracts/reader-ui.md](contracts/reader-ui.md)
-- [ ] T016 [US1] Anchoring check: if a correction above the viewport moves the top visible page by more than 1 px (log in Debug), apply the fallback from research R3 (`ChangeView` with the geometry delta in the same pass) in `A/Pages/ReaderPage.xaml.cs`
-- [ ] T017 [US1] `A/Pages/GalleryPage.xaml(.cs)`: Read button navigating the `ContentFrame` to `ReaderPage` with source, gallery JSON and settings (no new window)
+- [X] T012 [US1] `A/Reader/StripLayout.cs`: `VirtualizingLayout` over `StripGeometry` (measure/arrange realized items at their tops, exact width, no spacing; extent = total height; realization from the repeater's realization rect)
+- [X] T013 [US1] `A/Reader/PageSlot.cs`: control with placeholder background of the expected size, `Image` (stretch to width), progress ring after 300 ms, error text + Retry button; automation name `Page {n} of {total}`
+- [X] T014 [US1] `A/Reader/ReaderSession.cs`: page states per [data-model](data-model.md#reading-session-memory-only); planner loop on scroll/resize/zoom (cancel requests that left the window); for each page: cache hit → decode; else `getPageUrl` (stored settings) → apply exact size via `StripGeometry.SetPageSize` before decoding → `SourceSession.FetchImageAsync` → `PageCache.PutAsync` → decode at `W × scale` (cap 32 MP); release bitmaps outside the keep set; all off the UI thread except bitmap creation
+- [X] T015 [US1] `A/Pages/ReaderPage.xaml(.cs)`: `ScrollViewer` (vertical anchoring, `VerticalAnchorRatio = 0`) with `ItemsRepeater` + `StripLayout` + `PageSlot` template, centred column with maximum width from preferences, scroll/size events to the session, keys Space/Shift+Space/PgUp/PgDn/Home/End/Up/Down per [contracts/reader-ui.md](contracts/reader-ui.md)
+- [X] T016 [US1] Anchoring check: if a correction above the viewport moves the top visible page by more than 1 px (log in Debug), apply the fallback from research R3 (`ChangeView` with the geometry delta in the same pass) in `A/Pages/ReaderPage.xaml.cs`
+- [X] T017 [US1] `A/Pages/GalleryPage.xaml(.cs)`: Read button navigating the `ContentFrame` to `ReaderPage` with source, gallery JSON and settings (no new window)
 - [ ] T018 [US1] Live check per [quickstart.md §3](quickstart.md): Hitomi and E-Hentai galleries (100+ pages), mixed-resolution gallery for FR-004a, record first-page time (SC-001), placeholders seen while scrolling (SC-002), jumps (SC-003); fix and repeat
 
 **Checkpoint**: MVP reading works end to end in the main window.
@@ -74,9 +74,9 @@ window) form the MVP; US3–US7 add progress, navigation/full screen, failures, 
 
 **Independent test**: [quickstart.md §2](quickstart.md).
 
-- [ ] T019 [US2] `A/Pages/GalleryPage.xaml`: `NavigationCacheMode="Enabled"`; `GalleryPage.xaml.cs` skips reloading when navigated back with the same source+gallery
-- [ ] T020 [US2] `A/Pages/ReaderPage.xaml.cs`: Back/Escape/Alt+Left/mouse back via T011 return to the gallery; leaving (also by selecting another source) cancels loads, saves position (hook for US3) and releases all bitmaps
-- [ ] T021 [US2] UI Automation script check (scratchpad `uia.ps1` extension): search with filter, scroll 100+ results, open gallery, Read, back twice → same query, filter, result count and scroll offset; no new search request (status unchanged); measure < 0.5 s (SC-004)
+- [X] T019 [US2] `A/Pages/GalleryPage.xaml`: `NavigationCacheMode="Enabled"`; `GalleryPage.xaml.cs` skips reloading when navigated back with the same source+gallery
+- [X] T020 [US2] `A/Pages/ReaderPage.xaml.cs`: Back/Escape/Alt+Left/mouse back via T011 return to the gallery; leaving (also by selecting another source) cancels loads, saves position (hook for US3) and releases all bitmaps
+- [X] T021 [US2] UI Automation script check (scratchpad `uia.ps1` extension): search with filter, scroll 100+ results, open gallery, Read, back twice → same query, filter, result count and scroll offset; no new search request (status unchanged); measure < 0.5 s (SC-004)
 
 ---
 
@@ -86,10 +86,10 @@ window) form the MVP; US3–US7 add progress, navigation/full screen, failures, 
 
 **Independent test**: [quickstart.md §5](quickstart.md).
 
-- [ ] T022 [P] [US3] Implement `H/Storage/ProgressStore.cs` (load, get/set per `sourceId|galleryId`, atomic save, read flag stays true) and tests `T/Storage/ProgressStoreTests.cs`
-- [ ] T023 [US3] `A/Reader/ReaderSession.cs` + `A/Pages/ReaderPage.xaml.cs`: save position (page + offset fraction) on leave, on window close (`MainWindow.Closed`) and 5 s after scrolling stops; mark read when the last page's bottom is in view; open at a given position (Continue)
-- [ ] T024 [US3] `A/Pages/GalleryPage.xaml(.cs)`: show progress "{page} / {total}", Continue + Read from start when progress exists, read marker; strings from T002
-- [ ] T025 [US3] Live check: read to page 40, restart app, Continue → within one screen (SC-005)
+- [X] T022 [P] [US3] Implement `H/Storage/ProgressStore.cs` (load, get/set per `sourceId|galleryId`, atomic save, read flag stays true) and tests `T/Storage/ProgressStoreTests.cs`
+- [X] T023 [US3] `A/Reader/ReaderSession.cs` + `A/Pages/ReaderPage.xaml.cs`: save position (page + offset fraction) on leave, on window close (`MainWindow.Closed`) and 5 s after scrolling stops; mark read when the last page's bottom is in view; open at a given position (Continue)
+- [X] T024 [US3] `A/Pages/GalleryPage.xaml(.cs)`: show progress "{page} / {total}", Continue + Read from start when progress exists, read marker; strings from T002
+- [X] T025 [US3] Live check: read to page 40, restart app, Continue → within one screen (SC-005)
 
 ---
 
@@ -99,11 +99,11 @@ window) form the MVP; US3–US7 add progress, navigation/full screen, failures, 
 
 **Independent test**: [quickstart.md §3 step 4 and §7](quickstart.md).
 
-- [ ] T026 [US4] Reader toolbar in `A/Pages/ReaderPage.xaml(.cs)`: back, title, page indicator, go to page (Ctrl+G dialog with validation), zoom out/value/in, full screen; auto-hide after 2 s, reappear near top/bottom edge or on key press (FR-017)
-- [ ] T027 [US4] Vertical scrubber (Slider over page index) with target tooltip while dragging and jump on release; planner prioritises pages near the target (`LoadPlanner` jump ordering from T005)
-- [ ] T028 [US4] Zoom 50–300 % (Ctrl+wheel around the pointer, Ctrl+Plus/Minus/0) changing `W` in `StripGeometry`, keeping the point under the pointer; re-decode visible pages at the new width; horizontal scrolling when wider than the window
-- [ ] T029 [US4] `A/Services/FullScreen.cs` + `A/MainWindow.xaml.cs`: F11 accelerator on the window root toggling `AppWindowPresenterKind.FullScreen` ↔ Default, saving/restoring the overlapped state (maximized or rect); reader hides the navigation pane in full screen and restores it on leave; Escape in the reader leaves full screen first (FR-003, FR-016)
-- [ ] T030 [US4] UI Automation + screenshot check: F11 on search, gallery, settings, reader; Alt+Tab still switches windows; leaving restores the previous size/position and maximized state
+- [X] T026 [US4] Reader toolbar in `A/Pages/ReaderPage.xaml(.cs)`: back, title, page indicator, go to page (Ctrl+G dialog with validation), zoom out/value/in, full screen; auto-hide after 2 s, reappear near top/bottom edge or on key press (FR-017)
+- [X] T027 [US4] Vertical scrubber (Slider over page index) with target tooltip while dragging and jump on release; planner prioritises pages near the target (`LoadPlanner` jump ordering from T005)
+- [X] T028 [US4] Zoom 50–300 % (Ctrl+wheel around the pointer, Ctrl+Plus/Minus/0) changing `W` in `StripGeometry`, keeping the point under the pointer; re-decode visible pages at the new width; horizontal scrolling when wider than the window
+- [X] T029 [US4] `A/Services/FullScreen.cs` + `A/MainWindow.xaml.cs`: F11 accelerator on the window root toggling `AppWindowPresenterKind.FullScreen` ↔ Default, saving/restoring the overlapped state (maximized or rect); reader hides the navigation pane in full screen and restores it on leave; Escape in the reader leaves full screen first (FR-003, FR-016)
+- [X] T030 [US4] UI Automation + screenshot check: F11 on search, gallery, settings, reader; Alt+Tab still switches windows; leaving restores the previous size/position and maximized state
 
 ---
 

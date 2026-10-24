@@ -170,7 +170,7 @@ public sealed partial class SearchViewModel : ObservableObject
         CallResult result;
         try
         {
-            result = await Session.CallAsync("search", [query, _cursor is null ? null : JsonValue.Create(_cursor)], token: token);
+            result = await _source.CallAsync("search", [query, _cursor is null ? null : JsonValue.Create(_cursor)], token);
         }
         catch (OperationCanceledException)
         {

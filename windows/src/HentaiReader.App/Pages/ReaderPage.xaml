@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="HentaiReader.App.Pages.ReaderPage"
+    AutomationProperties.AutomationId="ReaderView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:reader="using:HentaiReader.App.Reader">
+    <Grid x:Name="Root" PreviewKeyDown="Root_PreviewKeyDown">
+        <!-- Anchoring is done by the page itself (exact geometry deltas), so the built-in one is off. -->
+        <ScrollViewer
+            x:Name="Scroller"
+            HorizontalScrollMode="Auto"
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollMode="Enabled"
+            VerticalScrollBarVisibility="Auto"
+            ZoomMode="Disabled"
+            IsTabStop="True"
+            ViewChanged="Scroller_ViewChanged"
+            SizeChanged="Scroller_SizeChanged"
+            PointerWheelChanged="Scroller_PointerWheelChanged">
+            <ItemsRepeater x:Name="Strip" HorizontalAlignment="Center" VerticalCacheLength="2">
+                <ItemsRepeater.Layout>
+                    <reader:StripLayout x:Name="Layout" />
+                </ItemsRepeater.Layout>
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate>
+                        <reader:PageSlot />
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+        </ScrollViewer>
+
+        <!-- Toolbar (contracts/reader-ui.md); hides after 2 s, reappears near the top edge. -->
+        <Grid
+            x:Name="Toolbar"
+            VerticalAlignment="Top"
+            Padding="8,6"
+            ColumnSpacing="4"
+            Background="{ThemeResource AcrylicInAppFillColorDefaultBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name="BackButton" Click="BackButton_Click">
+                <SymbolIcon Symbol="Back" />
+            </Button>
+            <TextBlock x:Name="TitleText" Grid.Column="1" Margin="8,0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+            <TextBlock x:Name="PageText" Grid.Column="2" Margin="8,0" VerticalAlignment="Center" />
+            <Button x:Name="GoToButton" Grid.Column="3" Click="GoToButton_Click">
+                <FontIcon Glyph="&#xE8AD;" />
+            </Button>
+            <Button x:Name="ZoomOutButton" Grid.Column="4" Click="ZoomOutButton_Click">
+                <SymbolIcon Symbol="ZoomOut" />
+            </Button>
+            <TextBlock x:Name="ZoomText" Grid.Column="5" MinWidth="52" VerticalAlignment="Center" TextAlignment="Center" />
+            <Button x:Name="ZoomInButton" Grid.Column="6" Click="ZoomInButton_Click">
+                <SymbolIcon Symbol="ZoomIn" />
+            </Button>
+            <Button x:Name="FullScreenButton" Grid.Column="7" Click="FullScreenButton_Click">
+                <SymbolIcon x:Name="FullScreenIcon" Symbol="FullScreen" />
+            </Button>
+        </Grid>
+
+        <InfoBar
+            x:Name="LimitBar"
+            VerticalAlignment="Top"
+            Margin="16,64,48,0"
+            Severity="Warning"
+            IsClosable="False">
+            <InfoBar.ActionButton>
+                <Button x:Name="LimitRetryButton" Click="LimitRetryButton_Click" />
+            </InfoBar.ActionButton>
+        </InfoBar>
+
+        <!-- Page scrubber: shows the target page while dragging, jumps on release (FR-013). -->
+        <Slider
+            x:Name="Scrubber"
+            Orientation="Vertical"
+            IsDirectionReversed="True"
+            HorizontalAlignment="Right"
+            Margin="0,72,20,24"
+            Minimum="1"
+            Maximum="1"
+            StepFrequency="1"
+            SmallChange="1"
+            LargeChange="10"
+            ValueChanged="Scrubber_ValueChanged" />
+    </Grid>
+</Page>

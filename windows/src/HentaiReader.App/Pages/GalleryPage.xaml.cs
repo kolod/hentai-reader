@@ -16,23 +16,55 @@ public sealed partial class GalleryPage : Page
 
     private Args? _args;
     private string? _webUrl;
-    private readonly CancellationTokenSource _cts = new();
+    private JsonObject? _gallery;
+    private CancellationTokenSource _cts = new();
+
+    /// <summary>Source and gallery shown and fully loaded; going back to it reloads nothing (US2).</summary>
+    private string? _loadedKey;
 
     public GalleryPage()
     {
         InitializeComponent();
         OpenInBrowser.Content = Strings.Get("Gallery_OpenInBrowser");
+        ReadButton.Content = Strings.Get("Gallery_Read");
+        ContinueButton.Content = Strings.Get("Gallery_Continue");
     }
 
     protected override async void OnNavigatedTo(NavigationEventArgs e)
     {
         if (e.Parameter is not Args args) return;
+        var key = $"{args.Source.Id}|{args.Summary["id"]!.GetValue<string>()}";
+        if (e.NavigationMode == NavigationMode.Back && key == _loadedKey)
+        {
+            ShowProgress();
+            return;
+        }
+
+        // The cached page is reused for every gallery: start from a clean state.
+        _cts.Cancel();
+        _cts = new CancellationTokenSource();
+        var token = _cts.Token;
+        _loadedKey = null;
+        _gallery = null;
+        ReadButton.IsEnabled = false;
+        ContinueButton.Visibility = Visibility.Collapsed;
+        ProgressText.Text = "";
+        ErrorBar.IsOpen = false;
+        Progress.IsActive = true;
+        Cover.Source = null;
+        OriginalTitleText.Visibility = Visibility.Collapsed;
+        MetaText.Text = "";
+        TagGroups.Children.Clear();
+        PagesGrid.ItemsSource = null;
+
         _args = args;
         TitleText.Text = args.Summary["title"]?.GetValue<string>() ?? "";
         var session = args.Source.Session!;
-        Cover.Source = await ImageLoader.Shared.LoadAsync(session, args.Summary["cover"], (int)(200 * (XamlRoot?.RasterizationScale ?? 1)), _cts.Token);
+        Cover.Source = await ImageLoader.Shared.LoadAsync(session, args.Summary["cover"], (int)(200 * (XamlRoot?.RasterizationScale ?? 1)), token);
+        if (token.IsCancellationRequested) return;
 
-        var res = await session.CallAsync("getGallery", [JsonValue.Create(args.Summary["id"]!.GetValue<string>())], token: _cts.Token);
+        var res = await args.Source.CallAsync("getGallery", [JsonValue.Create(args.Summary["id"]!.GetValue<string>())], token);
+        if (token.IsCancellationRequested) return;
         Progress.IsActive = false;
         if (!res.Ok)
         {
@@ -43,12 +75,16 @@ public sealed partial class GalleryPage : Page
             return;
         }
         Render(res.Value!.AsObject());
+        _loadedKey = key;
+        ShowProgress();
     }
 
     protected override void OnNavigatedFrom(NavigationEventArgs e) => _cts.Cancel();
 
     private void Render(JsonObject g)
     {
+        _gallery = g;
+        ReadButton.IsEnabled = (g["pages"] as JsonArray)?.Count > 0;
         TitleText.Text = g["title"]?.GetValue<string>() ?? "";
         OriginalTitleText.Text = g["titleOriginal"]?.GetValue<string>() ?? "";
         OriginalTitleText.Visibility = OriginalTitleText.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
@@ -100,6 +136,38 @@ public sealed partial class GalleryPage : Page
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(args.ItemContainer,
             page["fileName"]?.GetValue<string>() ?? $"{(page["index"]?.GetValue<int>() ?? 0) + 1}");
         args.Handled = true;
+    }
+
+    /// <summary>Saved progress: "Page 40 of 120" with Continue, or Finished (FR-019).</summary>
+    private void ShowProgress()
+    {
+        if (_args is null || _gallery is null) return;
+        var progress = AppServices.Progress.Get(_args.Source.Id, _gallery["id"]!.GetValue<string>());
+        var resumable = progress is { Read: false } && (progress.Page > 0 || progress.Offset > 0);
+        ContinueButton.Visibility = resumable ? Visibility.Visible : Visibility.Collapsed;
+        ReadButton.Content = Strings.Get(resumable ? "Gallery_ReadFromStart" : "Gallery_Read");
+        ReadButton.Style = (Style)Application.Current.Resources[resumable ? "DefaultButtonStyle" : "AccentButtonStyle"];
+        ProgressText.Text = progress switch
+        {
+            { Read: true } => Strings.Get("Gallery_Finished"),
+            not null when resumable => Strings.Format("Gallery_Progress", progress.Page + 1, progress.PageCount),
+            _ => "",
+        };
+    }
+
+    /// <summary>The reader replaces this page in the same window (FR-001).</summary>
+    private void ReadButton_Click(object sender, RoutedEventArgs e) => OpenReader(0, 0);
+
+    private void ContinueButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_args is null || _gallery is null) return;
+        var progress = AppServices.Progress.Get(_args.Source.Id, _gallery["id"]!.GetValue<string>());
+        OpenReader(progress?.Page ?? 0, progress?.Offset ?? 0);
+    }
+
+    private void OpenReader(int page, double offset)
+    {
+        if (_gallery is not null && _args is not null) Frame.Navigate(typeof(ReaderPage), new ReaderPage.Args(_args.Source, _gallery, page, offset));
     }
 
     private async void OpenInBrowser_Click(object sender, RoutedEventArgs e)
