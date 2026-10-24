@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Source host: Jint + AngleSharp implementation of contract 1.1. No UI dependency, so the
+       parity suite runs headless. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>HentaiReader.Host</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jint" Version="4.17.0" />
+    <PackageReference Include="AngleSharp" Version="1.8.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The contract prelude and the host glue shared by every host (contract/). -->
+    <EmbeddedResource Include="$(RepoRoot)contract\prelude.js" LogicalName="contract/prelude.js" Link="Contract\prelude.js" />
+    <EmbeddedResource Include="$(RepoRoot)contract\host-glue.js" LogicalName="contract/host-glue.js" Link="Contract\host-glue.js" />
+    <EmbeddedResource Include="Engine\jint-bridge.js" LogicalName="engine/jint-bridge.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="HentaiReader.Host.Tests" />
+  </ItemGroup>
+</Project>

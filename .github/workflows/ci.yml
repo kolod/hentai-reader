@@ -1,5 +1,6 @@
 # Keeps main green (Constitution X): contract, runner and every source script are checked and
-# tested offline on each push and pull request. No network access is needed.
+# tested offline on each push and pull request; the Windows host must replay the same recordings
+# with identical results (003 parity suite). No network access is needed.
 name: ci
 
 on:
@@ -21,10 +22,12 @@ jobs:
         run: node --test "tools/runner/test/*.test.ts"
       - name: Host contract suite
         run: npm run runner -- contract-test
-      - name: Conformance reference source
+      - name: Conformance reference sources
         run: |
-          npm run runner -- check contract/conformance/minimal
-          npm run runner -- test contract/conformance/minimal
+          for dir in contract/conformance/minimal contract/conformance/settings; do
+            npm run runner -- check "$dir"
+            npm run runner -- test "$dir"
+          done
       - name: Source scripts (check + offline tests)
         run: |
           for dir in sources/*/; do
@@ -34,3 +37,15 @@ jobs:
             npm run runner -- test "$dir"
             echo "::endgroup::"
           done
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Build (host, tests, WinUI app)
+        run: dotnet build windows/HentaiReader.slnx -c Release -p:Platform=x64
+      - name: Host unit tests and parity suite
+        run: dotnet test --project windows/tests/HentaiReader.Host.Tests -c Release

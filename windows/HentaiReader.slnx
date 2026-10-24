@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/HentaiReader.App/HentaiReader.App.csproj" />
+    <Project Path="src/HentaiReader.Host/HentaiReader.Host.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HentaiReader.Host.Tests/HentaiReader.Host.Tests.csproj" />
+  </Folder>
+</Solution>
