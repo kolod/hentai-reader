@@ -294,4 +294,166 @@
   <data name="Gate_Decline" xml:space="preserve">
     <value>Quitter</value>
   </data>
+  <data name="Gallery_Read" xml:space="preserve">
+    <value>Lire</value>
+  </data>
+  <data name="Gallery_Continue" xml:space="preserve">
+    <value>Continuer</value>
+  </data>
+  <data name="Gallery_ReadFromStart" xml:space="preserve">
+    <value>Lire depuis le début</value>
+  </data>
+  <data name="Gallery_Progress" xml:space="preserve">
+    <value>Page {0} sur {1}</value>
+  </data>
+  <data name="Gallery_Finished" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
+  <data name="Reader_PageOf" xml:space="preserve">
+    <value>{0} / {1}</value>
+  </data>
+  <data name="Reader_Page" xml:space="preserve">
+    <value>Page</value>
+  </data>
+  <data name="Reader_PageName" xml:space="preserve">
+    <value>Page {0} sur {1}</value>
+  </data>
+  <data name="Reader_GoToPage" xml:space="preserve">
+    <value>Aller à la page</value>
+  </data>
+  <data name="Reader_GoToPage_Prompt" xml:space="preserve">
+    <value>Numéro de page (1–{0})</value>
+  </data>
+  <data name="Reader_GoToPage_Invalid" xml:space="preserve">
+    <value>Saisissez un nombre de 1 à {0}.</value>
+  </data>
+  <data name="Reader_Go" xml:space="preserve">
+    <value>Aller</value>
+  </data>
+  <data name="Reader_Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="Reader_ZoomIn" xml:space="preserve">
+    <value>Zoom avant</value>
+  </data>
+  <data name="Reader_ZoomOut" xml:space="preserve">
+    <value>Zoom arrière</value>
+  </data>
+  <data name="Reader_ZoomValue" xml:space="preserve">
+    <value>{0} %</value>
+  </data>
+  <data name="Reader_FullScreen" xml:space="preserve">
+    <value>Plein écran</value>
+  </data>
+  <data name="Reader_ExitFullScreen" xml:space="preserve">
+    <value>Quitter le plein écran</value>
+  </data>
+  <data name="Reader_PageFailed" xml:space="preserve">
+    <value>Impossible de charger cette page.</value>
+  </data>
+  <data name="Settings_Reader" xml:space="preserve">
+    <value>Lecteur</value>
+  </data>
+  <data name="Settings_Preload" xml:space="preserve">
+    <value>Pages préchargées</value>
+  </data>
+  <data name="Settings_ReadingWidth" xml:space="preserve">
+    <value>Largeur de lecture maximale</value>
+  </data>
+  <data name="Settings_ReadingWidthValue" xml:space="preserve">
+    <value>{0} px</value>
+  </data>
+  <data name="Settings_CacheLimit" xml:space="preserve">
+    <value>Taille du cache d'images</value>
+  </data>
+  <data name="Settings_CacheSize" xml:space="preserve">
+    <value>Taille du cache : {0}</value>
+  </data>
+  <data name="Settings_ClearCache" xml:space="preserve">
+    <value>Vider le cache</value>
+  </data>
+  <data name="Settings_Sources" xml:space="preserve">
+    <value>Sources</value>
+  </data>
+  <data name="Size_MB" xml:space="preserve">
+    <value>{0} Mo</value>
+  </data>
+  <data name="Size_GB" xml:space="preserve">
+    <value>{0} Go</value>
+  </data>
+  <data name="Account_SignedIn" xml:space="preserve">
+    <value>Connecté</value>
+  </data>
+  <data name="Account_SignedOut" xml:space="preserve">
+    <value>Non connecté</value>
+  </data>
+  <data name="Account_Checking" xml:space="preserve">
+    <value>Vérification…</value>
+  </data>
+  <data name="Account_ImageLimit" xml:space="preserve">
+    <value>Limite d'images : {0} sur {1} utilisées</value>
+  </data>
+  <data name="Account_LimitResets" xml:space="preserve">
+    <value>Réinitialisée le {0}</value>
+  </data>
+  <data name="Account_SignIn" xml:space="preserve">
+    <value>Se connecter</value>
+  </data>
+  <data name="Account_PasteCookies" xml:space="preserve">
+    <value>Coller des cookies</value>
+  </data>
+  <data name="Account_SignOut" xml:space="preserve">
+    <value>Se déconnecter</value>
+  </data>
+  <data name="Account_Refresh" xml:space="preserve">
+    <value>Vérifier à nouveau</value>
+  </data>
+  <data name="Login_Title" xml:space="preserve">
+    <value>Se connecter à {0}</value>
+  </data>
+  <data name="Login_Hint" xml:space="preserve">
+    <value>Connectez-vous sur la page ci-dessous. Cette fenêtre se ferme d'elle-même une fois la connexion terminée.</value>
+  </data>
+  <data name="Login_NoWebView" xml:space="preserve">
+    <value>Le navigateur intégré (Microsoft Edge WebView2) n'est pas disponible sur cet ordinateur. Collez plutôt vos cookies.</value>
+  </data>
+  <data name="Paste_Title" xml:space="preserve">
+    <value>Coller des cookies</value>
+  </data>
+  <data name="Paste_Hint" xml:space="preserve">
+    <value>Collez les cookies sous la forme nom=valeur; nom=valeur ou le contenu d'un fichier cookies.txt. Ils sont stockés chiffrés sur cet ordinateur et envoyés uniquement à {0}.</value>
+  </data>
+  <data name="Paste_Save" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="Paste_Rejected" xml:space="preserve">
+    <value>Ces cookies ne vous ont pas connecté.</value>
+  </data>
+  <data name="ExHentai_NoAccess" xml:space="preserve">
+    <value>ExHentai nécessite un compte connecté disposant de l'accès à ExHentai.</value>
+  </data>
+  <data name="Reader_FitWidth" xml:space="preserve">
+    <value>Ajuster à la largeur de la fenêtre (W)</value>
+  </data>
+  <data name="Reader_PageGaps" xml:space="preserve">
+    <value>Espaces entre les pages (G)</value>
+  </data>
+  <data name="Settings_FitWidth" xml:space="preserve">
+    <value>Les pages remplissent la largeur de la fenêtre</value>
+  </data>
+  <data name="Settings_PageGap" xml:space="preserve">
+    <value>Espace entre les pages</value>
+  </data>
+  <data name="Settings_PageGapOff" xml:space="preserve">
+    <value>Aucun espace</value>
+  </data>
+  <data name="Settings_PageGapHint" xml:space="preserve">
+    <value>Appuyez sur G dans le lecteur pour afficher ou masquer les espaces. Les galeries avec le tag webtoon s'ouvrent sans espaces.</value>
+  </data>
+  <data name="Settings_On" xml:space="preserve">
+    <value>Activé</value>
+  </data>
+  <data name="Settings_Off" xml:space="preserve">
+    <value>Désactivé</value>
+  </data>
 </root>

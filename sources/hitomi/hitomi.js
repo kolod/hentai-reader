@@ -70,8 +70,8 @@ const AREAS = {
 export const manifest = {
   id: "hitomi",
   name: "Hitomi.la",
-  version: "0.1.0",
-  contract: "1.0",
+  version: "0.2.0",
+  contract: "1.2",
   domains: ["hitomi.la", "*.hitomi.la", DOMAIN2, `*.${DOMAIN2}`],
   politeness: { minIntervalMs: 100, maxConcurrency: 4 },
   login: "none",
@@ -82,7 +82,7 @@ export const manifest = {
       values: ["latest", "popular_day", "popular_week", "popular_month", "popular_year"],
       default: "latest",
     },
-    { id: "language", kind: "single", values: Object.values(LANGUAGES) },
+    { id: "language", kind: "multi", values: Object.values(LANGUAGES) },
     { id: "type", kind: "multi", values: Object.values(TYPES) },
   ],
   capabilities: { suggestTags: true },
@@ -384,6 +384,9 @@ function summary(info, gg) {
 /**
  * @typedef {{ area: string, tag: string, language?: string }} Term
  * @typedef {{ language: string, orderby: "date" | "popular", key: string }} State
+ * Several languages: the site keeps one list per language and has no "any of" search, so the
+ * query runs over all languages and keeps galleries found in any of the per-language indexes
+ * (`anyLanguage`), which preserves the site's order (date or popularity).
  */
 
 /** @param {SearchQuery} query */
@@ -397,10 +400,16 @@ function parseQuery(query) {
   if (!order) throw new SourceError("InvalidInput", `unsupported sort: ${String(sort)}`);
   /** @type {State} */
   const state = { language: "all", orderby: order.orderby, key: order.key };
+  /** @type {string[]} */
+  let anyLanguage = [];
   if (filters.language !== undefined) {
-    const name = typeof filters.language === "string" ? LANGUAGE_BY_ISO[filters.language] : undefined;
-    if (!name) throw new SourceError("InvalidInput", `unsupported language: ${String(filters.language)}`);
-    state.language = name;
+    // A list since 0.2.0 (contract 1.2 multi filter); a single code is still accepted.
+    const codes = Array.isArray(filters.language) ? filters.language : [filters.language];
+    const names = codes.map((c) => (typeof c === "string" ? LANGUAGE_BY_ISO[c] : undefined));
+    if (names.some((n) => !n)) throw new SourceError("InvalidInput", `unsupported language: ${JSON.stringify(filters.language)}`);
+    const unique = [...new Set(/** @type {string[]} */ (names))];
+    if (unique.length === 1) state.language = unique[0];
+    else anyLanguage = unique;
   }
   /** @type {Term[]} */
   const types = [];
@@ -433,7 +442,10 @@ function parseQuery(query) {
     if (ns === "language") {
       if (!(value in LANGUAGES)) throw new SourceError("InvalidInput", `unknown language: ${value}`);
       if (neg) negative.push({ area: "all", tag: "index", language: value });
-      else state.language = value;
+      else {
+        state.language = value;
+        anyLanguage = [];   // the query's own language: term wins over the filter
+      }
       continue;
     }
     const area = AREAS[ns];
@@ -441,7 +453,7 @@ function parseQuery(query) {
     const tag = ns === "female" || ns === "male" ? `${ns}:${value}` : value;
     (neg ? negative : positive).push({ area, tag });
   }
-  return { state, positive, negative, words, negativeWords, types };
+  return { state, positive, negative, words, negativeWords, types, anyLanguage };
 }
 
 /** @param {Term} term @param {State} state */
@@ -455,6 +467,35 @@ function nozomiUrl(term, state) {
   return `${LTN}/n/${term.area}/${term.tag}-${lang}.nozomi`;
 }
 
+/**
+ * Whole nozomi as a sorted typed array, for membership tests by binary search: a plain array or a
+ * Set of a million ids costs far more engine memory than the 4 bytes per id kept here.
+ * @param {string} url
+ */
+async function nozomiSet(url) {
+  const res = await getBytes(url);
+  if (res.status === 404) return new Int32Array(0);
+  if (res.status !== 200) throw unexpected("nozomi", res);
+  const view = new DataView(res.body.buffer, res.body.byteOffset, res.body.byteLength);
+  const ids = new Int32Array(res.body.byteLength >> 2);
+  for (let i = 0; i < ids.length; i++) ids[i] = view.getInt32(i * 4);
+  return ids.sort();
+}
+
+/** @param {Int32Array} sorted @param {number} id */
+function contains(sorted, id) {
+  let lo = 0;
+  let hi = sorted.length - 1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    const v = sorted[mid];
+    if (v === id) return true;
+    if (v < id) lo = mid + 1;
+    else hi = mid - 1;
+  }
+  return false;
+}
+
 /** Whole id list of a nozomi (missing list = no galleries). @param {string} url @returns {Promise<number[]>} */
 async function nozomiAll(url) {
   const res = await getBytes(url);
@@ -463,13 +504,13 @@ async function nozomiAll(url) {
   return int32s(res.body);
 }
 
-/** One page of a nozomi via Range. @param {string} url @param {number} offset */
-async function nozomiPage(url, offset) {
-  const res = await getBytes(url, { range: `bytes=${offset * 4}-${(offset + PAGE_SIZE) * 4 - 1}` });
+/** One page of a nozomi via Range. @param {string} url @param {number} offset @param {number} [count] */
+async function nozomiPage(url, offset, count = PAGE_SIZE) {
+  const res = await getBytes(url, { range: `bytes=${offset * 4}-${(offset + count) * 4 - 1}` });
   if (res.status === 404 || res.status === 416) return { ids: [], total: offset };
   if (res.status === 200) {
     const all = int32s(res.body);
-    return { ids: all.slice(offset, offset + PAGE_SIZE), total: all.length };
+    return { ids: all.slice(offset, offset + count), total: all.length };
   }
   if (res.status !== 206) throw unexpected("nozomi range", res);
   const m = /\/(\d+)\s*$/.exec(res.headers["content-range"] ?? "");
@@ -608,11 +649,13 @@ async function resultIds(q) {
     Promise.all(q.types.map((t) => nozomiAll(nozomiUrl(t, unordered)))),
     Promise.all(q.negative.map((t) => nozomiAll(nozomiUrl(t, unordered)))),
     Promise.all(q.negativeWords.map(searchWord)),
+    Promise.all(q.anyLanguage.map((language) => nozomiAll(nozomiUrl({ area: "all", tag: "index", language }, unordered)))),
   ]);
-  const [pos, words, types, neg, negWords] = lists;
+  const [pos, words, types, neg, negWords, languages] = lists;
   for (const list of pos) keep(list);
   for (const list of words) keep(list);
   if (types.length) keep(types.flat());
+  if (languages.length) keep(languages.flat());
   for (const list of neg) drop(list);
   for (const list of negWords) drop(list);
 
@@ -630,15 +673,79 @@ function parseCursor(cursor) {
 }
 
 /**
+ * Feed (no tags or words) in any of several languages: the site's all-language list is read in
+ * Range chunks and filtered by the per-language lists (and type / excluded lists), so the order is
+ * the site's and only the small lists are held whole. Cursor `b:<position in the all-language list>`.
+ * @param {ReturnType<typeof parseQuery>} q
+ * @param {string | null} cursor
+ * @returns {Promise<SearchPage>}
+ */
+async function searchAnyLanguage(q, cursor) {
+  let position = 0;
+  if (cursor !== null) {
+    const m = /^b:(\d+)$/.exec(cursor);
+    if (!m) throw new SourceError("InvalidInput", `invalid cursor: ${cursor}`);
+    position = Number(m[1]);
+  }
+  /** @type {State} */
+  const unordered = { language: "all", orderby: "date", key: "added" };
+  const [languages, types, negative] = await Promise.all([
+    Promise.all(q.anyLanguage.map((language) => nozomiSet(nozomiUrl({ area: "all", tag: "index", language }, unordered)))),
+    Promise.all(q.types.map((t) => nozomiSet(nozomiUrl(t, unordered)))),
+    Promise.all(q.negative.map((t) => nozomiSet(nozomiUrl(t, unordered)))),
+  ]);
+  const matches = (/** @type {number} */ id) =>
+    languages.some((l) => contains(l, id)) &&
+    (types.length === 0 || types.some((t) => contains(t, id))) &&
+    !negative.some((n) => contains(n, id));
+  // Languages do not overlap, so for the date feed the total is exact.
+  const languageTotal = languages.reduce((sum, l) => sum + l.length, 0);
+  const exactTotal = q.state.orderby === "date" && types.length === 0 && negative.length === 0;
+
+  const base = nozomiUrl({ area: "all", tag: "index" }, q.state);
+  /** @type {number[]} */
+  const ids = [];
+  let baseTotal = Infinity;
+  let chunk = 1000;
+  while (ids.length < PAGE_SIZE && position < baseTotal) {
+    const page = await nozomiPage(base, position, chunk);
+    baseTotal = page.total;
+    if (page.ids.length === 0) break;
+    let used = 0;
+    for (const id of page.ids) {
+      used++;
+      if (matches(id) && ids.push(id) === PAGE_SIZE) break;
+    }
+    position += used;
+    // Next read sized by how often ids matched so far (languages' share of the feed).
+    const density = Math.max(languageTotal / Math.max(1, baseTotal), 0.0005);
+    chunk = Math.min(50000, Math.max(200, Math.ceil(((PAGE_SIZE - ids.length) / density) * 1.5)));
+  }
+
+  const gg = await ensureGg(false);
+  const infos = await Promise.all(ids.map((id) => fetchInfo(String(id))));
+  const items = /** @type {GalleryInfo[]} */ (infos.filter((i) => i !== null)).map((info) => summary(info, gg));
+  return {
+    items,
+    nextCursor: position < baseTotal && ids.length === PAGE_SIZE ? `b:${position}` : null,
+    ...(exactTotal ? { total: languageTotal } : {}),
+  };
+}
+
+/**
  * @param {SearchQuery} query
  * @param {string | null} cursor
  * @returns {Promise<SearchPage>}
  */
 export async function search(query, cursor) {
   const q = parseQuery(query);
+  if (q.anyLanguage.length > 0 && q.positive.length === 0 && q.words.length === 0 && q.negativeWords.length === 0) {
+    return await searchAnyLanguage(q, cursor);
+  }
   const offset = parseCursor(cursor);
   const simple =
-    q.words.length === 0 && q.negativeWords.length === 0 && q.negative.length === 0 && q.types.length === 0;
+    q.words.length === 0 && q.negativeWords.length === 0 && q.negative.length === 0 && q.types.length === 0 &&
+    q.anyLanguage.length === 0;
 
   /** @type {number[]} */
   let ids;
@@ -733,7 +840,7 @@ export async function getGallery(id) {
 /**
  * @param {Gallery} gallery
  * @param {number} index
- * @param {RetryHint} [retry]
+ * @param {RetryHint | null} [retry] null when absent (contract 1.1+)
  * @returns {Promise<PageImage>}
  */
 export async function getPageUrl(gallery, index, retry) {
@@ -743,6 +850,6 @@ export async function getPageUrl(gallery, index, retry) {
   if (!Number.isInteger(index) || index < 0 || index >= hashes.length) {
     throw new SourceError("InvalidInput", `page index out of range: ${index}`);
   }
-  const gg = await ensureGg(retry !== undefined);
+  const gg = await ensureGg(retry != null);
   return { ...image(imageUrl(gg, String(hashes[index]))), format: "webp" };
 }

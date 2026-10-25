@@ -31,4 +31,11 @@ public class ConformanceTests
         var e = await Assert.ThrowsAsync<LoadException>(() => Open("broken-contract-version"));
         Assert.Contains("requires contract 2.0", e.Message);
     }
+
+    [Fact]
+    public async Task Login_page_outside_the_domains_is_refused()
+    {
+        var e = await Assert.ThrowsAsync<LoadException>(() => Open("broken-login-page"));
+        Assert.Contains("manifest.loginPage.url: host elsewhere.test is outside manifest.domains", e.Message);
+    }
 }

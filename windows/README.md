@@ -1,13 +1,13 @@
 # Windows app
 
 C# + WinUI 3 (Windows App SDK, unpackaged, self-contained). Source scripts run in Jint with
-AngleSharp for `html.select`; the host implements contract 1.1.1 and passes the same contract
+AngleSharp for `html.select`; the host implements contract 1.2 and passes the same contract
 tests and recorded source cases as the runner.
 
 | Project | Purpose |
 |---------|---------|
 | `src/HentaiReader.Host` | Contract host: Jint engine thread, `http.request` (cookie jar, politeness, redirects), `html.select`, storage, sessions. No UI dependency. |
-| `src/HentaiReader.App` | WinUI 3 shell: source list, search with declared filters and endless results, gallery details with page thumbnails, settings (language), adult gate. |
+| `src/HentaiReader.App` | WinUI 3 shell: source list, search with declared filters and endless results, gallery details with page thumbnails, the reader, settings (language, reader, sources and sign-in), adult gate. |
 | `tests/HentaiReader.Host.Tests` | Unit tests, contract suite, replay of every recorded source case, resource parity, plural rules, installer texts. |
 | `installer/`, `build/` | Inno Setup script, installer texts in six languages, distribution rules, build and verification scripts (feature 004). |
 
@@ -74,12 +74,43 @@ JRSoftware.InnoSetup.7`, or pass `-BootstrapTools` to download the pinned, hash-
 `.tools/`. Code signing: set `HENTAIREADER_SIGN_COMMAND` to a `signtool sign … $f` command line.
 The app version is `<Version>` in [Directory.Build.props](Directory.Build.props).
 
+## Reader
+
+The reader replaces the gallery in the same window (Back, Alt+Left or the mouse back button
+return to it with the search as it was). All pages form one strip, each exactly the column width;
+slots are reserved from known or estimated sizes, so the strip never jumps.
+
+| Key | Action |
+|-----|--------|
+| Up / Down | glide while held (eases in and out) |
+| Space, Page Down / Shift+Space, Page Up | the same, faster |
+| Home / End | first / last page |
+| Ctrl+G | go to page |
+| Ctrl+wheel, Ctrl+Plus / Ctrl+Minus | zoom around the pointer / in 10 % steps |
+| W | fit width (100 % of the window width) |
+| Ctrl+0 | default width from the settings |
+| G | gaps between pages on / off (webtoons open without them) |
+| F11 | borderless full screen (any screen); Escape leaves it in the reader |
+
+A click on a thumbnail opens the reader at that page. Progress is saved per gallery and offered as
+Continue. Failed pages show Retry in place; a stalled image (20 s) is requested again from the
+source with a retry hint, up to twice. A rate limit stops all requests of that source until Retry.
+
+**Sign-in (E-Hentai/ExHentai):** Settings → Sources → E-Hentai → Sign in (the site's own form in an
+embedded WebView2 with a throw-away profile) or Paste cookies. Only the account cookies are kept,
+encrypted, and sent only to the source's domains.
+
 ## Data
 
 Per user, in `%LOCALAPPDATA%\HentaiReader` (override with the `HENTAIREADER_DATA` environment
 variable, used by tests):
 
-- `preferences.json` — UI language, adult confirmation, last source
+- `preferences.json` — UI language, adult confirmation, last source, reader settings, source
+  settings, window size and position
+- `progress.json` — reading position per source and gallery
+- `cache/pages/` — page images of online reading (`index.json` + SHA-256 named files), size limit in
+  Settings
+- `webview/` — the embedded sign-in browser's profile, deleted after each sign-in
 - `sources/<id>/storage.json` — the source's `storage` values
 - `sources/<id>/cookies.bin` — the source's cookie jar, encrypted with DPAPI for the current user
 

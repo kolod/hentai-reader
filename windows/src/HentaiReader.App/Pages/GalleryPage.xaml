@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="HentaiReader.App.Pages.GalleryPage"
+    AutomationProperties.AutomationId="GalleryView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:HentaiReader.App.Controls">
+    xmlns:controls="using:HentaiReader.App.Controls"
+    NavigationCacheMode="Enabled">
     <Grid Padding="16,12,16,0" RowSpacing="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -26,7 +28,12 @@
                 <TextBlock x:Name="TitleText" Style="{StaticResource SubtitleTextBlockStyle}" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
                 <TextBlock x:Name="OriginalTitleText" Opacity="0.75" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
                 <TextBlock x:Name="MetaText" Opacity="0.75" TextWrapping="Wrap" />
-                <HyperlinkButton x:Name="OpenInBrowser" Padding="0" Click="OpenInBrowser_Click" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Button x:Name="ContinueButton" Style="{StaticResource AccentButtonStyle}" Visibility="Collapsed" Click="ContinueButton_Click" />
+                    <Button x:Name="ReadButton" Style="{StaticResource AccentButtonStyle}" IsEnabled="False" Click="ReadButton_Click" />
+                    <TextBlock x:Name="ProgressText" VerticalAlignment="Center" Opacity="0.75" />
+                    <HyperlinkButton x:Name="OpenInBrowser" Click="OpenInBrowser_Click" />
+                </StackPanel>
                 <StackPanel x:Name="TagGroups" Spacing="4" />
                 <ProgressRing x:Name="Progress" IsActive="True" HorizontalAlignment="Left" />
             </StackPanel>
@@ -36,6 +43,8 @@
             x:Name="PagesGrid"
             Grid.Row="2"
             SelectionMode="None"
+            IsItemClickEnabled="True"
+            ItemClick="PagesGrid_ItemClick"
             ContainerContentChanging="PagesGrid_ContainerContentChanging">
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem" BasedOn="{StaticResource DefaultGridViewItemStyle}">

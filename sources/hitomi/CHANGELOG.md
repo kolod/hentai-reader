@@ -4,6 +4,22 @@ All notable changes to this component. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+## [0.2.0] - Unreleased
+
+Requires contract 1.2.
+
+### Added
+
+- Several languages at once: the `language` filter is `multi` (contract 1.2). The site has no
+  "any of" search, so the feed in several languages reads the all-language list in Range chunks
+  and keeps galleries from any requested language list (site order kept, exact total); with tags
+  or words the language lists filter the result. A single code is still accepted.
+
+### Fixed
+
+- With the 1.1+ calling convention an absent retry arrives as `null`; it no longer forces a gg.js
+  refresh on every page.
+
 ## [0.1.0] - Unreleased
 
 Requires contract 1.0.

@@ -115,6 +115,27 @@ public sealed class CookieJar
         lock (_lock) _cookies = list;
     }
 
+    /// <summary>Adds cookies obtained outside a response (sign-in in an embedded browser, pasted by the user).</summary>
+    public void Add(IEnumerable<Cookie> cookies)
+    {
+        foreach (var cookie in cookies) Put(cookie with { Domain = cookie.Domain.TrimStart('.').ToLowerInvariant() });
+        Changed?.Invoke();
+    }
+
+    /// <summary>Forgets every cookie (sign-out).</summary>
+    public void Clear()
+    {
+        lock (_lock) _cookies = new();
+        Changed?.Invoke();
+    }
+
+    /// <summary>Names of the cookies held for a domain (never values; for status checks and tests).</summary>
+    public IReadOnlyList<string> NamesFor(string domain)
+    {
+        domain = domain.TrimStart('.').ToLowerInvariant();
+        lock (_lock) return _cookies.Where(c => c.Domain == domain).Select(c => c.Name).ToList();
+    }
+
     private void Put(Cookie cookie)
     {
         lock (_lock)

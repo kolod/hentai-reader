@@ -282,4 +282,166 @@
   <data name="Gate_Decline" xml:space="preserve">
     <value>終了</value>
   </data>
+  <data name="Gallery_Read" xml:space="preserve">
+    <value>読む</value>
+  </data>
+  <data name="Gallery_Continue" xml:space="preserve">
+    <value>続きから読む</value>
+  </data>
+  <data name="Gallery_ReadFromStart" xml:space="preserve">
+    <value>最初から読む</value>
+  </data>
+  <data name="Gallery_Progress" xml:space="preserve">
+    <value>{0} / {1} ページ</value>
+  </data>
+  <data name="Gallery_Finished" xml:space="preserve">
+    <value>読了</value>
+  </data>
+  <data name="Reader_PageOf" xml:space="preserve">
+    <value>{0} / {1}</value>
+  </data>
+  <data name="Reader_Page" xml:space="preserve">
+    <value>ページ</value>
+  </data>
+  <data name="Reader_PageName" xml:space="preserve">
+    <value>{1} ページ中 {0} ページ</value>
+  </data>
+  <data name="Reader_GoToPage" xml:space="preserve">
+    <value>ページへ移動</value>
+  </data>
+  <data name="Reader_GoToPage_Prompt" xml:space="preserve">
+    <value>ページ番号 (1–{0})</value>
+  </data>
+  <data name="Reader_GoToPage_Invalid" xml:space="preserve">
+    <value>1 から {0} までの数字を入力してください。</value>
+  </data>
+  <data name="Reader_Go" xml:space="preserve">
+    <value>移動</value>
+  </data>
+  <data name="Reader_Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Reader_ZoomIn" xml:space="preserve">
+    <value>拡大</value>
+  </data>
+  <data name="Reader_ZoomOut" xml:space="preserve">
+    <value>縮小</value>
+  </data>
+  <data name="Reader_ZoomValue" xml:space="preserve">
+    <value>{0}%</value>
+  </data>
+  <data name="Reader_FullScreen" xml:space="preserve">
+    <value>全画面表示</value>
+  </data>
+  <data name="Reader_ExitFullScreen" xml:space="preserve">
+    <value>全画面表示を終了</value>
+  </data>
+  <data name="Reader_PageFailed" xml:space="preserve">
+    <value>このページを読み込めませんでした。</value>
+  </data>
+  <data name="Settings_Reader" xml:space="preserve">
+    <value>リーダー</value>
+  </data>
+  <data name="Settings_Preload" xml:space="preserve">
+    <value>先読みするページ数</value>
+  </data>
+  <data name="Settings_ReadingWidth" xml:space="preserve">
+    <value>最大表示幅</value>
+  </data>
+  <data name="Settings_ReadingWidthValue" xml:space="preserve">
+    <value>{0} px</value>
+  </data>
+  <data name="Settings_CacheLimit" xml:space="preserve">
+    <value>画像キャッシュの上限</value>
+  </data>
+  <data name="Settings_CacheSize" xml:space="preserve">
+    <value>キャッシュサイズ: {0}</value>
+  </data>
+  <data name="Settings_ClearCache" xml:space="preserve">
+    <value>キャッシュを消去</value>
+  </data>
+  <data name="Settings_Sources" xml:space="preserve">
+    <value>ソース</value>
+  </data>
+  <data name="Size_MB" xml:space="preserve">
+    <value>{0} MB</value>
+  </data>
+  <data name="Size_GB" xml:space="preserve">
+    <value>{0} GB</value>
+  </data>
+  <data name="Account_SignedIn" xml:space="preserve">
+    <value>ログイン済み</value>
+  </data>
+  <data name="Account_SignedOut" xml:space="preserve">
+    <value>未ログイン</value>
+  </data>
+  <data name="Account_Checking" xml:space="preserve">
+    <value>確認中…</value>
+  </data>
+  <data name="Account_ImageLimit" xml:space="preserve">
+    <value>画像の上限: {1} 中 {0} 使用</value>
+  </data>
+  <data name="Account_LimitResets" xml:space="preserve">
+    <value>{0} にリセット</value>
+  </data>
+  <data name="Account_SignIn" xml:space="preserve">
+    <value>ログイン</value>
+  </data>
+  <data name="Account_PasteCookies" xml:space="preserve">
+    <value>Cookie を貼り付け</value>
+  </data>
+  <data name="Account_SignOut" xml:space="preserve">
+    <value>ログアウト</value>
+  </data>
+  <data name="Account_Refresh" xml:space="preserve">
+    <value>再確認</value>
+  </data>
+  <data name="Login_Title" xml:space="preserve">
+    <value>{0} にログイン</value>
+  </data>
+  <data name="Login_Hint" xml:space="preserve">
+    <value>下のページでログインしてください。ログインが完了するとこのウィンドウは自動的に閉じます。</value>
+  </data>
+  <data name="Login_NoWebView" xml:space="preserve">
+    <value>このコンピューターでは埋め込みブラウザー (Microsoft Edge WebView2) を使用できません。代わりに Cookie を貼り付けてください。</value>
+  </data>
+  <data name="Paste_Title" xml:space="preserve">
+    <value>Cookie を貼り付け</value>
+  </data>
+  <data name="Paste_Hint" xml:space="preserve">
+    <value>Cookie を name=value; name=value の形式、または cookies.txt の内容で貼り付けてください。このコンピューターに暗号化して保存され、{0} にのみ送信されます。</value>
+  </data>
+  <data name="Paste_Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Paste_Rejected" xml:space="preserve">
+    <value>この Cookie ではログインできませんでした。</value>
+  </data>
+  <data name="ExHentai_NoAccess" xml:space="preserve">
+    <value>ExHentai を使うには、ExHentai にアクセスできるアカウントでログインする必要があります。</value>
+  </data>
+  <data name="Reader_FitWidth" xml:space="preserve">
+    <value>ウィンドウの幅に合わせる (W)</value>
+  </data>
+  <data name="Reader_PageGaps" xml:space="preserve">
+    <value>ページ間の余白 (G)</value>
+  </data>
+  <data name="Settings_FitWidth" xml:space="preserve">
+    <value>ページをウィンドウの幅いっぱいに表示</value>
+  </data>
+  <data name="Settings_PageGap" xml:space="preserve">
+    <value>ページ間の余白</value>
+  </data>
+  <data name="Settings_PageGapOff" xml:space="preserve">
+    <value>余白なし</value>
+  </data>
+  <data name="Settings_PageGapHint" xml:space="preserve">
+    <value>リーダーで G キーを押すと余白を切り替えられます。webtoon タグのギャラリーは余白なしで開きます。</value>
+  </data>
+  <data name="Settings_On" xml:space="preserve">
+    <value>オン</value>
+  </data>
+  <data name="Settings_Off" xml:space="preserve">
+    <value>オフ</value>
+  </data>
 </root>

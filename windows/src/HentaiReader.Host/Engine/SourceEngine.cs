@@ -105,7 +105,7 @@ public sealed partial class SourceEngine : IDisposable
             var id = (int)a[0].AsNumber();
             var meta = a[1].AsString();
             byte[]? body = a.Length > 2 && a[2] is JsArray arr ? arr.Select(v => (byte)v.AsNumber()).ToArray() : null;
-            Start(id, () => _bridge.HttpAsync(meta, body), r => _engine.Invoke(_settleHttp, id, r.Env, r.Bytes is null ? JsValue.Undefined : Convert.ToBase64String(r.Bytes)));
+            Start(id, () => _bridge.HttpAsync(meta, body), r => _engine.Invoke(_settleHttp, id, r.Env, r.Bytes is null ? JsValue.Undefined : _engine.Intrinsics.ArrayBuffer.Construct(r.Bytes)));
             return JsValue.Undefined;
         });
         Define(native, "htmlSelect", (_, a) => _bridge.HtmlSelect(a[0].AsString(), (int)a[1].AsNumber(), a[2].AsString()));
@@ -151,6 +151,8 @@ public sealed partial class SourceEngine : IDisposable
         catch (Exception e) { task = Task.FromException<T>(e); }
         task.ContinueWith(t => _thread.Post(() =>
         {
+            // The engine was stopped (limit, disposal): nothing may run in it any more.
+            if (Broken is not null || _kill.IsCancellationRequested) return;
             if (t.IsCompletedSuccessfully) settle(t.Result);
             else _engine.Invoke(_settle, id, Envelope.Error(SourceErrorKind.Network, t.Exception?.GetBaseException().Message ?? "cancelled"));
             _engine.Advanced.ProcessTasks();
@@ -173,14 +175,19 @@ public sealed partial class SourceEngine : IDisposable
         return new SourceDescription(manifest, functions);
     }
 
-    /// <summary>Calls an exported function with JSON arguments. Never throws for script errors.</summary>
+    /// <summary>
+    /// Calls an exported function with JSON arguments. Never throws for script errors. The token
+    /// cancels a call that is still waiting for the engine (OperationCanceledException); a call that
+    /// already runs finishes within the time limit, because stopping a script means discarding the
+    /// whole engine (and its state, e.g. Hitomi's gg.js) for every page the reader scrolled past.
+    /// </summary>
     public async Task<CallResult> CallAsync(string fn, string argsJson, CancellationToken token)
     {
         if (Broken is not null) return Limit("EngineBroken", Broken, "time");
         await _callLock.WaitAsync(token);
         try
         {
-            return await _thread.InvokeAsync(() => RunCall(fn, argsJson, token));
+            return await _thread.InvokeAsync(() => RunCall(fn, argsJson, CancellationToken.None));
         }
         finally
         {

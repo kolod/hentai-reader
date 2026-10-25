@@ -4,6 +4,21 @@ All notable changes to this component. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+## [1.2.0] - Unreleased
+
+Backward compatible: sources declaring `1.0` or `1.1` run unchanged; 1.2 uses the 1.1 calling
+convention.
+
+### Added
+
+- Optional `manifest.loginPage { url, cookies, shareWith? }` for interactive sign-in in a host's
+  embedded browser, with the rule which captured cookies a host stores (only the source's domains,
+  plus the sign-in cookies for each `shareWith` domain). Validated by `runner check` and on load in
+  every host; conformance sample `broken-login-page`.
+- The `language` filter may be declared `kind: "multi"`: `SearchQuery.filters.language` is then a
+  list of codes and matches galleries in any of them. `single` stays valid; hosts already render
+  both kinds generically.
+
 ## [1.1.1] - Unreleased
 
 ### Changed

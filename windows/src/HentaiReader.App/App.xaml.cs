@@ -13,6 +13,7 @@ public partial class App : Application
     public App()
     {
         // The language override must be in place before any resource loads (research R6).
+        AppServices.Initialize(_preferences);
         var language = _preferences.EffectiveLanguage();
         Microsoft.Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = language;
         Strings.Language = language;
@@ -31,6 +32,9 @@ public partial class App : Application
             Exit();
             return;
         }
+
+        // Sign-in browser profiles left behind by a crash (they are deleted after each sign-in).
+        Dialogs.LoginDialog.CleanUp();
 
         var startSource = commandLine
             .FirstOrDefault(a => a.StartsWith("--source=", StringComparison.Ordinal))?["--source=".Length..];

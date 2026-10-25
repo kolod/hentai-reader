@@ -4,6 +4,35 @@ All notable changes to this component. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+## [0.3.0] - Unreleased
+
+Requires contract 1.2 (host reports 1.2.0).
+
+### Added
+
+- Reader in the main window (feature 005): one strip of all pages at the column width, slots
+  reserved from exact or estimated sizes with scroll anchoring, decoded at display width,
+  preloading sized by pages and screen height, on-disk page cache with a size limit.
+- Toolbar (auto-hides), page scrubber, go to page, zoom (Ctrl+wheel, Ctrl+Plus/Minus), fit width
+  (W, default) or maximum reading width, optional gaps between pages (G; webtoons open without),
+  smooth gliding on arrows, Page Up/Down and Space; borderless full screen on F11 everywhere.
+- Reading progress per gallery with Continue / Read from start; a thumbnail click opens the reader
+  at that page.
+- Failed pages retry in place; a stalled image is requested again with a retry hint after 20 s
+  (up to twice); rate limits stop the source until Retry, with the waiting time when known.
+- Settings: reader (preload, fit width, reading width, gap, cache limit and Clear cache) and one
+  section per source with its declared settings and, for E-Hentai, account state, image limit,
+  sign-in in an embedded page (WebView2), Paste cookies and Sign out.
+- Several languages at once in the search language filter.
+- The window opens with its last size, position and maximized state.
+
+### Fixed
+
+- A cancelled source call (e.g. leaving a gallery while it loads) no longer crashes the app.
+- Large Hitomi searches no longer fail with "engine memory limit exceeded": response bodies reach
+  scripts as native byte arrays.
+- No light frame around the content in the dark theme.
+
 ## [0.2.1] - Unreleased
 
 ### Fixed

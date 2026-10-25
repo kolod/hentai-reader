@@ -288,4 +288,166 @@
   <data name="Gate_Decline" xml:space="preserve">
     <value>Verlassen</value>
   </data>
+  <data name="Gallery_Read" xml:space="preserve">
+    <value>Lesen</value>
+  </data>
+  <data name="Gallery_Continue" xml:space="preserve">
+    <value>Weiterlesen</value>
+  </data>
+  <data name="Gallery_ReadFromStart" xml:space="preserve">
+    <value>Von vorn lesen</value>
+  </data>
+  <data name="Gallery_Progress" xml:space="preserve">
+    <value>Seite {0} von {1}</value>
+  </data>
+  <data name="Gallery_Finished" xml:space="preserve">
+    <value>Gelesen</value>
+  </data>
+  <data name="Reader_PageOf" xml:space="preserve">
+    <value>{0} / {1}</value>
+  </data>
+  <data name="Reader_Page" xml:space="preserve">
+    <value>Seite</value>
+  </data>
+  <data name="Reader_PageName" xml:space="preserve">
+    <value>Seite {0} von {1}</value>
+  </data>
+  <data name="Reader_GoToPage" xml:space="preserve">
+    <value>Gehe zu Seite</value>
+  </data>
+  <data name="Reader_GoToPage_Prompt" xml:space="preserve">
+    <value>Seitennummer (1–{0})</value>
+  </data>
+  <data name="Reader_GoToPage_Invalid" xml:space="preserve">
+    <value>Geben Sie eine Zahl von 1 bis {0} ein.</value>
+  </data>
+  <data name="Reader_Go" xml:space="preserve">
+    <value>Los</value>
+  </data>
+  <data name="Reader_Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="Reader_ZoomIn" xml:space="preserve">
+    <value>Vergrößern</value>
+  </data>
+  <data name="Reader_ZoomOut" xml:space="preserve">
+    <value>Verkleinern</value>
+  </data>
+  <data name="Reader_ZoomValue" xml:space="preserve">
+    <value>{0} %</value>
+  </data>
+  <data name="Reader_FullScreen" xml:space="preserve">
+    <value>Vollbild</value>
+  </data>
+  <data name="Reader_ExitFullScreen" xml:space="preserve">
+    <value>Vollbild beenden</value>
+  </data>
+  <data name="Reader_PageFailed" xml:space="preserve">
+    <value>Diese Seite konnte nicht geladen werden.</value>
+  </data>
+  <data name="Settings_Reader" xml:space="preserve">
+    <value>Leser</value>
+  </data>
+  <data name="Settings_Preload" xml:space="preserve">
+    <value>Vorausgeladene Seiten</value>
+  </data>
+  <data name="Settings_ReadingWidth" xml:space="preserve">
+    <value>Maximale Lesebreite</value>
+  </data>
+  <data name="Settings_ReadingWidthValue" xml:space="preserve">
+    <value>{0} px</value>
+  </data>
+  <data name="Settings_CacheLimit" xml:space="preserve">
+    <value>Größe des Bildcaches</value>
+  </data>
+  <data name="Settings_CacheSize" xml:space="preserve">
+    <value>Cachegröße: {0}</value>
+  </data>
+  <data name="Settings_ClearCache" xml:space="preserve">
+    <value>Cache leeren</value>
+  </data>
+  <data name="Settings_Sources" xml:space="preserve">
+    <value>Quellen</value>
+  </data>
+  <data name="Size_MB" xml:space="preserve">
+    <value>{0} MB</value>
+  </data>
+  <data name="Size_GB" xml:space="preserve">
+    <value>{0} GB</value>
+  </data>
+  <data name="Account_SignedIn" xml:space="preserve">
+    <value>Angemeldet</value>
+  </data>
+  <data name="Account_SignedOut" xml:space="preserve">
+    <value>Nicht angemeldet</value>
+  </data>
+  <data name="Account_Checking" xml:space="preserve">
+    <value>Wird geprüft…</value>
+  </data>
+  <data name="Account_ImageLimit" xml:space="preserve">
+    <value>Bildlimit: {0} von {1} verbraucht</value>
+  </data>
+  <data name="Account_LimitResets" xml:space="preserve">
+    <value>Zurückgesetzt am {0}</value>
+  </data>
+  <data name="Account_SignIn" xml:space="preserve">
+    <value>Anmelden</value>
+  </data>
+  <data name="Account_PasteCookies" xml:space="preserve">
+    <value>Cookies einfügen</value>
+  </data>
+  <data name="Account_SignOut" xml:space="preserve">
+    <value>Abmelden</value>
+  </data>
+  <data name="Account_Refresh" xml:space="preserve">
+    <value>Erneut prüfen</value>
+  </data>
+  <data name="Login_Title" xml:space="preserve">
+    <value>Bei {0} anmelden</value>
+  </data>
+  <data name="Login_Hint" xml:space="preserve">
+    <value>Melden Sie sich auf der Seite unten an. Dieses Fenster schließt sich nach der Anmeldung von selbst.</value>
+  </data>
+  <data name="Login_NoWebView" xml:space="preserve">
+    <value>Der eingebettete Browser (Microsoft Edge WebView2) ist auf diesem Computer nicht verfügbar. Fügen Sie stattdessen Ihre Cookies ein.</value>
+  </data>
+  <data name="Paste_Title" xml:space="preserve">
+    <value>Cookies einfügen</value>
+  </data>
+  <data name="Paste_Hint" xml:space="preserve">
+    <value>Fügen Sie Cookies als name=wert; name=wert oder den Inhalt einer cookies.txt ein. Sie werden verschlüsselt auf diesem Computer gespeichert und nur an {0} gesendet.</value>
+  </data>
+  <data name="Paste_Save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="Paste_Rejected" xml:space="preserve">
+    <value>Mit diesen Cookies wurden Sie nicht angemeldet.</value>
+  </data>
+  <data name="ExHentai_NoAccess" xml:space="preserve">
+    <value>ExHentai erfordert ein angemeldetes Konto mit ExHentai-Zugang.</value>
+  </data>
+  <data name="Reader_FitWidth" xml:space="preserve">
+    <value>An Fensterbreite anpassen (W)</value>
+  </data>
+  <data name="Reader_PageGaps" xml:space="preserve">
+    <value>Abstände zwischen Seiten (G)</value>
+  </data>
+  <data name="Settings_FitWidth" xml:space="preserve">
+    <value>Seiten füllen die Fensterbreite</value>
+  </data>
+  <data name="Settings_PageGap" xml:space="preserve">
+    <value>Abstand zwischen Seiten</value>
+  </data>
+  <data name="Settings_PageGapOff" xml:space="preserve">
+    <value>Keine Abstände</value>
+  </data>
+  <data name="Settings_PageGapHint" xml:space="preserve">
+    <value>Mit G schalten Sie die Abstände im Reader ein oder aus. Galerien mit dem Tag „webtoon“ öffnen ohne Abstände.</value>
+  </data>
+  <data name="Settings_On" xml:space="preserve">
+    <value>Ein</value>
+  </data>
+  <data name="Settings_Off" xml:space="preserve">
+    <value>Aus</value>
+  </data>
 </root>

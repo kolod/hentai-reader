@@ -181,6 +181,11 @@ export interface SourceManifest {
     maxConcurrency: number;            // ≥ 1
   };
   login: "none" | "optional" | "required";
+  /**
+   * (1.2) Where a host may let the user sign in interactively and how it recognises a completed
+   * sign-in. Only with `login` other than "none".
+   */
+  loginPage?: LoginPage;
   filters: FilterDefinition[];
   /** (1.1) User-facing settings; each id at most once, `default` ∈ `values`. */
   settings?: SettingDefinition[];
@@ -189,6 +194,24 @@ export interface SourceManifest {
     /** (1.1) The source exports `getAccountStatus`. */
     accountStatus?: boolean;
   };
+}
+
+/**
+ * (1.2) Interactive sign-in. A host MAY open `url` in an embedded browser; it MUST NOT navigate it
+ * to hosts outside `manifest.domains` (those open externally). When every name in `cookies` is
+ * set for `url`, the sign-in is complete: the host stores in the source's cookie jar only the
+ * cookies whose domain is within `manifest.domains`; the account is shared, so the `cookies` found
+ * on any of these domains are also stored for the domain of `url` and for each `shareWith` domain.
+ * Cookies the user types or pastes follow the same rule. As always, cookies
+ * stay local and are sent only to the source's domains.
+ */
+export interface LoginPage {
+  /** Absolute https URL; its host is within `manifest.domains`. */
+  url: string;
+  /** Names of the cookies that prove a completed sign-in; at least one, unique. */
+  cookies: string[];
+  /** Further domains (each within `manifest.domains`) that share the account, e.g. a mirror. */
+  shareWith?: string[];
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -247,7 +270,11 @@ export type LanguageCode = string;
 
 export type FilterDefinition =
   | { id: "sort"; kind: "single"; values: SortValue[]; default: SortValue }
-  | { id: "language"; kind: "single"; values: LanguageCode[] }
+  /**
+   * (1.2) `multi`: the query's `language` is a list and matches galleries in ANY of the languages;
+   * `single` (1.0/1.1) remains valid. A source declares one kind; hosts accept both.
+   */
+  | { id: "language"; kind: "single" | "multi"; values: LanguageCode[] }
   | { id: "type"; kind: "multi"; values: GalleryType[] }
   | { id: "min_rating"; kind: "number"; min: number; max: number }
   | { id: "pages"; kind: "range"; min: number; max: number };
@@ -262,7 +289,8 @@ export interface SearchQuery {
   /** Only ids declared in the manifest; unknown ids/values → SourceError("InvalidInput"). */
   filters: {
     sort?: SortValue;
-    language?: LanguageCode;
+    /** A single code for a `single` language filter, a non-empty list for a `multi` one (1.2). */
+    language?: LanguageCode | LanguageCode[];
     type?: GalleryType[];
     min_rating?: number;
     pages?: { min?: number; max?: number };

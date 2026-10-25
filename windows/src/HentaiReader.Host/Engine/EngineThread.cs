@@ -56,7 +56,15 @@ internal sealed class EngineThread : IDisposable
     {
         foreach (var action in _queue.GetConsumingEnumerable())
         {
-            action();
+            try
+            {
+                action();
+            }
+            catch (Exception)
+            {
+                // A late completion of a call that already ended (timed out, engine replaced) has
+                // nobody waiting for it; it must not take the whole app down.
+            }
         }
     }
 

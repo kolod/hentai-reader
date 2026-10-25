@@ -28,6 +28,10 @@ of every function, and `null` for an absent retry hint. 1.1 also adds the option
 `getAccountStatus` capability, `ImageRequest.crop` for sprite thumbnails, the `asian_porn` type,
 and the rule that hosts fetch images with the source's cookies and politeness limiter.
 
+1.2 keeps the 1.1 calling convention and adds the optional `manifest.loginPage { url, cookies,
+shareWith? }`: where a host may let the user sign in in an embedded browser, which cookies prove the
+sign-in, and which other domains of the source share them.
+
 ## Contract tests for hosts
 
 Each `tests/<name>/` holds `test.js` (a source module exporting `manifest` and `run()`, which

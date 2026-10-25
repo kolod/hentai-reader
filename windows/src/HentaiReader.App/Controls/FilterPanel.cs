@@ -44,7 +44,10 @@ public sealed class FilterPanel : StackPanel
                 var panel = new StackPanel { Spacing = 2 };
                 panel.Children.Add(new TextBlock { Text = label, Style = (Style)Application.Current.Resources["BodyStrongTextBlockStyle"] });
                 var grid = new WrapPanel { Spacing = 8 };
-                foreach (var v in f.Definition["values"]!.AsArray().Select(v => v!.GetValue<string>()))
+                var values = f.Definition["values"]!.AsArray().Select(v => v!.GetValue<string>());
+                // Languages (contract 1.2 multi filter) are many: alphabetical by their localized name.
+                if (f.Id == "language") values = values.OrderBy(v => ValueLabel(f.Id, v), StringComparer.CurrentCulture);
+                foreach (var v in values)
                 {
                     var box = new CheckBox { Content = ValueLabel(f.Id, v), IsChecked = f.Multi.Contains(v), MinWidth = 120 };
                     box.Checked += (_, _) => f.Multi.Add(v);
