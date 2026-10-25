@@ -33,6 +33,25 @@ login page); login state and remaining image limit; all new strings in six langu
   the in-memory set are therefore sized by screen height, not only by a page count, and the
   monitor may be rotated while reading.
 
+### Session 2026-10-25 (owner's review of the first build)
+
+- Q: Is the navigation pane shown in the reader? → A: Never: the reader always takes the whole
+  window; the pane comes back with the gallery (FR-016).
+- Q: What width does the reader start at? → A: The window width ("fit width", setting, on by
+  default); W or the toolbar button returns to it, any zoom step leaves it; with the setting off
+  the start is the maximum reading width (FR-011, FR-015).
+- Q: Gaps between pages? → A: A fixed gap is a setting (0–48 px, default 8 px), toggled with G
+  while reading; galleries tagged webtoon open without it (FR-004b; Constitution 1.1.0, IV).
+- Q: What does a click on a gallery thumbnail do? → A: Opens the reader at that page (FR-019a).
+- Q: Is the window remembered? → A: Size, position and maximized state are restored at start when
+  that place is still on a display (FR-035).
+- Q: What if an image server stalls? → A: After 20 s the source is asked for a new location
+  (`RetryHint`) without waiting for an error, up to 2 times, then the page fails with Retry
+  (FR-020a).
+- Q: Can the search filter several languages? → A: Yes, any of the chosen languages (contract 1.2
+  `multi` language filter); E-Hentai searches them with its "any of" terms, Hitomi (no such search
+  on the site) filters its all-language feed by the per-language lists (FR-036).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Read a gallery in one seamless strip (Priority: P1)
@@ -272,8 +291,11 @@ drop to zero.
 
 **Strip**
 
-- **FR-004**: All pages of a gallery MUST form one vertical strip without gaps or visible seams between
-  pages.
+- **FR-004**: All pages of a gallery MUST form one vertical strip without visible seams between
+  pages; the only space between them is the optional gap of FR-004b.
+- **FR-004b**: A fixed gap between pages (setting 0–48 px, default 8 px, 0 = never) MUST be part of
+  the strip geometry, so it never makes the strip jump; G toggles it while reading, keeping the
+  page in view; galleries tagged `webtoon` open without it.
 - **FR-004a**: Every page MUST be shown at exactly the strip width, whatever the resolution or
   proportions of its image: lower-resolution pages are scaled up and higher ones down; each page's
   height follows its own aspect ratio, so no page is cropped or distorted. Two-page spreads, covers
@@ -297,26 +319,31 @@ drop to zero.
   stay responsive while pages load.
 - **FR-010**: Page images MUST be requested through the source (`getPageUrl`, with the source's
   cookies and politeness limits); the reader MUST NOT construct site URLs itself.
-- **FR-011**: The strip MUST be centred with a maximum width (setting, default 1000 px at 100 %
-  scaling); narrower windows use the full width.
+- **FR-011**: The reader MUST start at the window width ("fit width", setting, on by default).
+  With the setting off, the strip is centred with a maximum width (setting, default 1000 px at
+  100 % scaling) and narrower windows use the full width.
 
 **Navigation**
 
-- **FR-012**: Keyboard: Space / Page Down one screen down, Shift+Space / Page Up one screen up, Home
-  first page, End last page, Up/Down arrow small steps.
+- **FR-012**: Keyboard: Up/Down arrows scroll continuously while held, Space / Page Down and
+  Shift+Space / Page Up the same but faster, all easing in and out (no fixed page steps); Home first
+  page, End last page.
 - **FR-013**: The current page and total MUST be visible; a scrubber MUST allow jumping to any page,
   showing the target page while dragging.
 - **FR-014**: Go to page MUST accept a page number and reject invalid input with a message.
-- **FR-015**: Zoom by Ctrl+wheel (around the pointer) and Ctrl+Plus/Minus/0 (Ctrl+0 = fit width); zoom
+- **FR-015**: Zoom by Ctrl+wheel (around the pointer), Ctrl+Plus/Minus and toolbar buttons, relative
+  to the starting width; Ctrl+0 returns to the default width (FR-011); W and the toolbar "fit
+  width" button return to the window width, the button being lit only at exactly that width. Zoom
   lasts for the session.
 - **FR-016**: Full screen via F11 anywhere in the app (browsing, gallery, settings, reader) and a
   reader toolbar command; F11 leaves it, and Escape leaves it in the reader. It stays on when moving
-  between screens. In the reader, full screen also hides the navigation pane and the reader toolbar
-  (FR-017); on other screens the navigation stays. Full screen is
+  between screens. The reader never shows the navigation pane (full screen or not); in full screen
+  it also hides the reader toolbar (FR-017); on other screens the navigation stays. Full screen is
   borderless: the window covers the whole monitor it is on, hiding its title bar and the taskbar,
   and remains an ordinary window (no exclusive full-screen mode): Alt+Tab, switching to other
   windows, notifications and resolution or monitor changes work normally, and leaving full screen
-  restores the previous window size, position and maximized state.
+  restores the previous window size, position and maximized state. Entering and leaving happen
+  without the system resize animation, so the strip is laid out once.
 - **FR-017**: The reader toolbar (page indicator, scrubber, go to page, zoom, full screen, back) MUST
   hide while reading and reappear on pointer movement near it or on a key press.
 
@@ -326,11 +353,15 @@ drop to zero.
   gallery when leaving the reader, closing the app, and periodically while reading.
 - **FR-019**: A gallery's details MUST show saved progress and offer Continue and Read from start; a
   gallery read to the end is marked read.
+- **FR-019a**: A click on a page thumbnail in the gallery MUST open the reader at that page.
 
 **Failures and limits**
 
 - **FR-020**: A page that fails MUST show the error and Retry in its own slot; Retry asks the source
   for a new image location with the retry hint (contract `RetryHint`).
+- **FR-020a**: An image that has not arrived within 20 s MUST be abandoned and the source asked for
+  a new location with the retry hint, automatically up to 2 times; then the page fails as in
+  FR-020.
 - **FR-021**: A rate-limit signal MUST stop all further requests of that source until the user chooses
   Retry, with an explanation and the waiting time when known (Constitution VI).
 - **FR-022**: Loaded pages MUST remain readable when later requests fail.
@@ -364,8 +395,18 @@ drop to zero.
 
 **Reader settings**
 
-- **FR-033**: Settings MUST offer preload depth (3–5), maximum reading width, cache size limit and Clear
-  cache.
+- **FR-033**: Settings MUST offer preload depth (3–5), fit width, maximum reading width, gap between
+  pages, cache size limit and Clear cache.
+
+**Search**
+
+- **FR-036**: The language filter MUST allow several languages at once, matching galleries in any
+  of them, for both sources; the result order stays the site's.
+
+**Window**
+
+- **FR-035**: The main window MUST reopen with its last size, position and maximized state (also
+  after the restart for a language change); a saved place no longer on any display is ignored.
 
 **Localization**
 

@@ -33,6 +33,9 @@ public partial class App : Application
             return;
         }
 
+        // Sign-in browser profiles left behind by a crash (they are deleted after each sign-in).
+        Dialogs.LoginDialog.CleanUp();
+
         var startSource = commandLine
             .FirstOrDefault(a => a.StartsWith("--source=", StringComparison.Ordinal))?["--source=".Length..];
         _window = new MainWindow(_preferences, startSource);

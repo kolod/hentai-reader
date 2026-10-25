@@ -16,8 +16,14 @@ public sealed class Preferences
     public int PreloadPages { get; set; } = 4;
     /// <summary>Maximum reading column width in DIP (600–2000, FR-011).</summary>
     public int ReadingWidth { get; set; } = 1000;
+    /// <summary>Pages fill the window width when the reader opens (otherwise the reading width), FR-011.</summary>
+    public bool FitWidth { get; set; } = true;
+    /// <summary>Gap between pages in DIP (0–48, 0 = never); webtoons start without it, FR-004b.</summary>
+    public int PageGap { get; set; } = 8;
     /// <summary>Disk cache limit for page images in MB (256–10240, FR-023).</summary>
     public int CacheLimitMb { get; set; } = 1024;
+    /// <summary>Main window bounds when it was last closed.</summary>
+    public WindowBounds? Window { get; set; }
     /// <summary>Per-source setting values (sourceId → settingId → value), FR-026.</summary>
     public Dictionary<string, Dictionary<string, string>> SourceSettings { get; set; } = new();
 

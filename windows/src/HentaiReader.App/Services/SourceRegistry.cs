@@ -23,6 +23,20 @@ public sealed class SourceEntry
     /// <summary>The source's cookie jar (sign-in and sign-out, FR-028/FR-030).</summary>
     public CookieJar? Cookies { get; set; }
 
+    /// <summary>The encrypted cookie file of this source.</summary>
+    public string? CookieFile { get; set; }
+
+    /// <summary>Sign-out: the source's cookies are forgotten and their file deleted (FR-030).</summary>
+    public void SignOut()
+    {
+        Cookies?.Clear();
+        if (CookieFile is not null && File.Exists(CookieFile)) File.Delete(CookieFile);
+        LastAccountStatus = null;
+    }
+
+    /// <summary>Last getAccountStatus result (AccountStatus JSON), shown again where it matters (FR-027).</summary>
+    public JsonObject? LastAccountStatus { get; set; }
+
     /// <summary>Calls a source function with the stored settings (manifest defaults for the rest).</summary>
     public Task<CallResult> CallAsync(string fn, IReadOnlyList<JsonNode?> args, CancellationToken token = default) =>
         Session!.CallAsync(fn, args, Settings?.Values, token);
@@ -47,6 +61,7 @@ public sealed class SourceRegistry : IDisposable
                 var dir = AppPaths.SourceData(bundle.Id);
                 Directory.CreateDirectory(dir);
                 entry.Cookies = LoadCookies(dir);
+                entry.CookieFile = Path.Combine(dir, "cookies.bin");
                 var options = new SessionOptions(_transport, EnforcePoliteness: true, new SourceStorage(Path.Combine(dir, "storage.json")), entry.Cookies);
                 entry.Session = await SourceSession.OpenAsync(bundle.Script, Path.GetFileName(bundle.ScriptPath), options);
                 entry.Settings = new SourceSettingsStore(preferences, bundle.Id, entry.Session.Manifest["settings"] as JsonArray);

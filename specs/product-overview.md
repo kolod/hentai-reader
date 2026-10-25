@@ -126,8 +126,10 @@ Options:
    replaying the source fixtures, browse/search/gallery screens, 6-language localisation. ✅
 4. `004-windows-installer` — Windows installer (per-user or all users, six languages, verified
    content, silent upgrade as the basis for later self-update); portable build kept. ✅
-5. `005-windows-reader` — seamless reader (online), source settings, E-Hentai login.
-6. `006-cbz-downloads` — download queue, CBZ + metadata, library (Windows first).
+5. `005-windows-reader` — seamless reader (online), source settings, E-Hentai login. ✅
+6. `006-windows-library` — history, library (uncompressed ZIP archives with metadata and the
+   reader's zoom), save to library, several library folders, cache location with migration, start
+   page, saved default query (Windows first). Replaces `006-cbz-downloads`.
 7. `007-android-app` — Android host (QuickJS + Jsoup) and UI at parity.
 8. `008-script-updates` — `sources-dist`, CI publishing, SHA-256 verification.
 

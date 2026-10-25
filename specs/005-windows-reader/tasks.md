@@ -113,9 +113,9 @@ window) form the MVP; US3–US7 add progress, navigation/full screen, failures, 
 
 **Independent test**: [quickstart.md §6](quickstart.md).
 
-- [ ] T031 [US5] `A/Reader/ReaderSession.cs`: `Failed(kind, message)` per page; Retry calls `getPageUrl` with `RetryHint { attempt, previous, status }`; network failures keep loaded pages
-- [ ] T032 [US5] Limit banner in `A/Pages/ReaderPage.xaml(.cs)`: on `RateLimited` (script or image) the planner stops, banner shows reason and waiting time (plural minutes), Retry → `ClearLimit()` and resume; account status refreshed for sources with `accountStatus`
-- [ ] T033 [US5] Check: disconnect/reconnect while reading (manual); forced limit via a Debug-only environment switch `HENTAIREADER_FAULT=image509` in `H/Http/HttpHost.cs` (compiled only in Debug) → banner shown, no further requests in the request log until Retry (SC-006)
+- [X] T031 [US5] `A/Reader/ReaderSession.cs`: `Failed(kind, message)` per page; Retry calls `getPageUrl` with `RetryHint { attempt, previous, status }`; network failures keep loaded pages
+- [X] T032 [US5] Limit banner in `A/Pages/ReaderPage.xaml(.cs)`: on `RateLimited` (script or image) the planner stops, banner shows reason and waiting time (plural minutes), Retry → `ClearLimit()` and resume; account status refreshed for sources with `accountStatus`
+- [X] T033 [US5] Check: disconnect/reconnect while reading (manual); forced limit via a Debug-only environment switch `HENTAIREADER_FAULT=image509` in `H/Http/HttpHost.cs` (compiled only in Debug) → banner shown, no further requests in the request log until Retry (SC-006)
 
 ---
 
@@ -125,16 +125,16 @@ window) form the MVP; US3–US7 add progress, navigation/full screen, failures, 
 
 **Independent test**: [quickstart.md §8](quickstart.md) steps 1–4.
 
-- [ ] T034 [US6] Confirm live the E-Hentai login URL and the cookies set after sign-in (names only, never values) and record them in [contracts/contract-1.2-login-page.md](contracts/contract-1.2-login-page.md)
-- [ ] T035 [US6] Contract 1.2 in `contract/host-api.d.ts` (`LoginPage`, `SourceManifest.loginPage` with doc comments and host rules), `contract/package.json` 1.2.0, `contract/CHANGELOG.md`, `contract/README.md` calling-convention section
-- [ ] T036 [P] [US6] Runner: host supports 1.2 (`tools/runner/src/source.ts`), `check` rules from the contract table (`tools/runner/src/commands/check.ts`), conformance sample `contract/conformance/broken-login-page/` with its expected violation, runner tests; `npm test` green
-- [ ] T037 [P] [US6] Windows host: `H/HostInfo.cs` 1.2.0; `H/Sources/ManifestRules.cs` with the same rules applied on load (source unavailable with the violation text); tests `T/Sources/ManifestRulesTests.cs`; parity suite green
-- [ ] T038 [US6] `sources/ehentai/ehentai.js`: `contract: "1.2"`, `loginPage` from T034, version 0.2.0; `sources/ehentai/CHANGELOG.md`; `npm run runner -- check sources/ehentai` and offline tests green
-- [ ] T039 [P] [US6] `H/Reading/LoginCookies.cs`: from captured cookies keep those whose domain matches `manifest.domains`, add `loginPage.cookies` for each `shareWith` domain, report missing required cookies; parsing of pasted `k=v; …` and Netscape text; tests `T/Reading/LoginCookiesTests.cs`
-- [ ] T040 [US6] `A/Dialogs/LoginDialog.cs`: `WebView2` with a throw-away user data folder under the data folder (deleted after close), `NavigationStarting` limited to `manifest.domains` (others → system browser), cookie check after each navigation, completion when all `loginPage.cookies` exist, store via `LoginCookies` into the source's jar; explanation when the WebView2 runtime is missing
-- [ ] T041 [US6] `A/Dialogs/PasteCookiesDialog.cs`: password-style input, store via `LoginCookies`, verify with `getAccountStatus`, never show values again
-- [ ] T042 [US6] `A/Pages/SettingsPage.xaml(.cs)`: Sources section, one expander per source with its declared settings (vocabulary labels, saved via `SourceSettingsStore`), account block for `accountStatus` sources (state, image limit used/max and reset time, Sign in when `loginPage` exists, Paste cookies, Sign out deleting `cookies.bin` and clearing the jar); choosing `site = exhentai` checks `getAccountStatus` first and refuses without `exhentai: true` (FR-031)
-- [ ] T043 [US6] Live check: sign in through the embedded page, image limit shown within 5 s (SC-007), ExHentai allowed only with access, sign out, paste cookies; confirm cookies never appear in logs or files outside `cookies.bin`
+- [X] T034 [US6] Confirm live the E-Hentai login URL and the cookies set after sign-in (names only, never values) and record them in [contracts/contract-1.2-login-page.md](contracts/contract-1.2-login-page.md)
+- [X] T035 [US6] Contract 1.2 in `contract/host-api.d.ts` (`LoginPage`, `SourceManifest.loginPage` with doc comments and host rules), `contract/package.json` 1.2.0, `contract/CHANGELOG.md`, `contract/README.md` calling-convention section
+- [X] T036 [P] [US6] Runner: host supports 1.2 (`tools/runner/src/source.ts`), `check` rules from the contract table (`tools/runner/src/commands/check.ts`), conformance sample `contract/conformance/broken-login-page/` with its expected violation, runner tests; `npm test` green
+- [X] T037 [P] [US6] Windows host: `H/HostInfo.cs` 1.2.0; `H/Sources/ManifestRules.cs` with the same rules applied on load (source unavailable with the violation text); tests `T/Sources/ManifestRulesTests.cs`; parity suite green
+- [X] T038 [US6] `sources/ehentai/ehentai.js`: `contract: "1.2"`, `loginPage` from T034, version 0.2.0; `sources/ehentai/CHANGELOG.md`; `npm run runner -- check sources/ehentai` and offline tests green
+- [X] T039 [P] [US6] `H/Reading/LoginCookies.cs`: from captured cookies keep those whose domain matches `manifest.domains`, add `loginPage.cookies` for each `shareWith` domain, report missing required cookies; parsing of pasted `k=v; …` and Netscape text; tests `T/Reading/LoginCookiesTests.cs`
+- [X] T040 [US6] `A/Dialogs/LoginDialog.cs`: `WebView2` with a throw-away user data folder under the data folder (deleted after close), `NavigationStarting` limited to `manifest.domains` (others → system browser), cookie check after each navigation, completion when all `loginPage.cookies` exist, store via `LoginCookies` into the source's jar; explanation when the WebView2 runtime is missing
+- [X] T041 [US6] `A/Dialogs/PasteCookiesDialog.cs`: password-style input, store via `LoginCookies`, verify with `getAccountStatus`, never show values again
+- [X] T042 [US6] `A/Pages/SettingsPage.xaml(.cs)`: Sources section, one expander per source with its declared settings (vocabulary labels, saved via `SourceSettingsStore`), account block for `accountStatus` sources (state, image limit used/max and reset time, Sign in when `loginPage` exists, Paste cookies, Sign out deleting `cookies.bin` and clearing the jar); choosing `site = exhentai` checks `getAccountStatus` first and refuses without `exhentai: true` (FR-031)
+- [X] T043 [US6] Live check: sign in through the embedded page, image limit shown within 5 s (SC-007), ExHentai allowed only with access, sign out, paste cookies; confirm cookies never appear in logs or files outside `cookies.bin`
 
 ---
 
@@ -144,17 +144,30 @@ window) form the MVP; US3–US7 add progress, navigation/full screen, failures, 
 
 **Independent test**: [quickstart.md §8](quickstart.md) step 5.
 
-- [ ] T044 [US7] `A/Pages/SettingsPage.xaml(.cs)`: Reader section with preload (3–5), maximum width (600–2000, step 100), cache limit (256 MB–10 GB) with current size (localized number + unit) and Clear cache; changes apply immediately to an open reader (planner N, column width, cache limit)
-- [ ] T045 [US7] Check: change each setting with a gallery open; Clear cache → size 0, progress/settings/sign-in kept
+- [X] T044 [US7] `A/Pages/SettingsPage.xaml(.cs)`: Reader section with preload (3–5), maximum width (600–2000, step 100), cache limit (256 MB–10 GB) with current size (localized number + unit) and Clear cache; changes apply immediately to an open reader (planner N, column width, cache limit)
+- [X] T045 [US7] Check: change each setting with a gallery open; Clear cache → size 0, progress/settings/sign-in kept
 
 ---
 
+## Phase 9b: Owner review of the first build (2026-10-25)
+
+- [X] T051 Engine crash: a cancelled call no longer kills the engine thread (`EngineThread`, `SourceEngine` — token only for the queue wait); `GalleryPage` ignores a cancelled `getGallery`
+- [X] T052 "engine memory limit exceeded" on large Hitomi indexes: response bodies cross the bridge as a native `ArrayBuffer` (`jint-bridge.js`, `SourceEngine`); regression test in `EngineTests`
+- [X] T053 No content frame (`App.xaml`), no focus frame around the strip, navigation pane always hidden in the reader (FR-016)
+- [X] T054 Fit width (FR-011, FR-015): `StripGeometry.ColumnWidthFor(..., fitWidth)`, `Preferences.FitWidth`, W / toolbar button / Ctrl+0, settings switch
+- [X] T055 Gaps (FR-004b, Constitution 1.1.0): `StripGeometry.SetGap`, `Preferences.PageGap`, G / toolbar button, webtoon tag starts without, settings slider; geometry tests
+- [X] T056 Thumbnail click opens the reader at that page (FR-019a); very tall thumbnails capped at 1:2 showing the page top
+- [X] T057 Window size, position and maximized state restored (FR-035): `WindowPlacement`, also across the language restart
+- [X] T058 Image timeout → new location (FR-020a): `PageImageLoader` (Host) used by `ReaderSession`; tests run `ehentai.js` against a stalled image server
+- [X] T059 Full screen switch without the resize animation; navigation selection follows Back (Settings can be opened again)
+- [X] T060 Multiple languages (FR-036): contract 1.2 `language` filter may be `multi`; E-Hentai `~language:` OR terms (runner case `search-languages-any`); Hitomi chunked all-language feed filtered by per-language lists (`HitomiLanguagesTests`), Hitomi to contract 1.2 / 0.2.0 with the `null` retry fix; filter panel sorts languages by name
+
 ## Phase 10: Polish & Cross-Cutting Concerns
 
-- [ ] T046 [P] Translate all keys from T002 into `de-DE`, `fr-FR`, `es-ES`, `ja-JP`, `uk-UA` (plural families per CLDR) and regenerate the `.resw` files; `ResourceParityTests` green
-- [ ] T047 Many-pages check per [quickstart.md §4](quickstart.md) (reading width 600, zoom 50 %, landscape CG set): ≥ 3 pages visible, 95 % ready before visible, memory < 1 GB on a 500-page gallery (SC-008, SC-011); scroll back → no placeholders, no requests (SC-010)
-- [ ] T048 Layout pass in de-DE and ja-JP at 1024 px for reader toolbar, settings, dialogs, banners (SC-009); fix clipping
-- [ ] T049 [P] Docs: `W/README.md` (reader, keys, full screen, sign-in, cache location), `W/CHANGELOG.md` 0.3.0, `specs/product-overview.md` roadmap (005 ✅ when merged); `<Version>` 0.3.0 in `W/Directory.Build.props`
+- [X] T046 [P] Translate all keys from T002 into `de-DE`, `fr-FR`, `es-ES`, `ja-JP`, `uk-UA` (plural families per CLDR) and regenerate the `.resw` files; `ResourceParityTests` green
+- [X] T047 Many-pages check per [quickstart.md §4](quickstart.md) (reading width 600, zoom 50 %, landscape CG set): ≥ 3 pages visible, 95 % ready before visible, memory < 1 GB on a 500-page gallery (SC-008, SC-011); scroll back → no placeholders, no requests (SC-010) — automated run up to 4 pages in view, 99.2 % ready, ~350 MB; accepted by the owner's reading on a portrait monitor (2026-10-25)
+- [X] T048 Layout pass in de-DE and ja-JP at 1024 px for reader toolbar, settings, dialogs, banners (SC-009); fix clipping — settings checked in de-DE and ja-JP at 1024 px, no clipping; toolbar is icons only
+- [X] T049 [P] Docs: `W/README.md` (reader, keys, full screen, sign-in, cache location), `W/CHANGELOG.md` 0.3.0, `specs/product-overview.md` roadmap (005 ✅ when merged); `<Version>` 0.3.0 in `W/Directory.Build.props`
 - [ ] T050 Final gate: `npm test`, `npx tsc -p tools/runner/tsconfig.json`, `dotnet build windows/HentaiReader.slnx -c Release -p:Platform=x64`, `dotnet test --project windows/tests/HentaiReader.Host.Tests -c Release`, `pwsh windows/build/Build-Installer.ps1 -SmokeTest` — all green before the PR
 
 ---

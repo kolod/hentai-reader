@@ -3,6 +3,7 @@ using HentaiReader.App.Controls;
 using HentaiReader.App.Images;
 using HentaiReader.App.Localization;
 using HentaiReader.App.Services;
+using HentaiReader.Host.Engine;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
@@ -63,7 +64,15 @@ public sealed partial class GalleryPage : Page
         Cover.Source = await ImageLoader.Shared.LoadAsync(session, args.Summary["cover"], (int)(200 * (XamlRoot?.RasterizationScale ?? 1)), token);
         if (token.IsCancellationRequested) return;
 
-        var res = await args.Source.CallAsync("getGallery", [JsonValue.Create(args.Summary["id"]!.GetValue<string>())], token);
+        CallResult res;
+        try
+        {
+            res = await args.Source.CallAsync("getGallery", [JsonValue.Create(args.Summary["id"]!.GetValue<string>())], token);
+        }
+        catch (OperationCanceledException)
+        {
+            return;   // Another gallery was opened while this one waited for the source.
+        }
         if (token.IsCancellationRequested) return;
         Progress.IsActive = false;
         if (!res.Ok)
@@ -136,6 +145,12 @@ public sealed partial class GalleryPage : Page
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(args.ItemContainer,
             page["fileName"]?.GetValue<string>() ?? $"{(page["index"]?.GetValue<int>() ?? 0) + 1}");
         args.Handled = true;
+    }
+
+    /// <summary>A thumbnail opens the reader at that page.</summary>
+    private void PagesGrid_ItemClick(object sender, ItemClickEventArgs e)
+    {
+        if (e.ClickedItem is JsonObject page) OpenReader(page["index"]?.GetValue<int>() ?? 0, 0);
     }
 
     /// <summary>Saved progress: "Page 40 of 120" with Continue, or Finished (FR-019).</summary>

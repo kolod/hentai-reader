@@ -6,15 +6,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:reader="using:HentaiReader.App.Reader">
     <Grid x:Name="Root" PreviewKeyDown="Root_PreviewKeyDown">
-        <!-- Anchoring is done by the page itself (exact geometry deltas), so the built-in one is off. -->
+        <!-- Anchoring is done by the page itself (exact geometry deltas), so the built-in one is off.
+             The strip keeps the focus for its keys; a focus frame around the whole reader only glared.
+             No system scroll bars: the page scrubber is the reader's scroll bar (scrolling itself stays). -->
         <ScrollViewer
             x:Name="Scroller"
             HorizontalScrollMode="Auto"
-            HorizontalScrollBarVisibility="Auto"
+            HorizontalScrollBarVisibility="Hidden"
             VerticalScrollMode="Enabled"
-            VerticalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Hidden"
             ZoomMode="Disabled"
             IsTabStop="True"
+            UseSystemFocusVisuals="False"
             ViewChanged="Scroller_ViewChanged"
             SizeChanged="Scroller_SizeChanged"
             PointerWheelChanged="Scroller_PointerWheelChanged">
@@ -46,6 +49,8 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button x:Name="BackButton" Click="BackButton_Click">
                 <SymbolIcon Symbol="Back" />
@@ -62,7 +67,13 @@
             <Button x:Name="ZoomInButton" Grid.Column="6" Click="ZoomInButton_Click">
                 <SymbolIcon Symbol="ZoomIn" />
             </Button>
-            <Button x:Name="FullScreenButton" Grid.Column="7" Click="FullScreenButton_Click">
+            <ToggleButton x:Name="FitWidthButton" Grid.Column="7" Click="FitWidthButton_Click">
+                <FontIcon Glyph="&#xE9A6;" />
+            </ToggleButton>
+            <ToggleButton x:Name="GapButton" Grid.Column="8" Click="GapButton_Click">
+                <FontIcon Glyph="&#xE8A9;" />
+            </ToggleButton>
+            <Button x:Name="FullScreenButton" Grid.Column="9" Click="FullScreenButton_Click">
                 <SymbolIcon x:Name="FullScreenIcon" Symbol="FullScreen" />
             </Button>
         </Grid>

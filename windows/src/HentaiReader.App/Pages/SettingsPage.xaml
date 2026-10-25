@@ -4,9 +4,34 @@
     AutomationProperties.AutomationId="SettingsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <StackPanel Padding="24,16" Spacing="12" MaxWidth="640" HorizontalAlignment="Left">
-        <TextBlock x:Name="TitleText" Style="{StaticResource TitleTextBlockStyle}" />
-        <ComboBox x:Name="LanguageBox" MinWidth="280" DisplayMemberPath="Text" />
-        <TextBlock x:Name="RestartNote" Opacity="0.7" TextWrapping="Wrap" />
-    </StackPanel>
+    <ScrollViewer>
+        <StackPanel Padding="24,16" Spacing="12" MaxWidth="680" HorizontalAlignment="Left">
+            <TextBlock x:Name="TitleText" Style="{StaticResource TitleTextBlockStyle}" />
+            <ComboBox x:Name="LanguageBox" MinWidth="280" DisplayMemberPath="Text" />
+            <TextBlock x:Name="RestartNote" Opacity="0.7" TextWrapping="Wrap" />
+
+            <!-- Reader (FR-033) -->
+            <TextBlock x:Name="ReaderHeader" Margin="0,16,0,0" Style="{StaticResource SubtitleTextBlockStyle}" />
+            <ComboBox x:Name="PreloadBox" MinWidth="200" />
+            <StackPanel Spacing="4">
+                <TextBlock x:Name="WidthLabel" />
+                <Slider x:Name="WidthSlider" Minimum="600" Maximum="2000" StepFrequency="100" TickFrequency="100" SnapsTo="StepValues" MaxWidth="420" HorizontalAlignment="Left" Width="420" />
+            </StackPanel>
+            <ToggleSwitch x:Name="FitWidthSwitch" />
+            <StackPanel Spacing="4">
+                <TextBlock x:Name="GapLabel" />
+                <Slider x:Name="GapSlider" Minimum="0" Maximum="48" StepFrequency="4" TickFrequency="4" SnapsTo="StepValues" HorizontalAlignment="Left" Width="420" />
+                <TextBlock x:Name="GapHint" Opacity="0.7" TextWrapping="Wrap" />
+            </StackPanel>
+            <ComboBox x:Name="CacheLimitBox" MinWidth="200" DisplayMemberPath="Text" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <TextBlock x:Name="CacheSizeText" VerticalAlignment="Center" />
+                <Button x:Name="ClearCacheButton" Click="ClearCacheButton_Click" />
+            </StackPanel>
+
+            <!-- Sources: declared settings and accounts (FR-026–FR-032) -->
+            <TextBlock x:Name="SourcesHeader" Margin="0,16,0,0" Style="{StaticResource SubtitleTextBlockStyle}" />
+            <StackPanel x:Name="SourcesPanel" Spacing="8" />
+        </StackPanel>
+    </ScrollViewer>
 </Page>

@@ -34,7 +34,9 @@ export interface LoginPage {
 - A host MAY offer an embedded sign-in for sources with `loginPage`; it MUST NOT navigate the
   embedded browser to hosts outside `manifest.domains` (open them externally instead).
 - On completion the host stores, in the source's cookie jar only, the cookies whose domain is
-  within `manifest.domains`, and the `loginPage.cookies` additionally for every `shareWith` domain.
+  within `manifest.domains`. The account is shared: the `loginPage.cookies` found on any of these
+  domains are also stored for the domain of `url` and for every `shareWith` domain (so cookies
+  pasted from the mirror sign in the main site too).
 - Cookies obtained this way follow the existing rule: sent only to the source's domains, stored
   only locally.
 - A host MAY also accept cookies typed or pasted by the user; the same storage rule applies.
@@ -57,15 +59,19 @@ Conformance sample: `contract/conformance/broken-login-page/` (url outside domai
 ```js
 contract: "1.2",
 loginPage: {
-  url: "https://forums.e-hentai.org/index.php?act=Login&CODE=00",
+  url: "https://e-hentai.org/bounce_login.php?b=d&bt=1-1",
   cookies: ["ipb_member_id", "ipb_pass_hash"],
   shareWith: ["exhentai.org"],
 },
 ```
 
-No function changes; recorded cases unchanged. The exact login URL and the cookie set are
-confirmed live in the first implementation task (sign in once, record which cookies appear;
-values are never written down).
+No function changes; recorded cases unchanged.
+
+Confirmed 2026-10-24 (T034): `bounce_login.php` answers 200 with the site's login form (posting to
+`forums.e-hentai.org`); the forum login page itself answers 403 to non-browser clients, so it is not
+used. A signed-in profile carries `ipb_member_id` and `ipb_pass_hash` (plus `igneous`, `sk`, `yay` on
+exhentai.org, which the site sets itself once the shared cookies are present). Only names were read;
+no values were written down.
 
 ## Versions and tags
 

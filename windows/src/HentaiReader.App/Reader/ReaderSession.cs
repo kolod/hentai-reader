@@ -135,10 +135,12 @@ public sealed class ReaderSession : IDisposable
             if (bytes is null)
             {
                 page.Load = PageLoad.Resolving;
-                var image = await ResolveAsync(page, token);
-                if (image is null) return;
-                page.Load = PageLoad.Downloading;
-                bytes = await _source.Session!.FetchImageAsync(image, token);
+                var loader = new PageImageLoader(_source.Session!, _source.Settings?.Values);
+                bytes = await loader.LoadAsync(_gallery, page.Index, page, image =>
+                {
+                    if (image["width"] is JsonValue w && image["height"] is JsonValue h) ApplySize(page.Index, w.GetValue<double>(), h.GetValue<double>());
+                    page.Load = PageLoad.Downloading;
+                }, token);
                 await _cache.PutAsync(key, bytes, CancellationToken.None);
             }
             token.ThrowIfCancellationRequested();
@@ -152,6 +154,11 @@ public sealed class ReaderSession : IDisposable
         {
             // Left the load window; the page goes back to Placeholder (UpdateView).
         }
+        catch (PageResolveException e)
+        {
+            Fail(page, e.Error.Type == "SourceError" ? e.Error.Kind! : "ScriptError");
+            if (e.Error.Kind == SourceErrorKind.RateLimited) Limited?.Invoke(e.Error.RetryAfterSeconds);
+        }
         catch (SourceLimitedException e)
         {
             Fail(page, "RateLimited");
@@ -162,7 +169,7 @@ public sealed class ReaderSession : IDisposable
             page.FailedStatus = (int?)e.StatusCode;
             Fail(page, "Network");
         }
-        catch (Exception e) when (e is IOException or ArgumentException or InvalidOperationException or System.Runtime.InteropServices.COMException)
+        catch (Exception e) when (e is TimeoutException or IOException or ArgumentException or InvalidOperationException or System.Runtime.InteropServices.COMException)
         {
             Fail(page, "Network");
         }
@@ -171,30 +178,6 @@ public sealed class ReaderSession : IDisposable
             _slots.Release();
             if (_loading.TryGetValue(page.Index, out var cts) && cts.Token == token) _loading.Remove(page.Index);
         }
-    }
-
-    /// <summary>getPageUrl for the page; applies an exact size before anything is decoded.</summary>
-    private async Task<JsonNode?> ResolveAsync(PageState page, CancellationToken token)
-    {
-        JsonObject? retry = null;
-        if (page.Attempts > 0 && page.PageImage is not null)
-        {
-            retry = new JsonObject { ["attempt"] = page.Attempts, ["previous"] = page.PageImage.DeepClone() };
-            if (page.FailedStatus is { } status) retry["status"] = status;
-        }
-        var result = await _source.CallAsync("getPageUrl", [_gallery.DeepClone(), page.Index, retry], token);
-        token.ThrowIfCancellationRequested();
-        if (!result.Ok)
-        {
-            var error = result.Error!;
-            Fail(page, error.Type == "SourceError" ? error.Kind! : "ScriptError");
-            if (error.Kind == SourceErrorKind.RateLimited) Limited?.Invoke(error.RetryAfterSeconds);
-            return null;
-        }
-        var image = result.Value!;
-        page.PageImage = image;
-        if (image["width"] is JsonValue w && image["height"] is JsonValue h) ApplySize(page.Index, w.GetValue<double>(), h.GetValue<double>());
-        return image;
     }
 
     private async Task DecodeAsync(PageState page, byte[] bytes, CancellationToken token)

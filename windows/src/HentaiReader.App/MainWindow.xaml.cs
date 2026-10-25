@@ -21,6 +21,8 @@ public sealed partial class MainWindow : Window
     public FullScreen FullScreen { get; }
 
     private readonly Preferences _preferences;
+    private readonly WindowPlacement _placement;
+    private bool _syncingSelection;
     private readonly string? _startSourceId;
     private readonly SourceRegistry _sources = new();
 
@@ -34,8 +36,11 @@ public sealed partial class MainWindow : Window
         // The system title bar of an unpackaged window stays light; follow the app's light/dark mode.
         AppWindow.TitleBar.PreferredTheme = Microsoft.UI.Windowing.TitleBarTheme.UseDefaultAppMode;
         Nav.PaneTitle = Strings.Get("Nav_Sources");
+        _placement = new WindowPlacement(AppWindow, preferences.Window);
         Closed += (_, _) =>
         {
+            RememberPlacement();
+            _preferences.Save();
             _sources.Dispose();
             AppServices.Shutdown();
         };
@@ -78,6 +83,31 @@ public sealed partial class MainWindow : Window
         Nav.SelectedItem = Nav.MenuItems.OfType<NavigationViewItem>().FirstOrDefault(i => (string)i.Tag == start);
     }
 
+    /// <summary>
+    /// Marks the navigation item of the page now shown, also after Back. Otherwise the item left
+    /// selected (Settings after going back from it) could not be chosen again: clicking an
+    /// already selected item raises no SelectionChanged.
+    /// </summary>
+    private void SyncSelection(object? parameter)
+    {
+        var sourceId = parameter switch
+        {
+            SourcePage.Args a => a.Source.Id,
+            GalleryPage.Args a => a.Source.Id,
+            ReaderPage.Args a => a.Source.Id,
+            _ => null,
+        };
+        object? item = ContentFrame.Content is SettingsPage ? Nav.SettingsItem
+            : Nav.MenuItems.OfType<NavigationViewItem>().FirstOrDefault(i => (string)i.Tag == sourceId);
+        if (item is null || ReferenceEquals(Nav.SelectedItem, item)) return;
+        _syncingSelection = true;
+        Nav.SelectedItem = item;
+        _syncingSelection = false;
+    }
+
+    /// <summary>Puts the window bounds into the preferences (saved by the caller).</summary>
+    public void RememberPlacement() => _preferences.Window = _placement.Current;
+
     private Task WaitForContentAsync()
     {
         if (Content.XamlRoot is not null) return Task.CompletedTask;
@@ -88,9 +118,10 @@ public sealed partial class MainWindow : Window
 
     private void Nav_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
+        if (_syncingSelection) return;
         if (args.IsSettingsSelected)
         {
-            ContentFrame.Navigate(typeof(SettingsPage), new SettingsPage.Args(_preferences, _preferences.LastSourceId));
+            ContentFrame.Navigate(typeof(SettingsPage), new SettingsPage.Args(_preferences, _preferences.LastSourceId, _sources.Entries));
             return;
         }
         if (args.SelectedItem is NavigationViewItem { Tag: string id } && _sources.Find(id) is { IsAvailable: true } entry)
@@ -148,6 +179,7 @@ public sealed partial class MainWindow : Window
         // the page's AutomationId (SourceView, GalleryView, ReaderView, SettingsView) as the navigation's ItemStatus.
         ContentFrame.Navigated += (_, _) => Microsoft.UI.Xaml.Automation.AutomationProperties.SetItemStatus(Nav,
             ContentFrame.Content is DependencyObject page ? Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(page) : "");
+        ContentFrame.Navigated += (_, e) => SyncSelection(e.Parameter);
         // Keys reach the window only through a focused element; a new page starts with nothing focused.
         ContentFrame.Navigated += (_, _) => DispatcherQueue.TryEnqueue(() =>
         {

@@ -6,7 +6,7 @@ namespace HentaiReader.App.Reader;
 public enum PageLoad { Placeholder, Resolving, Downloading, Decoding, Loaded, Failed }
 
 /// <summary>One page of the reading session (data-model.md "Reading session").</summary>
-public sealed partial class PageState(int index, int total) : ObservableObject
+public sealed partial class PageState(int index, int total) : ObservableObject, HentaiReader.Host.Reading.IPageAttempts
 {
     public int Index { get; } = index;
     public int Total { get; } = total;
