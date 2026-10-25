@@ -1,8 +1,24 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.0.2 → 1.0.3
-Bump rationale: PATCH — records decisions already taken; no principle added or removed.
+Version change: 1.0.3 → 1.1.0
+Bump rationale: MINOR — guidance of principle IV materially expanded: an optional, user-controlled
+gap between pages is allowed; the strip stays seamless by default for continuous content.
+
+Modified principles:
+  - IV. Reading Smoothness First — "no padding and no visible seams" becomes: no padding around
+    the strip and no visible seams; a fixed gap between pages MAY be shown as a user setting
+    (on by default for page-by-page manga, off for continuous content such as webtoons), and
+    it is part of the reserved layout, so it never makes the strip jump. Requested by the
+    owner while testing specs/005-windows-reader.
+Added sections: none
+Removed sections: none
+Templates requiring updates: none (templates do not restate the rule); specs/005-windows-reader
+  spec.md FR-004 updated with the same feature.
+Follow-up TODOs: none.
+
+--- History ---
+1.0.3 (2026-10-23): PATCH — records decisions already taken; no principle added or removed.
 
 Modified principles:
   - I. Native UI, Shared Source Logic — Windows UI framework fixed to WinUI 3 (the choice the
@@ -15,7 +31,6 @@ Removed sections: none
 Templates requiring updates: none.
 Follow-up TODOs: none.
 
---- History ---
 1.0.2 (2026-10-23): PATCH — wording clarification; the rule's intent (no images, no personal
 data) is unchanged.
 
@@ -123,7 +138,10 @@ delivered code is exactly what CI published, and the bundled copy keeps the app 
 
 Reading smoothness is the number-one UX priority.
 
-- The page strip MUST have no padding and no visible seams between pages.
+- The page strip MUST have no padding around it and no visible seams between pages. A fixed gap
+  between pages MAY be offered as a user setting: it MUST be part of the reserved layout (never
+  a cause of jumps), MUST be switchable while reading, and continuous content (e.g. galleries
+  tagged webtoon) MUST open without it.
 - The width and height of every page MUST be stored in metadata BEFORE the image is loaded; space
   for each page MUST be reserved up front so the strip never jumps.
 - Where a source exposes exact dimensions only per page (E-Hentai), the slot MAY be reserved from
@@ -282,4 +300,4 @@ publishing and strict secret hygiene make the update channel trustworthy.
   - PATCH — clarifications, wording, typo fixes.
 - Each amendment updates **Last Amended**; **Ratified** stays the date of original adoption.
 
-**Version**: 1.0.3 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-23
+**Version**: 1.1.0 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-25
