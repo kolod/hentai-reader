@@ -39,8 +39,12 @@ public sealed partial class MainWindow : Window
         _placement = new WindowPlacement(AppWindow, preferences.Window);
         Closed += (_, _) =>
         {
-            RememberPlacement();
-            _preferences.Save();
+            // Nothing is written before the adult content confirmation (see README, Data).
+            if (_preferences.AdultConfirmed)
+            {
+                RememberPlacement();
+                _preferences.Save();
+            }
             _sources.Dispose();
             AppServices.Shutdown();
         };
