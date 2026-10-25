@@ -73,6 +73,20 @@ public class EngineTests
     }
 
     [Fact]
+    public async Task Large_response_bodies_do_not_count_against_the_memory_limit()
+    {
+        // Hitomi's nozomi indexes run to megabytes; decoding them in script once exhausted the limit.
+        var bridge = new FakeBridge { Http = (_, _) => Task.FromResult(FakeBridge.Bytes("https://a.test/b", new byte[8 * 1024 * 1024])) };
+        using var engine = await Create("""
+            export async function f() {
+              const r = await http.request({ url: "https://a.test/b", responseType: "bytes" });
+              return r.body.length;
+            }
+            """, bridge, limits: new EngineLimits(TimeSpan.FromSeconds(30), 16L * 1024 * 1024));
+        Assert.Equal(8 * 1024 * 1024, (await Value(engine, "f"))!.GetValue<int>());
+    }
+
+    [Fact]
     public async Task Frozen_clock_is_visible()
     {
         var t = DateTimeOffset.Parse("2026-01-02T03:04:05Z").ToUnixTimeMilliseconds();

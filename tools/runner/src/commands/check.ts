@@ -11,6 +11,7 @@ import { validate } from "../schema.ts";
 import { ContractVersionError, locateSource, openSource, type SourceFiles } from "../source.ts";
 import { auditFixtures } from "../fixture-audit.ts";
 import { loadRedactor } from "../redaction.ts";
+import { loginPageViolations } from "../login-page.ts";
 
 const REQUIRED = ["search", "getGallery", "getPageUrl"];
 
@@ -80,6 +81,7 @@ async function runtimeCheck(files: SourceFiles): Promise<string[]> {
     seen.add(s.id);
     if (!s.values.includes(s.default)) out.push(`manifest.settings.${i}: default '${s.default}' is not one of its values`);
   });
+  out.push(...loginPageViolations(source.manifest));
 
   const cases = loadCases(files.testsDir);
   if (cases.length && out.length === 0) {

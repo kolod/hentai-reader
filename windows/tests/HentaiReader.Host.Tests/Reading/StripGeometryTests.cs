@@ -94,6 +94,34 @@ public class StripGeometryTests
         Assert.Equal(expected, StripGeometry.ColumnWidthFor(viewport, reading, zoom));
     }
 
+    [Theory]
+    [InlineData(1920, 1000, 1, 1920)]
+    [InlineData(700, 1000, 1, 700)]
+    [InlineData(1080, 1000, 0.5, 540)]
+    public void Fit_width_uses_the_whole_viewport_times_zoom(double viewport, double reading, double zoom, double expected)
+    {
+        Assert.Equal(expected, StripGeometry.ColumnWidthFor(viewport, reading, zoom, fitWidth: true));
+    }
+
+    [Fact]
+    public void Gap_separates_pages_without_changing_their_heights()
+    {
+        var strip = Strip(100, (1, 1), (1, 2), (1, 1));
+        strip.SetGap(10);
+        Assert.Equal([0, 110, 320], new[] { strip.TopOf(0), strip.TopOf(1), strip.TopOf(2) });
+        Assert.Equal(200, strip.HeightOf(1));
+        Assert.Equal(420, strip.TotalHeight);                  // no gap after the last page
+        Assert.Equal(0, strip.PageAt(105));                    // the gap belongs to the page above
+        Assert.Equal(1, strip.PageAt(110));
+        Assert.Equal(1, strip.PositionAt(strip.ScrollFor(1, 0.5)).Page);
+
+        var delta = strip.SetPageSize(0, 1, 2);
+        Assert.Equal(100, delta);
+        Assert.Equal(420, strip.TopOf(2));
+        strip.SetGap(0);
+        Assert.Equal(500, strip.TotalHeight);
+    }
+
     [Fact]
     public void PagesIn_spans_the_viewport()
     {

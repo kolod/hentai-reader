@@ -8,6 +8,7 @@ import { CookieJar } from "./host/cookies.ts";
 import type { HttpManifest } from "./host/http.ts";
 import { ReferenceHost, type LogLine } from "./host/index.ts";
 import { StorageHost } from "./host/storage.ts";
+import { loginPageViolations } from "./login-page.ts";
 import { validate } from "./schema.ts";
 import { LiveTransport } from "./transport/live.ts";
 import { OfflineTransport } from "./transport/offline.ts";
@@ -81,6 +82,8 @@ export async function openSource(files: SourceFiles, opts: OpenOptions): Promise
   if (opts.strictManifest !== false) {
     const violations = validate("SourceManifest", manifest);
     if (violations.length) throw new LoadError(`invalid manifest:\n  manifest.${violations.join("\n  manifest.")}`);
+    const login = loginPageViolations(manifest);
+    if (login.length) throw new LoadError(`invalid manifest:\n  ${login.join("\n  ")}`);
   }
   host.setManifest(manifest as unknown as HttpManifest);
   return { files, engine, host, description, manifest };

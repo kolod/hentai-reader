@@ -70,6 +70,8 @@ public sealed partial class SourceSession : IHostBridge, IDisposable
         {
             if (manifest[field] is null) throw new LoadException($"invalid manifest: missing {field}");
         }
+        var loginPage = ManifestRules.LoginPageViolations(manifest);
+        if (loginPage.Count > 0) throw new LoadException("invalid manifest:\n  " + string.Join("\n  ", loginPage));
         Manifest = manifest;
         Functions = description.Functions;
         var politeness = manifest["politeness"]!;

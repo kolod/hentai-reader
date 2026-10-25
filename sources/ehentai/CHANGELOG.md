@@ -4,6 +4,17 @@ All notable changes to this component. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+## [0.2.0] - Unreleased
+
+Requires contract 1.2.
+
+### Added
+
+- `manifest.loginPage`: sign-in on the site's own login form (`bounce_login.php`); the account
+  cookies `ipb_member_id` and `ipb_pass_hash` are shared with exhentai.org.
+- Several languages at once: the `language` filter is `multi` (contract 1.2) and searches with the
+  site's "any of" terms (`~language:korean$ ~language:spanish$`); a single code is still accepted.
+
 ## [0.1.0] - Unreleased
 
 Requires contract 1.1.

@@ -110,8 +110,10 @@ public sealed class HttpHost
         var raw = new RawRequest("GET", url, headers?.ToDictionary(h => h.Key.ToLowerInvariant(), h => h.Value) ?? new(), null, DefaultTimeout);
 #if DEBUG
         // Manual check of the limit path (specs/005-windows-reader T033); never compiled into Release.
-        if (Environment.GetEnvironmentVariable("HENTAIREADER_FAULT") == "image509")
-            throw new ImageRateLimitException(509, null, url);
+        var fault = Environment.GetEnvironmentVariable("HENTAIREADER_FAULT");
+        if (fault == "image509") throw new ImageRateLimitException(509, null, url);
+        // The first request for every image hangs, as a stalled image server does.
+        if (fault == "imagestall" && StalledUrls.TryAdd(url, 0)) await Task.Delay(Timeout.Infinite, token);
 #endif
         var (_, response) = await PerformAsync(raw, token);
         // HTTP 429/509 is a limit signal (Constitution VI), for images as for script requests.
@@ -120,6 +122,10 @@ public sealed class HttpHost
         if (response.Status is < 200 or >= 300) throw new HttpRequestException($"HTTP {response.Status} for {url}", null, (System.Net.HttpStatusCode)response.Status);
         return response.Body;
     }
+
+#if DEBUG
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, byte> StalledUrls = new();
+#endif
 
     /// <summary>Retry-After in seconds (delta form), or null when absent or a date.</summary>
     private static double? RetryAfter(RawResponse response)

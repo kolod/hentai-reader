@@ -47,32 +47,15 @@
 
   return {
     settle: settle,
-    // Response bodies arrive as base64 and become an ArrayBuffer here, on the engine thread.
-    settleHttp: function (id, env, base64) {
+    // Response bodies arrive as an ArrayBuffer built by the host: decoding them in script
+    // counted every byte against the engine memory limit.
+    settleHttp: function (id, env, bytes) {
       const value = { env: env };
-      if (typeof base64 === "string") value.bytes = decodeBase64(base64);
+      if (bytes !== undefined) value.bytes = bytes;
       settle(id, value);
     },
     watch: function (promise, id) {
       promise.then(function (json) { native.done(id, json); });
     },
   };
-
-  function decodeBase64(s) {
-    const table = new Uint8Array(128);
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    for (let i = 0; i < alphabet.length; i++) table[alphabet.charCodeAt(i)] = i;
-    const len = s.length;
-    const pad = s.endsWith("==") ? 2 : s.endsWith("=") ? 1 : 0;
-    const out = new Uint8Array((len * 3) / 4 - pad);
-    let o = 0;
-    for (let i = 0; i < len; i += 4) {
-      const n = (table[s.charCodeAt(i)] << 18) | (table[s.charCodeAt(i + 1)] << 12) |
-        (table[s.charCodeAt(i + 2)] << 6) | table[s.charCodeAt(i + 3)];
-      if (o < out.length) out[o++] = (n >> 16) & 255;
-      if (o < out.length) out[o++] = (n >> 8) & 255;
-      if (o < out.length) out[o++] = n & 255;
-    }
-    return out.buffer;
-  }
 })(globalThis.__native, globalThis.__frozenNow);

@@ -1,0 +1,4 @@
+{
+  "description": "Contract 1.2 multi language filter: Korean or Spanish (site OR terms with ~)",
+  "call": { "fn": "search", "args": [{ "text": "", "filters": { "language": ["ko", "es"] } }, null] }
+}

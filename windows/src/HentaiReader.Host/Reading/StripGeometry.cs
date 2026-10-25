@@ -3,7 +3,8 @@ namespace HentaiReader.Host.Reading;
 /// <summary>
 /// Layout of the reader strip (specs/005-windows-reader/data-model.md "Strip geometry"): every page
 /// is exactly the column width, whatever its resolution (FR-004a); its height follows its own
-/// aspect ratio; pages touch. Units are device-independent pixels.
+/// aspect ratio; pages touch unless the reader asks for a gap between them. Units are
+/// device-independent pixels.
 /// </summary>
 public sealed class StripGeometry
 {
@@ -27,20 +28,33 @@ public sealed class StripGeometry
 
     public int Count => _width.Length;
     public double ColumnWidth { get; private set; }
+    /// <summary>Space between neighbouring pages (0 = seamless).</summary>
+    public double Gap { get; private set; }
     public double TotalHeight => _tops[^1];
 
-    /// <summary>Column width for a viewport: the reading width, narrower windows use their width, times zoom.</summary>
-    public static double ColumnWidthFor(double viewportWidth, double readingWidth, double zoom) =>
-        Math.Max(1, Math.Min(viewportWidth, readingWidth)) * zoom;
+    /// <summary>
+    /// Column width for a viewport times zoom: the viewport width when fitting the window, otherwise
+    /// the reading width (narrower windows use their width).
+    /// </summary>
+    public static double ColumnWidthFor(double viewportWidth, double readingWidth, double zoom, bool fitWidth = false) =>
+        Math.Max(1, fitWidth ? viewportWidth : Math.Min(viewportWidth, readingWidth)) * zoom;
 
     public double TopOf(int page) => _tops[page];
-    public double HeightOf(int page) => _tops[page + 1] - _tops[page];
+    public double HeightOf(int page) => ColumnWidth * _height[page] / _width[page];
 
     public void SetColumnWidth(double columnWidth)
     {
         if (columnWidth <= 0) throw new ArgumentOutOfRangeException(nameof(columnWidth));
         if (columnWidth == ColumnWidth) return;
         ColumnWidth = columnWidth;
+        Recompute(0);
+    }
+
+    public void SetGap(double gap)
+    {
+        if (gap < 0 || !double.IsFinite(gap)) throw new ArgumentOutOfRangeException(nameof(gap));
+        if (gap == Gap) return;
+        Gap = gap;
         Recompute(0);
     }
 
@@ -56,7 +70,7 @@ public sealed class StripGeometry
         return HeightOf(page) - before;
     }
 
-    /// <summary>Page whose span contains <paramref name="y"/> (clamped to the strip).</summary>
+    /// <summary>Page whose span contains <paramref name="y"/> (clamped to the strip); a gap belongs to the page above it.</summary>
     public int PageAt(double y)
     {
         if (Count == 0) return -1;
@@ -103,6 +117,6 @@ public sealed class StripGeometry
 
     private void Recompute(int from)
     {
-        for (var i = from; i < Count; i++) _tops[i + 1] = _tops[i] + ColumnWidth * _height[i] / _width[i];
+        for (var i = from; i < Count; i++) _tops[i + 1] = _tops[i] + HeightOf(i) + (i < Count - 1 ? Gap : 0);
     }
 }

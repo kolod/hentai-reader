@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "recordedAt": "2026-10-23T19:47:19.038Z",
+  "recordedAt": "2026-10-24T21:17:05.064Z",
   "entries": [
     {
       "request": {
@@ -201,6 +201,20 @@
     },
     {
       "request": {
+        "method": "POST",
+        "url": "https://api.e-hentai.org/api.php",
+        "bodySha256": "1a1e29f16ecdffd92787c15f26fbec7acd9ce340392fb3c909dcadba00e8bc32"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/90ccac4ff65e7d61.html"
+      }
+    },
+    {
+      "request": {
         "method": "GET",
         "url": "https://e-hentai.org/"
       },
@@ -210,6 +224,19 @@
           "content-type": "text/html; charset=UTF-8"
         },
         "body": "bodies/a8adf285f97bbc26.html"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://e-hentai.org/?f_search=~language%3Akorean%24%20~language%3Aspanish%24"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8"
+        },
+        "body": "bodies/ca9fabade4e95cb4.html"
       }
     },
     {

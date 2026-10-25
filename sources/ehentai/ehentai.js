@@ -61,20 +61,26 @@ const TOPLISTS = { popular_day: 15, popular_month: 13, popular_year: 12 };
 export const manifest = {
   id: "ehentai",
   name: "E-Hentai",
-  version: "0.1.0",
-  contract: "1.1",
+  version: "0.2.0",
+  contract: "1.2",
   domains: [
     "e-hentai.org", "*.e-hentai.org", "exhentai.org", "*.exhentai.org",
     "ehgt.org", "*.ehgt.org", "*.hath.network",
   ],
   politeness: { minIntervalMs: 500, maxConcurrency: 2 },
   login: "optional",
+  // The site's own login form; the forum's ipb_* cookies are the account, shared with ExHentai.
+  loginPage: {
+    url: "https://e-hentai.org/bounce_login.php?b=d&bt=1-1",
+    cookies: ["ipb_member_id", "ipb_pass_hash"],
+    shareWith: ["exhentai.org"],
+  },
   filters: [
     { id: "sort", kind: "single", values: ["latest", "popular_day", "popular_month", "popular_year"], default: "latest" },
     { id: "type", kind: "multi", values: Object.values(CATEGORIES).map((c) => c.type) },
     { id: "min_rating", kind: "number", min: 2, max: 5 },
     { id: "pages", kind: "range", min: 1, max: 2000 },
-    { id: "language", kind: "single", values: Object.values(LANGUAGES) },
+    { id: "language", kind: "multi", values: Object.values(LANGUAGES) },
   ],
   settings: [
     { id: "image_quality", values: ["resampled", "original"], default: "resampled" },
@@ -256,10 +262,12 @@ function checkFilters(query) {
   if (f.min_rating !== undefined && !(Number.isInteger(f.min_rating) && Number(f.min_rating) >= 2 && Number(f.min_rating) <= 5)) {
     throw new SourceError("InvalidInput", `min_rating must be 2–5: ${String(f.min_rating)}`);
   }
-  if (f.language !== undefined && !(typeof f.language === "string" && f.language in LANGUAGE_BY_ISO)) {
-    throw new SourceError("InvalidInput", `unsupported language: ${String(f.language)}`);
+  // A list since 0.2.0 (contract 1.2 multi filter); a single code is still accepted.
+  const languages = f.language === undefined ? [] : Array.isArray(f.language) ? f.language : [f.language];
+  if (languages.some((l) => !(typeof l === "string" && l in LANGUAGE_BY_ISO))) {
+    throw new SourceError("InvalidInput", `unsupported language: ${JSON.stringify(f.language)}`);
   }
-  return /** @type {{ sort: string, type?: string[], min_rating?: number, pages?: { min?: number, max?: number }, language?: string }} */ ({ ...f, sort });
+  return /** @type {{ sort: string, type?: string[], min_rating?: number, pages?: { min?: number, max?: number }, languages: string[] }} */ ({ ...f, sort, languages });
 }
 
 /**
@@ -272,7 +280,9 @@ function listingUrl(site, query, f, next) {
   /** @type {string[]} */
   const params = [];
   let text = (query.text ?? "").trim();
-  if (f.language) text = `${text} language:${LANGUAGE_BY_ISO[f.language]}$`.trim();
+  // Several languages: `~` marks the site's "any of" terms.
+  const or = f.languages.length > 1 ? "~" : "";
+  for (const code of f.languages) text = `${text} ${or}language:${LANGUAGE_BY_ISO[code]}$`.trim();
   if (text) params.push(`f_search=${encodeURIComponent(text)}`);
   if (f.type && f.type.length) {
     params.push(`f_cats=${1023 - f.type.reduce((sum, t) => sum + BIT_BY_TYPE[t], 0)}`);
