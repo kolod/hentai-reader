@@ -145,6 +145,45 @@ public sealed partial class SearchViewModel : ObservableObject
         foreach (var f in Filters) f.Reset();
     }
 
+    /// <summary>The contract <c>SearchQuery.filters</c> for the current filter values.</summary>
+    public JsonObject CurrentFilters()
+    {
+        var filters = new JsonObject();
+        foreach (var f in Filters)
+        {
+            if (f.ToJson() is { } v) filters[f.Id] = v;
+        }
+        return filters;
+    }
+
+    /// <summary>Sets the filters from a saved <c>SearchQuery.filters</c> (default query); unknown ids are ignored.</summary>
+    public void ApplyFilters(JsonObject filters)
+    {
+        foreach (var f in Filters)
+        {
+            f.Reset();
+            if (filters[f.Id] is not { } v) continue;
+            switch (f.Kind)
+            {
+                case "single" when v is JsonValue sv && sv.TryGetValue<string>(out var single):
+                    f.Single = single;
+                    break;
+                case "multi":
+                    // A single saved value (a filter that was "single" before) counts as a one-item list.
+                    foreach (var item in v is JsonArray list ? list.ToList() : [v])
+                        if (item is JsonValue iv && iv.TryGetValue<string>(out var m)) f.Multi.Add(m);
+                    break;
+                case "number" when v is JsonValue nv && nv.TryGetValue<double>(out var n):
+                    f.Number = n;
+                    break;
+                case "range":
+                    if (v["min"] is JsonValue min) f.Min = min.GetValue<double>();
+                    if (v["max"] is JsonValue max) f.Max = max.GetValue<double>();
+                    break;
+            }
+        }
+    }
+
     /// <summary>
     /// Loads the next page. A call made while a page is loading (the grid asks while Search already
     /// started one) shares that load; answering 0 would make the grid stop asking for more.
@@ -161,12 +200,7 @@ public sealed partial class SearchViewModel : ObservableObject
         var generation = _generation;
         var token = _cts?.Token ?? CancellationToken.None;
         Status = SearchStatus.Loading;
-        var filters = new JsonObject();
-        foreach (var f in Filters)
-        {
-            if (f.ToJson() is { } v) filters[f.Id] = v;
-        }
-        var query = new JsonObject { ["text"] = Query.Trim(), ["filters"] = filters };
+        var query = new JsonObject { ["text"] = Query.Trim(), ["filters"] = CurrentFilters() };
         CallResult result;
         try
         {

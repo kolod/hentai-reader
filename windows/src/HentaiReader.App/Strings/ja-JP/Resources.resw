@@ -444,4 +444,247 @@
   <data name="Settings_Off" xml:space="preserve">
     <value>オフ</value>
   </data>
+  <data name="Save_ToLibrary" xml:space="preserve">
+    <value>ライブラリに保存</value>
+  </data>
+  <data name="Save_Queued" xml:space="preserve">
+    <value>保存待ち</value>
+  </data>
+  <data name="Save_Saving" xml:space="preserve">
+    <value>保存中 {0} / {1}</value>
+  </data>
+  <data name="Save_Paused" xml:space="preserve">
+    <value>一時停止中 {0} / {1} · 再開</value>
+  </data>
+  <data name="Save_Limited" xml:space="preserve">
+    <value>サイトにより停止 · 再開</value>
+  </data>
+  <data name="Save_LoginRequired" xml:space="preserve">
+    <value>ログインが必要 · 再開</value>
+  </data>
+  <data name="Save_Failed" xml:space="preserve">
+    <value>保存に失敗 · 再試行</value>
+  </data>
+  <data name="Save_InLibrary" xml:space="preserve">
+    <value>ライブラリにあります</value>
+  </data>
+  <data name="Save_Cancel" xml:space="preserve">
+    <value>保存をキャンセル</value>
+  </data>
+  <data name="Save_ClickToPause" xml:space="preserve">
+    <value>クリックで一時停止</value>
+  </data>
+  <data name="Nav_History" xml:space="preserve">
+    <value>履歴</value>
+  </data>
+  <data name="Nav_Library" xml:space="preserve">
+    <value>ライブラリ</value>
+  </data>
+  <data name="Nav_Downloads" xml:space="preserve">
+    <value>ダウンロード</value>
+  </data>
+  <data name="Library_Search" xml:space="preserve">
+    <value>タイトルを検索</value>
+  </data>
+  <data name="Library_FilterAll" xml:space="preserve">
+    <value>すべて</value>
+  </data>
+  <data name="Library_FilterAllSources" xml:space="preserve">
+    <value>すべてのソース</value>
+  </data>
+  <data name="Library_LocalSource" xml:space="preserve">
+    <value>ローカルファイル</value>
+  </data>
+  <data name="Library_Unread" xml:space="preserve">
+    <value>未読</value>
+  </data>
+  <data name="Library_InProgress" xml:space="preserve">
+    <value>読書中</value>
+  </data>
+  <data name="Library_SortAdded" xml:space="preserve">
+    <value>保存日</value>
+  </data>
+  <data name="Library_SortLastRead" xml:space="preserve">
+    <value>最後に読んだ日</value>
+  </data>
+  <data name="Library_SortTitle" xml:space="preserve">
+    <value>タイトル</value>
+  </data>
+  <data name="Library_Empty" xml:space="preserve">
+    <value>まだ何も保存されていません。ギャラリーで「ライブラリに保存」を使うか、コミックのアーカイブが入ったフォルダーを追加してください。</value>
+  </data>
+  <data name="Library_NoMatches" xml:space="preserve">
+    <value>一致する保存済みギャラリーはありません。</value>
+  </data>
+  <data name="Library_FoldersButton" xml:space="preserve">
+    <value>ライブラリのフォルダー</value>
+  </data>
+  <data name="Library_Unavailable" xml:space="preserve">
+    <value>フォルダーを利用できません</value>
+  </data>
+  <data name="Library_Unreadable" xml:space="preserve">
+    <value>読み込めません</value>
+  </data>
+  <data name="Library_OpenFolder" xml:space="preserve">
+    <value>フォルダーを開く</value>
+  </data>
+  <data name="Library_Delete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Library_DeleteTitle" xml:space="preserve">
+    <value>保存したギャラリーを削除しますか？</value>
+  </data>
+  <data name="Library_DeleteBody" xml:space="preserve">
+    <value>「{0}」はごみ箱に移動されます。読書履歴は残ります。</value>
+  </data>
+  <data name="History_Clear" xml:space="preserve">
+    <value>履歴を消去</value>
+  </data>
+  <data name="History_ClearTitle" xml:space="preserve">
+    <value>履歴を消去しますか？</value>
+  </data>
+  <data name="History_ClearBody" xml:space="preserve">
+    <value>すべての項目が削除されます。保存したギャラリーと読書の進み具合は残ります。</value>
+  </data>
+  <data name="History_Empty" xml:space="preserve">
+    <value>読んだギャラリーがここに表示されます。</value>
+  </data>
+  <data name="History_Remove" xml:space="preserve">
+    <value>履歴から削除</value>
+  </data>
+  <data name="History_SourceUnavailable" xml:space="preserve">
+    <value>このソースは利用できず、ギャラリーも保存されていません。</value>
+  </data>
+  <data name="Downloads_ClearDone" xml:space="preserve">
+    <value>完了したものを消去</value>
+  </data>
+  <data name="Downloads_Empty" xml:space="preserve">
+    <value>ダウンロードはありません。ギャラリーで「ライブラリに保存」を使ってください。</value>
+  </data>
+  <data name="Downloads_Pause" xml:space="preserve">
+    <value>一時停止</value>
+  </data>
+  <data name="Downloads_Resume" xml:space="preserve">
+    <value>再開</value>
+  </data>
+  <data name="Downloads_Open" xml:space="preserve">
+    <value>開く</value>
+  </data>
+  <data name="Downloads_Paused" xml:space="preserve">
+    <value>一時停止中 {0} / {1}</value>
+  </data>
+  <data name="Time_JustNow" xml:space="preserve">
+    <value>たった今</value>
+  </data>
+  <data name="Time_MinutesAgo_other" xml:space="preserve">
+    <value>{0} 分前</value>
+  </data>
+  <data name="Time_HoursAgo_other" xml:space="preserve">
+    <value>{0} 時間前</value>
+  </data>
+  <data name="Time_Yesterday" xml:space="preserve">
+    <value>昨日</value>
+  </data>
+  <data name="Search_SaveDefault" xml:space="preserve">
+    <value>このソースの既定の検索として保存 (Ctrl+クリックで解除)</value>
+  </data>
+  <data name="Search_DefaultSaved" xml:space="preserve">
+    <value>既定の検索です (Ctrl+クリックで解除)</value>
+  </data>
+  <data name="Settings_StartPage" xml:space="preserve">
+    <value>起動時のページ</value>
+  </data>
+  <data name="Settings_StartLastSource" xml:space="preserve">
+    <value>最後に使ったソース</value>
+  </data>
+  <data name="Settings_Library" xml:space="preserve">
+    <value>ライブラリ</value>
+  </data>
+  <data name="Settings_AddFolder" xml:space="preserve">
+    <value>フォルダーを追加</value>
+  </data>
+  <data name="Settings_TargetFolder" xml:space="preserve">
+    <value>新しい保存先</value>
+  </data>
+  <data name="Settings_RemoveFolder" xml:space="preserve">
+    <value>フォルダーを削除</value>
+  </data>
+  <data name="Settings_RemoveFolderBody" xml:space="preserve">
+    <value>{0} には {1}があります。別のライブラリフォルダーに移動しますか？それともファイルをそのまま残して表示しないようにしますか？</value>
+  </data>
+  <data name="Settings_MoveGalleries" xml:space="preserve">
+    <value>ギャラリーを移動</value>
+  </data>
+  <data name="Settings_KeepFiles" xml:space="preserve">
+    <value>ファイルを残す</value>
+  </data>
+  <data name="Settings_MoveProgress" xml:space="preserve">
+    <value>{1} 件中 {0} 件を移動中</value>
+  </data>
+  <data name="Settings_NetworkCovers" xml:space="preserve">
+    <value>表紙をネットワークから読み込む</value>
+  </data>
+  <data name="Settings_NetworkCoversHint" xml:space="preserve">
+    <value>履歴タブ用：ギャラリーに表紙がなく（キャッシュを消去した、または最初のページ以外から開いた）、最初のページがライブラリにもキャッシュにもない場合、表示中の行について 1 件ずつソースから表紙をダウンロードします。オフ：履歴はサイトへのリクエストを行いません。</value>
+  </data>
+  <data name="Settings_MoveConflictTitle" xml:space="preserve">
+    <value>移動先に同じギャラリーがあります</value>
+  </data>
+  <data name="Settings_MoveConflictBody" xml:space="preserve">
+    <value>移動先フォルダーには「{0}」または同じ名前のファイルが既にありますが、ページが異なります（画質の違いなど）。どちらを残しますか？ 外したコピーはごみ箱に移動します。</value>
+  </data>
+  <data name="Settings_MoveConflictExisting" xml:space="preserve">
+    <value>既存</value>
+  </data>
+  <data name="Settings_MoveConflictIncoming" xml:space="preserve">
+    <value>移動するもの</value>
+  </data>
+  <data name="Settings_MoveConflictDetails" xml:space="preserve">
+    <value>{0} ページ · {1:0.#} MB · {2:g}</value>
+  </data>
+  <data name="Settings_MoveConflictForAll" xml:space="preserve">
+    <value>残りにも同じ操作を適用</value>
+  </data>
+  <data name="Settings_MoveKeepBoth" xml:space="preserve">
+    <value>両方残す</value>
+  </data>
+  <data name="Settings_MoveReplace" xml:space="preserve">
+    <value>既存のものを置き換える</value>
+  </data>
+  <data name="Settings_MoveKeepExisting" xml:space="preserve">
+    <value>既存のものを残す</value>
+  </data>
+  <data name="Settings_FolderBusy" xml:space="preserve">
+    <value>このフォルダーにはまだギャラリーを保存中です。先にそのダウンロードを完了またはキャンセルしてください。</value>
+  </data>
+  <data name="Settings_FolderGalleries_other" xml:space="preserve">
+    <value>{0} 件のギャラリー</value>
+  </data>
+  <data name="Settings_CacheFolder" xml:space="preserve">
+    <value>ページキャッシュのフォルダー: {0}</value>
+  </data>
+  <data name="Settings_ChangeFolder" xml:space="preserve">
+    <value>変更…</value>
+  </data>
+  <data name="Settings_CacheMoving" xml:space="preserve">
+    <value>キャッシュを移動中: {1} 件中 {0} 件</value>
+  </data>
+  <data name="Settings_CacheMoveFailed" xml:space="preserve">
+    <value>キャッシュの移動が止まりました: {0}。キャッシュ済みのページは引き続き読めます。キャンセルすると元に戻ります。</value>
+  </data>
+  <data name="Settings_CancelMove" xml:space="preserve">
+    <value>移動をキャンセル</value>
+  </data>
+  <data name="Settings_DefaultSearch" xml:space="preserve">
+    <value>既定の検索: {0}</value>
+  </data>
+  <data name="Settings_DefaultSearchEmpty" xml:space="preserve">
+    <value>保存したフィルター付きのトップページ</value>
+  </data>
+  <data name="Settings_RemoveDefaultSearch" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Downloads_Failed" xml:space="preserve">
+    <value>保存に失敗しました: {0}</value>
+  </data>
 </root>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="HentaiReader.App.Pages.LibraryPage"
+    AutomationProperties.AutomationId="LibraryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:HentaiReader.App.Controls"
+    NavigationCacheMode="Enabled">
+    <Grid Padding="16,12,16,0" RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="TitleText" Style="{StaticResource TitleTextBlockStyle}" />
+
+        <!-- Search, filters and sort (FR-011) -->
+        <Grid Grid.Row="1" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MaxWidth="420" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="SearchBox" AutomationProperties.AutomationId="LibrarySearch" TextChanged="SearchBox_TextChanged" />
+            <ComboBox x:Name="SourceBox" Grid.Column="1" MinWidth="140" DisplayMemberPath="Text" SelectionChanged="Filter_Changed" />
+            <ComboBox x:Name="ReadBox" Grid.Column="2" MinWidth="140" DisplayMemberPath="Text" SelectionChanged="Filter_Changed" />
+            <ComboBox x:Name="SortBox" Grid.Column="3" MinWidth="140" DisplayMemberPath="Text" SelectionChanged="Filter_Changed" />
+        </Grid>
+
+        <GridView
+            x:Name="LibraryGrid"
+            Grid.Row="2"
+            AutomationProperties.AutomationId="LibraryGrid"
+            SelectionMode="None"
+            IsItemClickEnabled="True"
+            ItemClick="LibraryGrid_ItemClick"
+            ContainerContentChanging="LibraryGrid_ContainerContentChanging">
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem" BasedOn="{StaticResource DefaultGridViewItemStyle}">
+                    <Setter Property="Margin" Value="0,0,12,16" />
+                </Style>
+            </GridView.ItemContainerStyle>
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <controls:LibraryCard />
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+
+        <StackPanel x:Name="EmptyPanel" Grid.Row="2" Spacing="12" Visibility="Collapsed" VerticalAlignment="Top" Margin="0,24,0,0">
+            <TextBlock x:Name="EmptyText" TextWrapping="Wrap" Opacity="0.75" />
+            <Button x:Name="FoldersButton" Click="FoldersButton_Click" />
+        </StackPanel>
+    </Grid>
+</Page>

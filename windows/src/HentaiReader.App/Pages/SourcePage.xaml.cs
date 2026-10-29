@@ -53,16 +53,59 @@ public sealed partial class SourcePage : Page
         }
         else if (newSource)
         {
-            QueryBox.Text = "";
+            // The source's default search, if one is saved (FR-023); else its front page.
+            if (AppServices.Preferences.DefaultQueries.GetValueOrDefault(args.Source.Id) is { } saved)
+            {
+                QueryBox.Text = saved.Text;
+                _vm!.ApplyFilters(saved.Filters);
+                FilterHost.Content = new FilterPanel(_vm.Filters);
+            }
+            else
+            {
+                QueryBox.Text = "";
+            }
             Run();
         }
         Render();
+        UpdateStar();
     }
+
+    // --- default query star (FR-022) ---------------------------------------------------------------
+
+    private bool IsDefault() =>
+        _vm is not null && _source is not null &&
+        AppServices.Preferences.DefaultQueries.GetValueOrDefault(_source.Id) is { } saved &&
+        saved.Text == QueryBox.Text.Trim() && JsonNode.DeepEquals(saved.Filters, _vm.CurrentFilters());
+
+    private void UpdateStar()
+    {
+        var on = IsDefault();
+        DefaultQueryIcon.Glyph = on ? "" : "";   // filled / outline star
+        var text = Strings.Get(on ? "Search_DefaultSaved" : "Search_SaveDefault");
+        ToolTipService.SetToolTip(DefaultQueryButton, text);
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(DefaultQueryButton, text);
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetItemStatus(DefaultQueryButton, on ? "Default" : "NotDefault");
+    }
+
+    private void DefaultQueryButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_vm is null || _source is null) return;
+        var preferences = AppServices.Preferences;
+        var ctrl = Microsoft.UI.Input.InputKeyboardSource.GetKeyStateForCurrentThread(Windows.System.VirtualKey.Control)
+            .HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down);
+        if (ctrl) preferences.DefaultQueries.Remove(_source.Id);
+        else preferences.DefaultQueries[_source.Id] = new DefaultQuery(QueryBox.Text.Trim(), _vm.CurrentFilters());
+        preferences.Save();
+        UpdateStar();
+    }
+
+    private void QueryBox_TextChanged(object sender, TextChangedEventArgs e) => UpdateStar();
 
     private void Run()
     {
         _vm!.Query = QueryBox.Text;
         _vm.Search();
+        UpdateStar();
     }
 
     private void QueryBox_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -71,7 +114,16 @@ public sealed partial class SourcePage : Page
     }
 
     private void SearchButton_Click(object sender, RoutedEventArgs e) => Run();
-    private void FiltersFlyout_Closed(object? sender, object e) => Run();
+    // Filters as they were when the flyout opened: closing it without a change keeps the results.
+    private JsonNode? _filtersOnOpen;
+
+    private void FiltersFlyout_Opened(object? sender, object e) => _filtersOnOpen = _vm?.CurrentFilters();
+
+    private void FiltersFlyout_Closed(object? sender, object e)
+    {
+        if (_vm is null || JsonNode.DeepEquals(_filtersOnOpen, _vm.CurrentFilters())) return;
+        Run();
+    }
 
     private void ResetButton_Click(object sender, RoutedEventArgs e)
     {

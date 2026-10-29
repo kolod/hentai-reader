@@ -456,4 +456,265 @@
   <data name="Settings_Off" xml:space="preserve">
     <value>Desactivado</value>
   </data>
+  <data name="Save_ToLibrary" xml:space="preserve">
+    <value>Guardar en la biblioteca</value>
+  </data>
+  <data name="Save_Queued" xml:space="preserve">
+    <value>Esperando para guardar</value>
+  </data>
+  <data name="Save_Saving" xml:space="preserve">
+    <value>Guardando {0} / {1}</value>
+  </data>
+  <data name="Save_Paused" xml:space="preserve">
+    <value>En pausa {0} / {1} · Reanudar</value>
+  </data>
+  <data name="Save_Limited" xml:space="preserve">
+    <value>Detenido por el sitio · Reanudar</value>
+  </data>
+  <data name="Save_LoginRequired" xml:space="preserve">
+    <value>Hay que iniciar sesión · Reanudar</value>
+  </data>
+  <data name="Save_Failed" xml:space="preserve">
+    <value>No se pudo guardar · Reintentar</value>
+  </data>
+  <data name="Save_InLibrary" xml:space="preserve">
+    <value>En la biblioteca</value>
+  </data>
+  <data name="Save_Cancel" xml:space="preserve">
+    <value>Cancelar el guardado</value>
+  </data>
+  <data name="Save_ClickToPause" xml:space="preserve">
+    <value>Haz clic para pausar</value>
+  </data>
+  <data name="Nav_History" xml:space="preserve">
+    <value>Historial</value>
+  </data>
+  <data name="Nav_Library" xml:space="preserve">
+    <value>Biblioteca</value>
+  </data>
+  <data name="Nav_Downloads" xml:space="preserve">
+    <value>Descargas</value>
+  </data>
+  <data name="Library_Search" xml:space="preserve">
+    <value>Buscar títulos</value>
+  </data>
+  <data name="Library_FilterAll" xml:space="preserve">
+    <value>Todas</value>
+  </data>
+  <data name="Library_FilterAllSources" xml:space="preserve">
+    <value>Todas las fuentes</value>
+  </data>
+  <data name="Library_LocalSource" xml:space="preserve">
+    <value>Archivos locales</value>
+  </data>
+  <data name="Library_Unread" xml:space="preserve">
+    <value>Sin leer</value>
+  </data>
+  <data name="Library_InProgress" xml:space="preserve">
+    <value>Empezadas</value>
+  </data>
+  <data name="Library_SortAdded" xml:space="preserve">
+    <value>Fecha de guardado</value>
+  </data>
+  <data name="Library_SortLastRead" xml:space="preserve">
+    <value>Última lectura</value>
+  </data>
+  <data name="Library_SortTitle" xml:space="preserve">
+    <value>Título</value>
+  </data>
+  <data name="Library_Empty" xml:space="preserve">
+    <value>Aún no hay nada guardado. Usa «Guardar en la biblioteca» en una galería o añade una carpeta que ya tenga archivos de cómic.</value>
+  </data>
+  <data name="Library_NoMatches" xml:space="preserve">
+    <value>Ninguna galería guardada coincide.</value>
+  </data>
+  <data name="Library_FoldersButton" xml:space="preserve">
+    <value>Carpetas de la biblioteca</value>
+  </data>
+  <data name="Library_Unavailable" xml:space="preserve">
+    <value>Carpeta no disponible</value>
+  </data>
+  <data name="Library_Unreadable" xml:space="preserve">
+    <value>No se puede leer</value>
+  </data>
+  <data name="Library_OpenFolder" xml:space="preserve">
+    <value>Abrir carpeta</value>
+  </data>
+  <data name="Library_Delete" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="Library_DeleteTitle" xml:space="preserve">
+    <value>¿Eliminar la galería guardada?</value>
+  </data>
+  <data name="Library_DeleteBody" xml:space="preserve">
+    <value>«{0}» se moverá a la Papelera de reciclaje. Su historial de lectura se conserva.</value>
+  </data>
+  <data name="History_Clear" xml:space="preserve">
+    <value>Borrar historial</value>
+  </data>
+  <data name="History_ClearTitle" xml:space="preserve">
+    <value>¿Borrar el historial?</value>
+  </data>
+  <data name="History_ClearBody" xml:space="preserve">
+    <value>Se eliminan todas las entradas. Las galerías guardadas y el progreso de lectura se conservan.</value>
+  </data>
+  <data name="History_Empty" xml:space="preserve">
+    <value>Aquí aparecen las galerías que lees.</value>
+  </data>
+  <data name="History_Remove" xml:space="preserve">
+    <value>Quitar del historial</value>
+  </data>
+  <data name="History_SourceUnavailable" xml:space="preserve">
+    <value>Esta fuente no está disponible y la galería no está guardada.</value>
+  </data>
+  <data name="Downloads_ClearDone" xml:space="preserve">
+    <value>Quitar las terminadas</value>
+  </data>
+  <data name="Downloads_Empty" xml:space="preserve">
+    <value>No hay descargas. Usa «Guardar en la biblioteca» en una galería.</value>
+  </data>
+  <data name="Downloads_Pause" xml:space="preserve">
+    <value>Pausar</value>
+  </data>
+  <data name="Downloads_Resume" xml:space="preserve">
+    <value>Reanudar</value>
+  </data>
+  <data name="Downloads_Open" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="Downloads_Paused" xml:space="preserve">
+    <value>En pausa {0} / {1}</value>
+  </data>
+  <data name="Time_JustNow" xml:space="preserve">
+    <value>ahora mismo</value>
+  </data>
+  <data name="Time_MinutesAgo_one" xml:space="preserve">
+    <value>hace {0} minuto</value>
+  </data>
+  <data name="Time_MinutesAgo_many" xml:space="preserve">
+    <value>hace {0} de minutos</value>
+  </data>
+  <data name="Time_MinutesAgo_other" xml:space="preserve">
+    <value>hace {0} minutos</value>
+  </data>
+  <data name="Time_HoursAgo_one" xml:space="preserve">
+    <value>hace {0} hora</value>
+  </data>
+  <data name="Time_HoursAgo_many" xml:space="preserve">
+    <value>hace {0} de horas</value>
+  </data>
+  <data name="Time_HoursAgo_other" xml:space="preserve">
+    <value>hace {0} horas</value>
+  </data>
+  <data name="Time_Yesterday" xml:space="preserve">
+    <value>ayer</value>
+  </data>
+  <data name="Search_SaveDefault" xml:space="preserve">
+    <value>Guardar como búsqueda predeterminada de esta fuente (Ctrl+clic la quita)</value>
+  </data>
+  <data name="Search_DefaultSaved" xml:space="preserve">
+    <value>Es la búsqueda predeterminada (Ctrl+clic la quita)</value>
+  </data>
+  <data name="Settings_StartPage" xml:space="preserve">
+    <value>Página de inicio</value>
+  </data>
+  <data name="Settings_StartLastSource" xml:space="preserve">
+    <value>Última fuente usada</value>
+  </data>
+  <data name="Settings_Library" xml:space="preserve">
+    <value>Biblioteca</value>
+  </data>
+  <data name="Settings_AddFolder" xml:space="preserve">
+    <value>Añadir carpeta</value>
+  </data>
+  <data name="Settings_TargetFolder" xml:space="preserve">
+    <value>Las nuevas galerías se guardan aquí</value>
+  </data>
+  <data name="Settings_RemoveFolder" xml:space="preserve">
+    <value>Quitar carpeta</value>
+  </data>
+  <data name="Settings_RemoveFolderBody" xml:space="preserve">
+    <value>{0} contiene {1}. ¿Moverlas a otra carpeta de la biblioteca, o dejar los archivos donde están y no mostrarlos más?</value>
+  </data>
+  <data name="Settings_MoveGalleries" xml:space="preserve">
+    <value>Mover galerías</value>
+  </data>
+  <data name="Settings_KeepFiles" xml:space="preserve">
+    <value>Conservar archivos</value>
+  </data>
+  <data name="Settings_MoveProgress" xml:space="preserve">
+    <value>Moviendo {0} de {1}</value>
+  </data>
+  <data name="Settings_NetworkCovers" xml:space="preserve">
+    <value>Cargar portadas desde la red</value>
+  </data>
+  <data name="Settings_NetworkCoversHint" xml:space="preserve">
+    <value>Para la pestaña Historial: si una galería no tiene portada (se vació la caché o se abrió más allá de la primera página) y su primera página no está ni en la biblioteca ni en la caché, la portada se descarga de la fuente, de una en una, para las filas visibles. Desactivado: el Historial no hace solicitudes a los sitios.</value>
+  </data>
+  <data name="Settings_MoveConflictTitle" xml:space="preserve">
+    <value>La galería ya está en el destino</value>
+  </data>
+  <data name="Settings_MoveConflictBody" xml:space="preserve">
+    <value>La carpeta de destino ya contiene «{0}» o un archivo con este nombre, pero las páginas son distintas (por ejemplo, otra calidad de imagen). ¿Qué copia se conserva? La copia retirada va a la Papelera de reciclaje.</value>
+  </data>
+  <data name="Settings_MoveConflictExisting" xml:space="preserve">
+    <value>Existente</value>
+  </data>
+  <data name="Settings_MoveConflictIncoming" xml:space="preserve">
+    <value>Movida</value>
+  </data>
+  <data name="Settings_MoveConflictDetails" xml:space="preserve">
+    <value>{0} páginas · {1:0.#} MB · {2:g}</value>
+  </data>
+  <data name="Settings_MoveConflictForAll" xml:space="preserve">
+    <value>Hacer lo mismo con el resto</value>
+  </data>
+  <data name="Settings_MoveKeepBoth" xml:space="preserve">
+    <value>Conservar ambas</value>
+  </data>
+  <data name="Settings_MoveReplace" xml:space="preserve">
+    <value>Reemplazar la existente</value>
+  </data>
+  <data name="Settings_MoveKeepExisting" xml:space="preserve">
+    <value>Conservar la existente</value>
+  </data>
+  <data name="Settings_FolderBusy" xml:space="preserve">
+    <value>Todavía se están guardando galerías en esta carpeta. Termina o cancela primero esas descargas.</value>
+  </data>
+  <data name="Settings_FolderGalleries_one" xml:space="preserve">
+    <value>{0} galería</value>
+  </data>
+  <data name="Settings_FolderGalleries_many" xml:space="preserve">
+    <value>{0} de galerías</value>
+  </data>
+  <data name="Settings_FolderGalleries_other" xml:space="preserve">
+    <value>{0} galerías</value>
+  </data>
+  <data name="Settings_CacheFolder" xml:space="preserve">
+    <value>Carpeta de la caché de páginas: {0}</value>
+  </data>
+  <data name="Settings_ChangeFolder" xml:space="preserve">
+    <value>Cambiar…</value>
+  </data>
+  <data name="Settings_CacheMoving" xml:space="preserve">
+    <value>Moviendo la caché: {0} de {1}</value>
+  </data>
+  <data name="Settings_CacheMoveFailed" xml:space="preserve">
+    <value>Se detuvo el traslado de la caché: {0}. Las páginas en caché siguen siendo legibles; cancela para volver atrás.</value>
+  </data>
+  <data name="Settings_CancelMove" xml:space="preserve">
+    <value>Cancelar el traslado</value>
+  </data>
+  <data name="Settings_DefaultSearch" xml:space="preserve">
+    <value>Búsqueda predeterminada: {0}</value>
+  </data>
+  <data name="Settings_DefaultSearchEmpty" xml:space="preserve">
+    <value>portada con los filtros guardados</value>
+  </data>
+  <data name="Settings_RemoveDefaultSearch" xml:space="preserve">
+    <value>Quitar</value>
+  </data>
+  <data name="Downloads_Failed" xml:space="preserve">
+    <value>No se pudo guardar: {0}</value>
+  </data>
 </root>

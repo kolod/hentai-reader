@@ -67,4 +67,16 @@ public static class Strings
 
     public static string Date(DateTimeOffset date) => date.ToLocalTime().ToString("d", Culture);
     public static string Number(double value, string format = "N0") => value.ToString(format, Culture);
+
+    /// <summary>"just now", "5 minutes ago", "3 hours ago", "yesterday", else the date (history, library).</summary>
+    public static string Relative(DateTimeOffset at, DateTimeOffset? now = null)
+    {
+        var current = now ?? DateTimeOffset.Now;
+        var age = current - at;
+        if (age < TimeSpan.FromMinutes(1)) return Get("Time_JustNow");
+        if (age < TimeSpan.FromHours(1)) return Plural("Time_MinutesAgo", (long)age.TotalMinutes);
+        if (age < TimeSpan.FromDays(1) && at.ToLocalTime().Date == current.ToLocalTime().Date) return Plural("Time_HoursAgo", (long)age.TotalHours);
+        if (at.ToLocalTime().Date == current.ToLocalTime().Date.AddDays(-1)) return Get("Time_Yesterday");
+        return Date(at);
+    }
 }

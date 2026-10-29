@@ -15,6 +15,7 @@
             HorizontalScrollBarVisibility="Hidden"
             VerticalScrollMode="Enabled"
             VerticalScrollBarVisibility="Hidden"
+            VerticalAnchorRatio="NaN"
             ZoomMode="Disabled"
             IsTabStop="True"
             UseSystemFocusVisuals="False"
@@ -51,6 +52,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button x:Name="BackButton" Click="BackButton_Click">
                 <SymbolIcon Symbol="Back" />
@@ -73,7 +75,10 @@
             <ToggleButton x:Name="GapButton" Grid.Column="8" Click="GapButton_Click">
                 <FontIcon Glyph="&#xE8A9;" />
             </ToggleButton>
-            <Button x:Name="FullScreenButton" Grid.Column="9" Click="FullScreenButton_Click">
+            <Button x:Name="SaveButton" Grid.Column="9" AutomationProperties.AutomationId="ReaderSaveButton" Visibility="Collapsed" Click="SaveButton_Click">
+                <FontIcon x:Name="SaveIcon" Glyph="&#xE896;" />
+            </Button>
+            <Button x:Name="FullScreenButton" Grid.Column="10" Click="FullScreenButton_Click">
                 <SymbolIcon x:Name="FullScreenIcon" Symbol="FullScreen" />
             </Button>
         </Grid>

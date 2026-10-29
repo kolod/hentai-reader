@@ -462,4 +462,274 @@
   <data name="Settings_Off" xml:space="preserve">
     <value>Вимкнено</value>
   </data>
+  <data name="Save_ToLibrary" xml:space="preserve">
+    <value>Зберегти в бібліотеку</value>
+  </data>
+  <data name="Save_Queued" xml:space="preserve">
+    <value>Чекає на збереження</value>
+  </data>
+  <data name="Save_Saving" xml:space="preserve">
+    <value>Збереження {0} / {1}</value>
+  </data>
+  <data name="Save_Paused" xml:space="preserve">
+    <value>Пауза {0} / {1} · Продовжити</value>
+  </data>
+  <data name="Save_Limited" xml:space="preserve">
+    <value>Зупинено сайтом · Продовжити</value>
+  </data>
+  <data name="Save_LoginRequired" xml:space="preserve">
+    <value>Потрібен вхід · Продовжити</value>
+  </data>
+  <data name="Save_Failed" xml:space="preserve">
+    <value>Не вдалося зберегти · Повторити</value>
+  </data>
+  <data name="Save_InLibrary" xml:space="preserve">
+    <value>У бібліотеці</value>
+  </data>
+  <data name="Save_Cancel" xml:space="preserve">
+    <value>Скасувати збереження</value>
+  </data>
+  <data name="Save_ClickToPause" xml:space="preserve">
+    <value>Натисніть, щоб призупинити</value>
+  </data>
+  <data name="Nav_History" xml:space="preserve">
+    <value>Історія</value>
+  </data>
+  <data name="Nav_Library" xml:space="preserve">
+    <value>Бібліотека</value>
+  </data>
+  <data name="Nav_Downloads" xml:space="preserve">
+    <value>Завантаження</value>
+  </data>
+  <data name="Library_Search" xml:space="preserve">
+    <value>Пошук за назвою</value>
+  </data>
+  <data name="Library_FilterAll" xml:space="preserve">
+    <value>Усі</value>
+  </data>
+  <data name="Library_FilterAllSources" xml:space="preserve">
+    <value>Усі джерела</value>
+  </data>
+  <data name="Library_LocalSource" xml:space="preserve">
+    <value>Локальні файли</value>
+  </data>
+  <data name="Library_Unread" xml:space="preserve">
+    <value>Непрочитані</value>
+  </data>
+  <data name="Library_InProgress" xml:space="preserve">
+    <value>Розпочаті</value>
+  </data>
+  <data name="Library_SortAdded" xml:space="preserve">
+    <value>Дата збереження</value>
+  </data>
+  <data name="Library_SortLastRead" xml:space="preserve">
+    <value>Останнє читання</value>
+  </data>
+  <data name="Library_SortTitle" xml:space="preserve">
+    <value>Назва</value>
+  </data>
+  <data name="Library_Empty" xml:space="preserve">
+    <value>Тут ще нічого немає. Збережіть галерею кнопкою «Зберегти в бібліотеку» або додайте теку, де вже є архіви коміксів.</value>
+  </data>
+  <data name="Library_NoMatches" xml:space="preserve">
+    <value>Жодна збережена галерея не підходить.</value>
+  </data>
+  <data name="Library_FoldersButton" xml:space="preserve">
+    <value>Теки бібліотеки</value>
+  </data>
+  <data name="Library_Unavailable" xml:space="preserve">
+    <value>Тека недоступна</value>
+  </data>
+  <data name="Library_Unreadable" xml:space="preserve">
+    <value>Не вдається прочитати</value>
+  </data>
+  <data name="Library_OpenFolder" xml:space="preserve">
+    <value>Відкрити теку</value>
+  </data>
+  <data name="Library_Delete" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="Library_DeleteTitle" xml:space="preserve">
+    <value>Видалити збережену галерею?</value>
+  </data>
+  <data name="Library_DeleteBody" xml:space="preserve">
+    <value>«{0}» буде переміщено в Кошик. Історія читання залишиться.</value>
+  </data>
+  <data name="History_Clear" xml:space="preserve">
+    <value>Очистити історію</value>
+  </data>
+  <data name="History_ClearTitle" xml:space="preserve">
+    <value>Очистити історію?</value>
+  </data>
+  <data name="History_ClearBody" xml:space="preserve">
+    <value>Усі записи буде видалено. Збережені галереї та прогрес читання залишаться.</value>
+  </data>
+  <data name="History_Empty" xml:space="preserve">
+    <value>Тут з'являтимуться галереї, які ви читаєте.</value>
+  </data>
+  <data name="History_Remove" xml:space="preserve">
+    <value>Прибрати з історії</value>
+  </data>
+  <data name="History_SourceUnavailable" xml:space="preserve">
+    <value>Це джерело недоступне, а галерею не збережено.</value>
+  </data>
+  <data name="Downloads_ClearDone" xml:space="preserve">
+    <value>Прибрати завершені</value>
+  </data>
+  <data name="Downloads_Empty" xml:space="preserve">
+    <value>Завантажень немає. Збережіть галерею кнопкою «Зберегти в бібліотеку».</value>
+  </data>
+  <data name="Downloads_Pause" xml:space="preserve">
+    <value>Призупинити</value>
+  </data>
+  <data name="Downloads_Resume" xml:space="preserve">
+    <value>Продовжити</value>
+  </data>
+  <data name="Downloads_Open" xml:space="preserve">
+    <value>Відкрити</value>
+  </data>
+  <data name="Downloads_Paused" xml:space="preserve">
+    <value>Пауза {0} / {1}</value>
+  </data>
+  <data name="Time_JustNow" xml:space="preserve">
+    <value>щойно</value>
+  </data>
+  <data name="Time_MinutesAgo_one" xml:space="preserve">
+    <value>{0} хвилину тому</value>
+  </data>
+  <data name="Time_MinutesAgo_few" xml:space="preserve">
+    <value>{0} хвилини тому</value>
+  </data>
+  <data name="Time_MinutesAgo_many" xml:space="preserve">
+    <value>{0} хвилин тому</value>
+  </data>
+  <data name="Time_MinutesAgo_other" xml:space="preserve">
+    <value>{0} хвилини тому</value>
+  </data>
+  <data name="Time_HoursAgo_one" xml:space="preserve">
+    <value>{0} годину тому</value>
+  </data>
+  <data name="Time_HoursAgo_few" xml:space="preserve">
+    <value>{0} години тому</value>
+  </data>
+  <data name="Time_HoursAgo_many" xml:space="preserve">
+    <value>{0} годин тому</value>
+  </data>
+  <data name="Time_HoursAgo_other" xml:space="preserve">
+    <value>{0} години тому</value>
+  </data>
+  <data name="Time_Yesterday" xml:space="preserve">
+    <value>учора</value>
+  </data>
+  <data name="Search_SaveDefault" xml:space="preserve">
+    <value>Зберегти як типовий пошук цього джерела (Ctrl+клік скасовує)</value>
+  </data>
+  <data name="Search_DefaultSaved" xml:space="preserve">
+    <value>Це типовий пошук (Ctrl+клік скасовує)</value>
+  </data>
+  <data name="Settings_StartPage" xml:space="preserve">
+    <value>Стартова сторінка</value>
+  </data>
+  <data name="Settings_StartLastSource" xml:space="preserve">
+    <value>Останнє джерело</value>
+  </data>
+  <data name="Settings_Library" xml:space="preserve">
+    <value>Бібліотека</value>
+  </data>
+  <data name="Settings_AddFolder" xml:space="preserve">
+    <value>Додати теку</value>
+  </data>
+  <data name="Settings_TargetFolder" xml:space="preserve">
+    <value>Нові галереї зберігаються сюди</value>
+  </data>
+  <data name="Settings_RemoveFolder" xml:space="preserve">
+    <value>Прибрати теку</value>
+  </data>
+  <data name="Settings_RemoveFolderBody" xml:space="preserve">
+    <value>У {0} є {1}. Перемістити їх в іншу теку бібліотеки чи залишити файли на місці й більше їх не показувати?</value>
+  </data>
+  <data name="Settings_MoveGalleries" xml:space="preserve">
+    <value>Перемістити галереї</value>
+  </data>
+  <data name="Settings_KeepFiles" xml:space="preserve">
+    <value>Залишити файли</value>
+  </data>
+  <data name="Settings_MoveProgress" xml:space="preserve">
+    <value>Переміщення {0} з {1}</value>
+  </data>
+  <data name="Settings_NetworkCovers" xml:space="preserve">
+    <value>Підвантажувати обкладинки з мережі</value>
+  </data>
+  <data name="Settings_NetworkCoversHint" xml:space="preserve">
+    <value>Для вкладки «Історія»: якщо обкладинки галереї немає (кеш очищено або галерею відкривали не з першої сторінки) і її першої сторінки немає ні в бібліотеці, ні в кеші, обкладинку буде завантажено з джерела — по одній для видимих рядків. Вимкнено: «Історія» не робить запитів до сайтів.</value>
+  </data>
+  <data name="Settings_MoveConflictTitle" xml:space="preserve">
+    <value>Галерея вже є в цілі</value>
+  </data>
+  <data name="Settings_MoveConflictBody" xml:space="preserve">
+    <value>У цільовій теці вже є «{0}» або файл з такою назвою, але сторінки відрізняються (наприклад, інша якість зображень). Яку копію залишити? Прибрана копія піде в Кошик.</value>
+  </data>
+  <data name="Settings_MoveConflictExisting" xml:space="preserve">
+    <value>Наявна</value>
+  </data>
+  <data name="Settings_MoveConflictIncoming" xml:space="preserve">
+    <value>Переміщувана</value>
+  </data>
+  <data name="Settings_MoveConflictDetails" xml:space="preserve">
+    <value>{0} стор. · {1:0.#} МБ · {2:g}</value>
+  </data>
+  <data name="Settings_MoveConflictForAll" xml:space="preserve">
+    <value>Так само для решти</value>
+  </data>
+  <data name="Settings_MoveKeepBoth" xml:space="preserve">
+    <value>Залишити обидві</value>
+  </data>
+  <data name="Settings_MoveReplace" xml:space="preserve">
+    <value>Замінити наявну</value>
+  </data>
+  <data name="Settings_MoveKeepExisting" xml:space="preserve">
+    <value>Залишити наявну</value>
+  </data>
+  <data name="Settings_FolderBusy" xml:space="preserve">
+    <value>У цю теку ще зберігаються галереї. Спершу завершіть або скасуйте ці завантаження.</value>
+  </data>
+  <data name="Settings_FolderGalleries_one" xml:space="preserve">
+    <value>{0} галерея</value>
+  </data>
+  <data name="Settings_FolderGalleries_few" xml:space="preserve">
+    <value>{0} галереї</value>
+  </data>
+  <data name="Settings_FolderGalleries_many" xml:space="preserve">
+    <value>{0} галерей</value>
+  </data>
+  <data name="Settings_FolderGalleries_other" xml:space="preserve">
+    <value>{0} галереї</value>
+  </data>
+  <data name="Settings_CacheFolder" xml:space="preserve">
+    <value>Тека кешу сторінок: {0}</value>
+  </data>
+  <data name="Settings_ChangeFolder" xml:space="preserve">
+    <value>Змінити…</value>
+  </data>
+  <data name="Settings_CacheMoving" xml:space="preserve">
+    <value>Переміщення кешу: {0} з {1}</value>
+  </data>
+  <data name="Settings_CacheMoveFailed" xml:space="preserve">
+    <value>Переміщення кешу зупинилося: {0}. Сторінки з кешу далі читаються; скасуйте, щоб повернутися.</value>
+  </data>
+  <data name="Settings_CancelMove" xml:space="preserve">
+    <value>Скасувати переміщення</value>
+  </data>
+  <data name="Settings_DefaultSearch" xml:space="preserve">
+    <value>Типовий пошук: {0}</value>
+  </data>
+  <data name="Settings_DefaultSearchEmpty" xml:space="preserve">
+    <value>головна сторінка зі збереженими фільтрами</value>
+  </data>
+  <data name="Settings_RemoveDefaultSearch" xml:space="preserve">
+    <value>Прибрати</value>
+  </data>
+  <data name="Downloads_Failed" xml:space="preserve">
+    <value>Не вдалося зберегти: {0}</value>
+  </data>
 </root>

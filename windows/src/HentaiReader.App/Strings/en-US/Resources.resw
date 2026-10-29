@@ -462,4 +462,274 @@
   <data name="Settings_Off" xml:space="preserve">
     <value>Off</value>
   </data>
+  <data name="Save_ToLibrary" xml:space="preserve">
+    <value>Save to library</value>
+  </data>
+  <data name="Save_Queued" xml:space="preserve">
+    <value>Waiting to save</value>
+  </data>
+  <data name="Save_Saving" xml:space="preserve">
+    <value>Saving {0} / {1}</value>
+  </data>
+  <data name="Save_Paused" xml:space="preserve">
+    <value>Paused {0} / {1} · Resume</value>
+  </data>
+  <data name="Save_Limited" xml:space="preserve">
+    <value>Stopped by the site · Resume</value>
+  </data>
+  <data name="Save_LoginRequired" xml:space="preserve">
+    <value>Sign-in required · Resume</value>
+  </data>
+  <data name="Save_Failed" xml:space="preserve">
+    <value>Saving failed · Retry</value>
+  </data>
+  <data name="Save_InLibrary" xml:space="preserve">
+    <value>In library</value>
+  </data>
+  <data name="Save_Cancel" xml:space="preserve">
+    <value>Cancel saving</value>
+  </data>
+  <data name="Save_ClickToPause" xml:space="preserve">
+    <value>Click to pause</value>
+  </data>
+  <data name="Nav_History" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="Nav_Library" xml:space="preserve">
+    <value>Library</value>
+  </data>
+  <data name="Nav_Downloads" xml:space="preserve">
+    <value>Downloads</value>
+  </data>
+  <data name="Library_Search" xml:space="preserve">
+    <value>Search titles</value>
+  </data>
+  <data name="Library_FilterAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Library_FilterAllSources" xml:space="preserve">
+    <value>All sources</value>
+  </data>
+  <data name="Library_LocalSource" xml:space="preserve">
+    <value>Local files</value>
+  </data>
+  <data name="Library_Unread" xml:space="preserve">
+    <value>Unread</value>
+  </data>
+  <data name="Library_InProgress" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="Library_SortAdded" xml:space="preserve">
+    <value>Date added</value>
+  </data>
+  <data name="Library_SortLastRead" xml:space="preserve">
+    <value>Last read</value>
+  </data>
+  <data name="Library_SortTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Library_Empty" xml:space="preserve">
+    <value>Nothing saved yet. Use Save to library on a gallery, or add a folder that already holds comic archives.</value>
+  </data>
+  <data name="Library_NoMatches" xml:space="preserve">
+    <value>No saved gallery matches.</value>
+  </data>
+  <data name="Library_FoldersButton" xml:space="preserve">
+    <value>Library folders</value>
+  </data>
+  <data name="Library_Unavailable" xml:space="preserve">
+    <value>Folder not available</value>
+  </data>
+  <data name="Library_Unreadable" xml:space="preserve">
+    <value>Cannot be read</value>
+  </data>
+  <data name="Library_OpenFolder" xml:space="preserve">
+    <value>Open folder</value>
+  </data>
+  <data name="Library_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Library_DeleteTitle" xml:space="preserve">
+    <value>Delete saved gallery?</value>
+  </data>
+  <data name="Library_DeleteBody" xml:space="preserve">
+    <value>“{0}” will be moved to the Recycle Bin. Its reading history stays.</value>
+  </data>
+  <data name="History_Clear" xml:space="preserve">
+    <value>Clear history</value>
+  </data>
+  <data name="History_ClearTitle" xml:space="preserve">
+    <value>Clear the history?</value>
+  </data>
+  <data name="History_ClearBody" xml:space="preserve">
+    <value>All entries are removed. Saved galleries and reading progress are kept.</value>
+  </data>
+  <data name="History_Empty" xml:space="preserve">
+    <value>Galleries you read appear here.</value>
+  </data>
+  <data name="History_Remove" xml:space="preserve">
+    <value>Remove from history</value>
+  </data>
+  <data name="History_SourceUnavailable" xml:space="preserve">
+    <value>This source is not available, and the gallery is not saved.</value>
+  </data>
+  <data name="Downloads_ClearDone" xml:space="preserve">
+    <value>Clear finished</value>
+  </data>
+  <data name="Downloads_Empty" xml:space="preserve">
+    <value>No downloads. Use Save to library on a gallery.</value>
+  </data>
+  <data name="Downloads_Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="Downloads_Resume" xml:space="preserve">
+    <value>Resume</value>
+  </data>
+  <data name="Downloads_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Downloads_Paused" xml:space="preserve">
+    <value>Paused {0} / {1}</value>
+  </data>
+  <data name="Time_JustNow" xml:space="preserve">
+    <value>just now</value>
+  </data>
+  <data name="Time_MinutesAgo_one" xml:space="preserve">
+    <value>{0} minute ago</value>
+  </data>
+  <data name="Time_MinutesAgo_few" xml:space="preserve">
+    <value>{0} minutes ago</value>
+  </data>
+  <data name="Time_MinutesAgo_many" xml:space="preserve">
+    <value>{0} minutes ago</value>
+  </data>
+  <data name="Time_MinutesAgo_other" xml:space="preserve">
+    <value>{0} minutes ago</value>
+  </data>
+  <data name="Time_HoursAgo_one" xml:space="preserve">
+    <value>{0} hour ago</value>
+  </data>
+  <data name="Time_HoursAgo_few" xml:space="preserve">
+    <value>{0} hours ago</value>
+  </data>
+  <data name="Time_HoursAgo_many" xml:space="preserve">
+    <value>{0} hours ago</value>
+  </data>
+  <data name="Time_HoursAgo_other" xml:space="preserve">
+    <value>{0} hours ago</value>
+  </data>
+  <data name="Time_Yesterday" xml:space="preserve">
+    <value>yesterday</value>
+  </data>
+  <data name="Search_SaveDefault" xml:space="preserve">
+    <value>Save as this source's default search (Ctrl+click clears it)</value>
+  </data>
+  <data name="Search_DefaultSaved" xml:space="preserve">
+    <value>This is the default search (Ctrl+click clears it)</value>
+  </data>
+  <data name="Settings_StartPage" xml:space="preserve">
+    <value>Start page</value>
+  </data>
+  <data name="Settings_StartLastSource" xml:space="preserve">
+    <value>Last used source</value>
+  </data>
+  <data name="Settings_Library" xml:space="preserve">
+    <value>Library</value>
+  </data>
+  <data name="Settings_AddFolder" xml:space="preserve">
+    <value>Add folder</value>
+  </data>
+  <data name="Settings_TargetFolder" xml:space="preserve">
+    <value>New saves go here</value>
+  </data>
+  <data name="Settings_RemoveFolder" xml:space="preserve">
+    <value>Remove folder</value>
+  </data>
+  <data name="Settings_RemoveFolderBody" xml:space="preserve">
+    <value>{0} holds {1}. Move them into another library folder, or keep the files where they are and stop showing them?</value>
+  </data>
+  <data name="Settings_MoveGalleries" xml:space="preserve">
+    <value>Move galleries</value>
+  </data>
+  <data name="Settings_KeepFiles" xml:space="preserve">
+    <value>Keep files</value>
+  </data>
+  <data name="Settings_MoveProgress" xml:space="preserve">
+    <value>Moving {0} of {1}</value>
+  </data>
+  <data name="Settings_NetworkCovers" xml:space="preserve">
+    <value>Load covers from the network</value>
+  </data>
+  <data name="Settings_NetworkCoversHint" xml:space="preserve">
+    <value>For the History tab: when a gallery has no cover (the cache was cleared, or it was opened past the first page) and its first page is neither in the library nor in the cache, the cover is downloaded from the source — one at a time, for the rows in view. Off: History makes no requests to sites.</value>
+  </data>
+  <data name="Settings_MoveConflictTitle" xml:space="preserve">
+    <value>Gallery already in the destination</value>
+  </data>
+  <data name="Settings_MoveConflictBody" xml:space="preserve">
+    <value>The destination folder already has “{0}” or a file with this name, but the pages differ (for example, a different image quality). Which copy should stay? The removed copy goes to the Recycle Bin.</value>
+  </data>
+  <data name="Settings_MoveConflictExisting" xml:space="preserve">
+    <value>Existing</value>
+  </data>
+  <data name="Settings_MoveConflictIncoming" xml:space="preserve">
+    <value>Moved</value>
+  </data>
+  <data name="Settings_MoveConflictDetails" xml:space="preserve">
+    <value>{0} pages · {1:0.#} MB · {2:g}</value>
+  </data>
+  <data name="Settings_MoveConflictForAll" xml:space="preserve">
+    <value>Do the same for the rest</value>
+  </data>
+  <data name="Settings_MoveKeepBoth" xml:space="preserve">
+    <value>Keep both</value>
+  </data>
+  <data name="Settings_MoveReplace" xml:space="preserve">
+    <value>Replace the existing one</value>
+  </data>
+  <data name="Settings_MoveKeepExisting" xml:space="preserve">
+    <value>Keep the existing one</value>
+  </data>
+  <data name="Settings_FolderBusy" xml:space="preserve">
+    <value>Galleries are still being saved into this folder. Finish or cancel those downloads first.</value>
+  </data>
+  <data name="Settings_FolderGalleries_one" xml:space="preserve">
+    <value>{0} gallery</value>
+  </data>
+  <data name="Settings_FolderGalleries_few" xml:space="preserve">
+    <value>{0} galleries</value>
+  </data>
+  <data name="Settings_FolderGalleries_many" xml:space="preserve">
+    <value>{0} galleries</value>
+  </data>
+  <data name="Settings_FolderGalleries_other" xml:space="preserve">
+    <value>{0} galleries</value>
+  </data>
+  <data name="Settings_CacheFolder" xml:space="preserve">
+    <value>Page cache folder: {0}</value>
+  </data>
+  <data name="Settings_ChangeFolder" xml:space="preserve">
+    <value>Change…</value>
+  </data>
+  <data name="Settings_CacheMoving" xml:space="preserve">
+    <value>Moving the cache: {0} of {1}</value>
+  </data>
+  <data name="Settings_CacheMoveFailed" xml:space="preserve">
+    <value>Moving the cache stopped: {0}. Cached pages stay readable; cancel to go back.</value>
+  </data>
+  <data name="Settings_CancelMove" xml:space="preserve">
+    <value>Cancel move</value>
+  </data>
+  <data name="Settings_DefaultSearch" xml:space="preserve">
+    <value>Default search: {0}</value>
+  </data>
+  <data name="Settings_DefaultSearchEmpty" xml:space="preserve">
+    <value>front page with the saved filters</value>
+  </data>
+  <data name="Settings_RemoveDefaultSearch" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Downloads_Failed" xml:space="preserve">
+    <value>Saving failed: {0}</value>
+  </data>
 </root>

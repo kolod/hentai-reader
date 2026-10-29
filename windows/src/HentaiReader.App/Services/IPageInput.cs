@@ -6,8 +6,11 @@ namespace HentaiReader.App.Services;
 /// </summary>
 public interface IPageInput
 {
-    /// <summary>Escape: true when the page used it (e.g. the reader leaving full screen or going back).</summary>
-    bool OnEscape();
+    /// <summary>
+    /// Escape: true when the page used it for something of its own. Otherwise the window goes back a
+    /// level, or closes on the first page of a section. Full screen is F11's alone.
+    /// </summary>
+    bool OnEscape() => false;
 
     /// <summary>Element to focus after navigation (default: the first focusable one).</summary>
     Microsoft.UI.Xaml.Controls.Control? InitialFocus => null;

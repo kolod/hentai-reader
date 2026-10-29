@@ -456,4 +456,265 @@
   <data name="Settings_Off" xml:space="preserve">
     <value>Désactivé</value>
   </data>
+  <data name="Save_ToLibrary" xml:space="preserve">
+    <value>Enregistrer dans la bibliothèque</value>
+  </data>
+  <data name="Save_Queued" xml:space="preserve">
+    <value>En attente d'enregistrement</value>
+  </data>
+  <data name="Save_Saving" xml:space="preserve">
+    <value>Enregistrement {0} / {1}</value>
+  </data>
+  <data name="Save_Paused" xml:space="preserve">
+    <value>En pause {0} / {1} · Reprendre</value>
+  </data>
+  <data name="Save_Limited" xml:space="preserve">
+    <value>Arrêté par le site · Reprendre</value>
+  </data>
+  <data name="Save_LoginRequired" xml:space="preserve">
+    <value>Connexion requise · Reprendre</value>
+  </data>
+  <data name="Save_Failed" xml:space="preserve">
+    <value>Échec de l'enregistrement · Réessayer</value>
+  </data>
+  <data name="Save_InLibrary" xml:space="preserve">
+    <value>Dans la bibliothèque</value>
+  </data>
+  <data name="Save_Cancel" xml:space="preserve">
+    <value>Annuler l'enregistrement</value>
+  </data>
+  <data name="Save_ClickToPause" xml:space="preserve">
+    <value>Cliquez pour mettre en pause</value>
+  </data>
+  <data name="Nav_History" xml:space="preserve">
+    <value>Historique</value>
+  </data>
+  <data name="Nav_Library" xml:space="preserve">
+    <value>Bibliothèque</value>
+  </data>
+  <data name="Nav_Downloads" xml:space="preserve">
+    <value>Téléchargements</value>
+  </data>
+  <data name="Library_Search" xml:space="preserve">
+    <value>Rechercher un titre</value>
+  </data>
+  <data name="Library_FilterAll" xml:space="preserve">
+    <value>Toutes</value>
+  </data>
+  <data name="Library_FilterAllSources" xml:space="preserve">
+    <value>Toutes les sources</value>
+  </data>
+  <data name="Library_LocalSource" xml:space="preserve">
+    <value>Fichiers locaux</value>
+  </data>
+  <data name="Library_Unread" xml:space="preserve">
+    <value>Non lues</value>
+  </data>
+  <data name="Library_InProgress" xml:space="preserve">
+    <value>En cours</value>
+  </data>
+  <data name="Library_SortAdded" xml:space="preserve">
+    <value>Date d'ajout</value>
+  </data>
+  <data name="Library_SortLastRead" xml:space="preserve">
+    <value>Dernière lecture</value>
+  </data>
+  <data name="Library_SortTitle" xml:space="preserve">
+    <value>Titre</value>
+  </data>
+  <data name="Library_Empty" xml:space="preserve">
+    <value>Rien d'enregistré pour l'instant. Utilisez « Enregistrer dans la bibliothèque » sur une galerie, ou ajoutez un dossier qui contient déjà des archives de bandes dessinées.</value>
+  </data>
+  <data name="Library_NoMatches" xml:space="preserve">
+    <value>Aucune galerie enregistrée ne correspond.</value>
+  </data>
+  <data name="Library_FoldersButton" xml:space="preserve">
+    <value>Dossiers de la bibliothèque</value>
+  </data>
+  <data name="Library_Unavailable" xml:space="preserve">
+    <value>Dossier indisponible</value>
+  </data>
+  <data name="Library_Unreadable" xml:space="preserve">
+    <value>Illisible</value>
+  </data>
+  <data name="Library_OpenFolder" xml:space="preserve">
+    <value>Ouvrir le dossier</value>
+  </data>
+  <data name="Library_Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="Library_DeleteTitle" xml:space="preserve">
+    <value>Supprimer la galerie enregistrée ?</value>
+  </data>
+  <data name="Library_DeleteBody" xml:space="preserve">
+    <value>« {0} » sera déplacée dans la Corbeille. Son historique de lecture est conservé.</value>
+  </data>
+  <data name="History_Clear" xml:space="preserve">
+    <value>Effacer l'historique</value>
+  </data>
+  <data name="History_ClearTitle" xml:space="preserve">
+    <value>Effacer l'historique ?</value>
+  </data>
+  <data name="History_ClearBody" xml:space="preserve">
+    <value>Toutes les entrées sont supprimées. Les galeries enregistrées et la progression de lecture sont conservées.</value>
+  </data>
+  <data name="History_Empty" xml:space="preserve">
+    <value>Les galeries que vous lisez apparaissent ici.</value>
+  </data>
+  <data name="History_Remove" xml:space="preserve">
+    <value>Retirer de l'historique</value>
+  </data>
+  <data name="History_SourceUnavailable" xml:space="preserve">
+    <value>Cette source n'est pas disponible et la galerie n'est pas enregistrée.</value>
+  </data>
+  <data name="Downloads_ClearDone" xml:space="preserve">
+    <value>Retirer les terminés</value>
+  </data>
+  <data name="Downloads_Empty" xml:space="preserve">
+    <value>Aucun téléchargement. Utilisez « Enregistrer dans la bibliothèque » sur une galerie.</value>
+  </data>
+  <data name="Downloads_Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="Downloads_Resume" xml:space="preserve">
+    <value>Reprendre</value>
+  </data>
+  <data name="Downloads_Open" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+  <data name="Downloads_Paused" xml:space="preserve">
+    <value>En pause {0} / {1}</value>
+  </data>
+  <data name="Time_JustNow" xml:space="preserve">
+    <value>à l'instant</value>
+  </data>
+  <data name="Time_MinutesAgo_one" xml:space="preserve">
+    <value>il y a {0} minute</value>
+  </data>
+  <data name="Time_MinutesAgo_many" xml:space="preserve">
+    <value>il y a {0} de minutes</value>
+  </data>
+  <data name="Time_MinutesAgo_other" xml:space="preserve">
+    <value>il y a {0} minutes</value>
+  </data>
+  <data name="Time_HoursAgo_one" xml:space="preserve">
+    <value>il y a {0} heure</value>
+  </data>
+  <data name="Time_HoursAgo_many" xml:space="preserve">
+    <value>il y a {0} d'heures</value>
+  </data>
+  <data name="Time_HoursAgo_other" xml:space="preserve">
+    <value>il y a {0} heures</value>
+  </data>
+  <data name="Time_Yesterday" xml:space="preserve">
+    <value>hier</value>
+  </data>
+  <data name="Search_SaveDefault" xml:space="preserve">
+    <value>Enregistrer comme recherche par défaut de cette source (Ctrl+clic la supprime)</value>
+  </data>
+  <data name="Search_DefaultSaved" xml:space="preserve">
+    <value>C'est la recherche par défaut (Ctrl+clic la supprime)</value>
+  </data>
+  <data name="Settings_StartPage" xml:space="preserve">
+    <value>Page de démarrage</value>
+  </data>
+  <data name="Settings_StartLastSource" xml:space="preserve">
+    <value>Dernière source utilisée</value>
+  </data>
+  <data name="Settings_Library" xml:space="preserve">
+    <value>Bibliothèque</value>
+  </data>
+  <data name="Settings_AddFolder" xml:space="preserve">
+    <value>Ajouter un dossier</value>
+  </data>
+  <data name="Settings_TargetFolder" xml:space="preserve">
+    <value>Les nouveaux enregistrements vont ici</value>
+  </data>
+  <data name="Settings_RemoveFolder" xml:space="preserve">
+    <value>Retirer le dossier</value>
+  </data>
+  <data name="Settings_RemoveFolderBody" xml:space="preserve">
+    <value>{0} contient {1}. Les déplacer vers un autre dossier de la bibliothèque, ou laisser les fichiers en place et ne plus les afficher ?</value>
+  </data>
+  <data name="Settings_MoveGalleries" xml:space="preserve">
+    <value>Déplacer les galeries</value>
+  </data>
+  <data name="Settings_KeepFiles" xml:space="preserve">
+    <value>Garder les fichiers</value>
+  </data>
+  <data name="Settings_MoveProgress" xml:space="preserve">
+    <value>Déplacement {0} sur {1}</value>
+  </data>
+  <data name="Settings_NetworkCovers" xml:space="preserve">
+    <value>Charger les couvertures depuis le réseau</value>
+  </data>
+  <data name="Settings_NetworkCoversHint" xml:space="preserve">
+    <value>Pour l’onglet Historique : si une galerie n’a pas de couverture (cache vidé, ou ouverte au-delà de la première page) et que sa première page n’est ni dans la bibliothèque ni dans le cache, la couverture est téléchargée depuis la source, une à la fois, pour les lignes visibles. Désactivé : l’Historique n’envoie aucune requête aux sites.</value>
+  </data>
+  <data name="Settings_MoveConflictTitle" xml:space="preserve">
+    <value>Galerie déjà dans la destination</value>
+  </data>
+  <data name="Settings_MoveConflictBody" xml:space="preserve">
+    <value>Le dossier de destination contient déjà « {0} » ou un fichier de ce nom, mais les pages diffèrent (par exemple, une autre qualité d’image). Quelle copie garder ? La copie retirée va dans la Corbeille.</value>
+  </data>
+  <data name="Settings_MoveConflictExisting" xml:space="preserve">
+    <value>Existante</value>
+  </data>
+  <data name="Settings_MoveConflictIncoming" xml:space="preserve">
+    <value>Déplacée</value>
+  </data>
+  <data name="Settings_MoveConflictDetails" xml:space="preserve">
+    <value>{0} pages · {1:0.#} Mo · {2:g}</value>
+  </data>
+  <data name="Settings_MoveConflictForAll" xml:space="preserve">
+    <value>Faire de même pour le reste</value>
+  </data>
+  <data name="Settings_MoveKeepBoth" xml:space="preserve">
+    <value>Garder les deux</value>
+  </data>
+  <data name="Settings_MoveReplace" xml:space="preserve">
+    <value>Remplacer l’existante</value>
+  </data>
+  <data name="Settings_MoveKeepExisting" xml:space="preserve">
+    <value>Garder l’existante</value>
+  </data>
+  <data name="Settings_FolderBusy" xml:space="preserve">
+    <value>Des galeries sont encore en cours d'enregistrement dans ce dossier. Terminez ou annulez d'abord ces téléchargements.</value>
+  </data>
+  <data name="Settings_FolderGalleries_one" xml:space="preserve">
+    <value>{0} galerie</value>
+  </data>
+  <data name="Settings_FolderGalleries_many" xml:space="preserve">
+    <value>{0} de galeries</value>
+  </data>
+  <data name="Settings_FolderGalleries_other" xml:space="preserve">
+    <value>{0} galeries</value>
+  </data>
+  <data name="Settings_CacheFolder" xml:space="preserve">
+    <value>Dossier du cache des pages : {0}</value>
+  </data>
+  <data name="Settings_ChangeFolder" xml:space="preserve">
+    <value>Modifier…</value>
+  </data>
+  <data name="Settings_CacheMoving" xml:space="preserve">
+    <value>Déplacement du cache : {0} sur {1}</value>
+  </data>
+  <data name="Settings_CacheMoveFailed" xml:space="preserve">
+    <value>Le déplacement du cache s'est arrêté : {0}. Les pages en cache restent lisibles ; annulez pour revenir en arrière.</value>
+  </data>
+  <data name="Settings_CancelMove" xml:space="preserve">
+    <value>Annuler le déplacement</value>
+  </data>
+  <data name="Settings_DefaultSearch" xml:space="preserve">
+    <value>Recherche par défaut : {0}</value>
+  </data>
+  <data name="Settings_DefaultSearchEmpty" xml:space="preserve">
+    <value>page d'accueil avec les filtres enregistrés</value>
+  </data>
+  <data name="Settings_RemoveDefaultSearch" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="Downloads_Failed" xml:space="preserve">
+    <value>Échec de l'enregistrement : {0}</value>
+  </data>
 </root>

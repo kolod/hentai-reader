@@ -9,6 +9,7 @@
             <TextBlock x:Name="TitleText" Style="{StaticResource TitleTextBlockStyle}" />
             <ComboBox x:Name="LanguageBox" MinWidth="280" DisplayMemberPath="Text" />
             <TextBlock x:Name="RestartNote" Opacity="0.7" TextWrapping="Wrap" />
+            <ComboBox x:Name="StartPageBox" AutomationProperties.AutomationId="StartPageBox" MinWidth="280" DisplayMemberPath="Text" />
 
             <!-- Reader (FR-033) -->
             <TextBlock x:Name="ReaderHeader" Margin="0,16,0,0" Style="{StaticResource SubtitleTextBlockStyle}" />
@@ -24,10 +25,24 @@
                 <TextBlock x:Name="GapHint" Opacity="0.7" TextWrapping="Wrap" />
             </StackPanel>
             <ComboBox x:Name="CacheLimitBox" MinWidth="200" DisplayMemberPath="Text" />
-            <StackPanel Orientation="Horizontal" Spacing="12">
-                <TextBlock x:Name="CacheSizeText" VerticalAlignment="Center" />
-                <Button x:Name="ClearCacheButton" Click="ClearCacheButton_Click" />
+            <!-- Buttons on the right edge, like the library folder rows. -->
+            <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="CacheSizeText" VerticalAlignment="Center" TextWrapping="Wrap" />
+                <Button x:Name="ClearCacheButton" Grid.Column="1" Click="ClearCacheButton_Click" />
+            </Grid>
+            <StackPanel x:Name="CacheFolderPanel" Spacing="4" />
+            <StackPanel Spacing="4">
+                <ToggleSwitch x:Name="NetworkCoversSwitch" AutomationProperties.AutomationId="NetworkCoversSwitch" />
+                <TextBlock x:Name="NetworkCoversHint" Opacity="0.7" TextWrapping="Wrap" />
             </StackPanel>
+
+            <!-- Library folders (006 FR-015–FR-017) -->
+            <TextBlock x:Name="LibraryHeader" Margin="0,16,0,0" Style="{StaticResource SubtitleTextBlockStyle}" />
+            <StackPanel x:Name="LibraryPanel" Spacing="8" />
 
             <!-- Sources: declared settings and accounts (FR-026–FR-032) -->
             <TextBlock x:Name="SourcesHeader" Margin="0,16,0,0" Style="{StaticResource SubtitleTextBlockStyle}" />
