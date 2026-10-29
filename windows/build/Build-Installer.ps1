@@ -10,14 +10,20 @@
     portable ZIP of the same verified folder. Stops at the first failure; a failed run leaves no
     installer and no ZIP in the output folder.
 
+    -Install then installs the new build right away over the installed copy (same folder and install
+    mode as before): a running app is closed the normal way first (it saves its state), setup runs
+    with a progress window and no questions, and the installed app is started again.
+
 .EXAMPLE
     pwsh windows/build/Build-Installer.ps1
     pwsh windows/build/Build-Installer.ps1 -BootstrapTools -SmokeTest
+    pwsh windows/build/Build-Installer.ps1 -SkipTests -Install
 #>
 [CmdletBinding()]
 param(
     [switch] $SkipTests,
     [switch] $SmokeTest,
+    [switch] $Install,
     [switch] $BootstrapTools,
     [string] $InnoSetupPath,
     [string] $OutputDir = 'artifacts/installer'
@@ -132,6 +138,32 @@ function Find-Iscc {
     }
 
     return $iscc
+}
+
+function Get-InstalledExe {
+    # Inno Setup's uninstall key ({AppId}_is1): per-user installs in HKCU, per-machine ones in HKLM.
+    $key = 'Software\Microsoft\Windows\CurrentVersion\Uninstall\{6E0B7C2A-4F1D-4C8B-9A35-2D7E91B4F6C3}_is1'
+    foreach ($path in "HKCU:\$key", "HKLM:\$key") {
+        $location = (Get-ItemProperty $path -ErrorAction SilentlyContinue)?.InstallLocation
+        if ($location -and (Test-Path (Join-Path $location 'HentaiReader.exe'))) { return Join-Path $location 'HentaiReader.exe' }
+    }
+    return $null
+}
+
+function Install-Build([string] $Installer) {
+    # Setup waits on the app's mutex (AppMutex); close the app the normal way so it saves progress and window.
+    foreach ($process in Get-Process HentaiReader -ErrorAction SilentlyContinue) {
+        Write-Host "Closing Hentai Reader (PID $($process.Id))"
+        [void] $process.CloseMainWindow()
+        if (-not $process.WaitForExit(15000)) { throw "Hentai Reader (PID $($process.Id)) did not close within 15 s; close it and run again" }
+    }
+    # An earlier per-machine install asks for elevation (UsePreviousPrivileges); Start-Process shows the UAC prompt.
+    $process = Start-Process $Installer -Wait -PassThru -ArgumentList @('/SILENT', '/SUPPRESSMSGBOXES', '/NORESTART')
+    if ($process.ExitCode -ne 0) { throw "Setup exited with code $($process.ExitCode)" }
+    $exe = Get-InstalledExe
+    if (-not $exe) { throw 'Setup finished, but the installed HentaiReader.exe was not found' }
+    Start-Process $exe
+    return $exe
 }
 
 function Test-Distribution([string[]] $Extra) {
@@ -255,4 +287,19 @@ finally {
     }
 }
 
-exit ($Summary.Result -eq 'passed' ? 0 : 1)
+# Outside the build's try: a failed install (UAC declined, app not closing) keeps the verified installer.
+$installFailed = $false
+if ($Install -and $Summary.Result -eq 'passed') {
+    try {
+        Invoke-Step 'Install' {
+            $exe = Install-Build $installer.FullName
+            Write-Host "Installed and started: $exe" -ForegroundColor Green
+        }
+    }
+    catch {
+        Write-Host $_.Exception.Message -ForegroundColor Red
+        $installFailed = $true
+    }
+}
+
+exit ($Summary.Result -eq 'passed' -and -not $installFailed ? 0 : 1)
