@@ -21,6 +21,8 @@ public class PageImageLoaderTests
     private sealed class Site : ITransport
     {
         public HashSet<string> Stalled { get; } = new();
+        /// <summary>Images answering HTTP 503 (a failing image server).</summary>
+        public HashSet<string> Failing { get; } = new();
         public List<string> Requests { get; } = new();
 
         public async Task<RawResponse> SendAsync(RawRequest request, CancellationToken token = default)
@@ -38,6 +40,7 @@ public class PageImageLoaderTests
                     """);
             }
             if (Stalled.Contains(request.Url)) await Task.Delay(Timeout.Infinite, token);
+            if (Failing.Contains(request.Url)) return new RawResponse(503, [], []);
             return new RawResponse(200, [new("content-type", "image/webp")], Encoding.ASCII.GetBytes(request.Url));
         }
 
@@ -97,6 +100,37 @@ public class PageImageLoaderTests
         Assert.Equal(3, site.Requests.Count(u => u.Contains(".hath.network/")));   // first try + 2 retries
         Assert.Equal(2, page.Attempts);
         Assert.Equal("c-token", page.PageImage!["retryToken"]!.GetValue<string>());
+    }
+
+    [Fact]
+    public async Task Server_error_is_retried_at_a_new_location_with_the_status()
+    {
+        var site = new Site();
+        site.Failing.Add("https://a.hath.network/h/abc/001.webp");
+        using var session = await Open(site);
+        var page = new Page();
+        var hints = new List<JsonNode?>();
+
+        var bytes = await new PageImageLoader(session) { RetryDelay = TimeSpan.FromMilliseconds(10) }
+            .LoadAsync(Gallery, 0, page, _ => hints.Add(PageImageLoader.RetryHint(page)), TestContext.Current.CancellationToken);
+
+        Assert.Equal("https://b.hath.network/h/abc/001.webp", Encoding.ASCII.GetString(bytes));
+        Assert.Equal(503, page.FailedStatus);   // sent as RetryHint.status with the second getPageUrl
+        Assert.Contains($"{Viewer}?nl=a-token", site.Requests);
+    }
+
+    [Fact]
+    public async Task Server_errors_everywhere_fail_after_the_retries()
+    {
+        var site = new Site();
+        foreach (var server in new[] { "a", "b", "c" }) site.Failing.Add($"https://{server}.hath.network/h/abc/001.webp");
+        using var session = await Open(site);
+
+        var loader = new PageImageLoader(session) { RetryDelay = TimeSpan.FromMilliseconds(10) };
+        var e = await Assert.ThrowsAsync<HttpRequestException>(() => loader.LoadAsync(Gallery, 0, new Page(), null, TestContext.Current.CancellationToken));
+
+        Assert.Equal(System.Net.HttpStatusCode.ServiceUnavailable, e.StatusCode);
+        Assert.Equal(3, site.Requests.Count(u => u.Contains(".hath.network/")));
     }
 
     [Fact]
