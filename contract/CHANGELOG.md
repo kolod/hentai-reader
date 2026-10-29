@@ -4,6 +4,16 @@ All notable changes to this component. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+## [1.2.1] - Unreleased
+
+No host API change.
+
+### Added
+
+- Archive format 1 (`archive/`): the `.cbz` layout (one archive per gallery, every entry stored),
+  page entry names, the `ComicInfo.xml` subset and the `hentai-reader.json` metadata with its JSON
+  Schema, shared by the Windows and Android apps (Constitution V).
+
 ## [1.2.0] - Unreleased
 
 Backward compatible: sources declaring `1.0` or `1.1` run unchanged; 1.2 uses the 1.1 calling

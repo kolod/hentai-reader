@@ -14,6 +14,11 @@ provides (Constitution II). Android, Windows and the console runner all implemen
 | `tests/` | Portable host contract suite |
 | `conformance/` | `minimal` (1.0) and `settings` (1.1) reference sources + one-defect samples |
 
+## Archive format
+
+Saved galleries are one `.cbz` per gallery with `hentai-reader.json` inside; the layout and the
+metadata schema are shared by all apps: [archive/README.md](archive/README.md).
+
 ## Versioning
 
 A source declares `manifest.contract: "MAJOR.MINOR"`. A host supporting `H.h` runs it only if
