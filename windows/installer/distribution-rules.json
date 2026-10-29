@@ -38,7 +38,10 @@
     "coreclr.dll",
     "Microsoft.ui.xaml.dll",
     "Jint.dll",
-    "AngleSharp.dll"
+    "AngleSharp.dll",
+    "Microsoft.Data.Sqlite.dll",
+    "SQLitePCLRaw.core.dll",
+    "e_sqlite3.dll"
   ],
   "nativeMachine": {
     "x64": "0x8664"

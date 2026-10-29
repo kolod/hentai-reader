@@ -32,6 +32,15 @@
                     <Button x:Name="ContinueButton" Style="{StaticResource AccentButtonStyle}" Visibility="Collapsed" Click="ContinueButton_Click" />
                     <Button x:Name="ReadButton" Style="{StaticResource AccentButtonStyle}" IsEnabled="False" Click="ReadButton_Click" />
                     <TextBlock x:Name="ProgressText" VerticalAlignment="Center" Opacity="0.75" />
+                    <Button x:Name="SaveButton" AutomationProperties.AutomationId="SaveButton" IsEnabled="False" Click="SaveButton_Click">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon x:Name="SaveIcon" Glyph="&#xE896;" FontSize="16" />
+                            <TextBlock x:Name="SaveText" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="CancelSaveButton" AutomationProperties.AutomationId="CancelSaveButton" Visibility="Collapsed" Click="CancelSaveButton_Click">
+                        <SymbolIcon Symbol="Cancel" />
+                    </Button>
                     <HyperlinkButton x:Name="OpenInBrowser" Click="OpenInBrowser_Click" />
                 </StackPanel>
                 <StackPanel x:Name="TagGroups" Spacing="4" />

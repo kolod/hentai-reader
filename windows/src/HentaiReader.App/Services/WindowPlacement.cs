@@ -3,13 +3,13 @@ using Windows.Graphics;
 
 namespace HentaiReader.App.Services;
 
-/// <summary>Window size and position kept between sessions (physical pixels).</summary>
-public sealed record WindowBounds(int X, int Y, int Width, int Height, bool Maximized);
+/// <summary>Window size and position kept between sessions (physical pixels); full screen on top of them.</summary>
+public sealed record WindowBounds(int X, int Y, int Width, int Height, bool Maximized, bool FullScreen = false);
 
 /// <summary>
 /// Restores the main window where it was closed and remembers its last normal bounds. A position
 /// that is no longer on any display (monitor unplugged) is ignored and the system default is kept.
-/// Full screen is not restored; the window comes back as it was before entering it.
+/// Full screen is restored by the main window on top of these bounds, so leaving it returns to them.
 /// </summary>
 public sealed class WindowPlacement
 {
@@ -18,6 +18,7 @@ public sealed class WindowPlacement
     private readonly AppWindow _window;
     private RectInt32? _normal;
     private bool _maximized;
+    private bool _maximizeOnShow;
 
     public WindowPlacement(AppWindow window, WindowBounds? saved)
     {
@@ -29,7 +30,7 @@ public sealed class WindowPlacement
             {
                 window.MoveAndResize(rect);
                 _normal = rect;
-                if (saved.Maximized && window.Presenter is OverlappedPresenter overlapped) overlapped.Maximize();
+                _maximizeOnShow = saved.Maximized;
             }
         }
         Track();
@@ -37,6 +38,17 @@ public sealed class WindowPlacement
         {
             if (args.DidPositionChange || args.DidSizeChange || args.DidPresenterChange) Track();
         };
+    }
+
+    /// <summary>
+    /// After the window was first shown: a maximize before that was undone by the show (the window came
+    /// back restored, and was then saved as not maximized).
+    /// </summary>
+    public void ApplyAfterShow()
+    {
+        if (!_maximizeOnShow) return;
+        _maximizeOnShow = false;
+        if (_window.Presenter is OverlappedPresenter overlapped) overlapped.Maximize();
     }
 
     /// <summary>Bounds to save: the last normal (not maximized, not full screen) rectangle.</summary>
@@ -51,9 +63,17 @@ public sealed class WindowPlacement
                 _maximized = true;
                 break;
             case OverlappedPresenterState.Restored:
+                var rect = new RectInt32(_window.Position.X, _window.Position.Y, _window.Size.Width, _window.Size.Height);
+                // Leaving full screen passes through a restored window the size of the monitor before it
+                // is maximized again; that is no size the user chose.
+                if (CoversDisplay(rect)) break;
                 _maximized = false;
-                _normal = new RectInt32(_window.Position.X, _window.Position.Y, _window.Size.Width, _window.Size.Height);
+                _normal = rect;
                 break;
         }
     }
+
+    private static bool CoversDisplay(RectInt32 rect) =>
+        DisplayArea.GetFromRect(rect, DisplayAreaFallback.None)?.OuterBounds is { } d
+        && rect.X <= d.X && rect.Y <= d.Y && rect.X + rect.Width >= d.X + d.Width && rect.Y + rect.Height >= d.Y + d.Height;
 }

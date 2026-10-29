@@ -100,16 +100,36 @@ source with a retry hint, up to twice. A rate limit stops all requests of that s
 embedded WebView2 with a throw-away profile) or Paste cookies. Only the account cookies are kept,
 encrypted, and sent only to the source's domains.
 
+## Library and history
+
+**Save to library** (gallery screen, reader toolbar) downloads every page through the source, with
+the same politeness, retries and limits as reading; a rate limit or a sign-in requirement stops the
+download and keeps its pages. Downloads are queued (one per source at a time), can be paused,
+resumed and cancelled, and continue after a restart. Each saved gallery is one `.cbz` file (ZIP,
+every entry stored, never recompressed) with `ComicInfo.xml` for other comic readers and
+`hentai-reader.json` ([archive format 1](../contract/archive/README.md)); reading progress and the
+gallery's zoom, width mode and gaps are written back into it when you leave the reader.
+
+**Library** lists the saved galleries of all library folders (Settings → Library: add folders, choose
+where new saves go, remove a folder moving its galleries or keeping the files). Archives copied into a
+library folder by hand appear within seconds; comic archives from other programs are listed by file
+name. **History** lists every gallery opened in the reader and continues it at the saved page with
+its own zoom. Settings also choose the **start page** and the **page cache folder** (moved in the
+background while you read); the star left of a source's search box saves that search as the source's
+default.
+
 ## Data
 
 Per user, in `%LOCALAPPDATA%\HentaiReader` (override with the `HENTAIREADER_DATA` environment
-variable, used by tests):
+variable, used by tests; the default library folder is then `Library` inside it):
 
-- `preferences.json` — UI language, adult confirmation, last source, reader settings, source
-  settings, window size and position
-- `progress.json` — reading position per source and gallery
-- `cache/pages/` — page images of online reading (`index.json` + SHA-256 named files), size limit in
-  Settings
+- `preferences.json` — UI language, adult confirmation, last source, start page, reader settings,
+  source settings and default searches, page cache folder, window size and position
+- `library.db` — SQLite: library folders, saved archives, history, reading progress, per-gallery
+  reader settings, downloads (imports the 0.3 `progress.json` once)
+- `covers/` — small cover thumbnails of history entries
+- `cache/pages/` — page images of online reading (`index.json` + SHA-256 named files), size limit and
+  folder in Settings
 - `webview/` — the embedded sign-in browser's profile, deleted after each sign-in
 - `sources/<id>/storage.json` — the source's `storage` values
 - `sources/<id>/cookies.bin` — the source's cookie jar, encrypted with DPAPI for the current user

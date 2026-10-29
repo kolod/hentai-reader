@@ -22,6 +22,21 @@ public sealed class Preferences
     public int PageGap { get; set; } = 8;
     /// <summary>Disk cache limit for page images in MB (256–10240, FR-023).</summary>
     public int CacheLimitMb { get; set; } = 1024;
+    /// <summary>
+    /// History may fetch a missing cover through the source (getGallery, then its cover image) when
+    /// neither a saved copy nor the page cache has the first page. Off: History makes no requests.
+    /// </summary>
+    public bool NetworkCovers { get; set; }
+    public const string StartLastSource = "last-source", StartHistory = "history", StartLibrary = "library", StartSourcePrefix = "source:";
+
+    /// <summary>Screen shown at start (FR-021): last-source, source:&lt;id&gt;, history or library.</summary>
+    public string StartPage { get; set; } = StartLastSource;
+    /// <summary>Folder of the page cache (null = %LOCALAPPDATA%\HentaiReader\cache\pages), FR-024.</summary>
+    public string? CacheFolder { get; set; }
+    /// <summary>The previous cache folder while a move runs (continues after a restart).</summary>
+    public string? CacheMoveFrom { get; set; }
+    /// <summary>Default search per source: query text and filter values (FR-022).</summary>
+    public Dictionary<string, DefaultQuery> DefaultQueries { get; set; } = new();
     /// <summary>Main window bounds when it was last closed.</summary>
     public WindowBounds? Window { get; set; }
     /// <summary>Per-source setting values (sourceId → settingId → value), FR-026.</summary>
@@ -75,6 +90,20 @@ public static class AppPaths
     public static string SourceData(string id) => Path.Combine(Data, "sources", id);
     public static string Progress => Path.Combine(Data, "progress.json");
     public static string PageCache => Path.Combine(Data, "cache", "pages");
+    /// <summary>Library database: folders, saved archives, history, progress, downloads (006).</summary>
+    public static string Database => Path.Combine(Data, "library.db");
+    /// <summary>Small cover thumbnails of history entries.</summary>
+    public static string Covers => Path.Combine(Data, "covers");
+    /// <summary>
+    /// Library folder created on first use: Documents\Hentai Reader, or Library inside the data folder
+    /// when HENTAIREADER_DATA is set (test runs, portable setups).
+    /// </summary>
+    public static string DefaultLibrary => Environment.GetEnvironmentVariable("HENTAIREADER_DATA") is { Length: > 0 }
+        ? Path.Combine(Data, "Library")
+        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Hentai Reader");
     /// <summary>Throw-away embedded browser profiles for sign-in (deleted after use).</summary>
     public static string WebView => Path.Combine(Data, "webview");
 }
+
+/// <summary>A source's saved default search (star button).</summary>
+public sealed record DefaultQuery(string Text, System.Text.Json.Nodes.JsonObject Filters);

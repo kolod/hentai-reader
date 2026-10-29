@@ -25,13 +25,19 @@ public sealed class PageResolveException(CallError error) : Exception(error.Mess
 /// Resolves a page through the source (getPageUrl, with a RetryHint after failures) and downloads
 /// its image. A download that takes longer than <see cref="Timeout"/> is abandoned and the source
 /// is asked again: a stalled image server (E-Hentai's H@H) rarely recovers, while a new location
-/// usually comes from another one. After <see cref="AutoRetries"/> such attempts a
-/// <see cref="TimeoutException"/> leaves the page to the user's Retry.
+/// usually comes from another one. The same happens after an HTTP error of the image server (with
+/// the status in the hint and a growing pause). After <see cref="AutoRetries"/> such attempts the
+/// error leaves the page to the user's Retry.
 /// </summary>
 public sealed class PageImageLoader(SourceSession session, IReadOnlyDictionary<string, string>? settings = null)
 {
     public TimeSpan Timeout { get; init; } = TimeSpan.FromSeconds(20);
     public int AutoRetries { get; init; } = 2;
+    /// <summary>Pause before the first retry after an HTTP error; doubled for each further one.</summary>
+    public TimeSpan RetryDelay { get; init; } = TimeSpan.FromSeconds(1);
+
+    private static bool Retryable(HttpRequestException e) =>
+        e.StatusCode is null || (int)e.StatusCode >= 500 || (int)e.StatusCode is 403 or 404 or 408 or 410;
 
     /// <param name="onResolved">Called with every PageImage before its download (exact sizes, state).</param>
     public async Task<byte[]> LoadAsync(JsonObject gallery, int index, IPageAttempts page, Action<JsonNode>? onResolved, CancellationToken token)
@@ -56,6 +62,15 @@ public sealed class PageImageLoader(SourceSession session, IReadOnlyDictionary<s
                 page.FailedStatus = null;
                 if (page.Attempts >= AutoRetries) throw new TimeoutException($"page {index + 1}: image did not arrive in {Timeout.TotalSeconds:0} s");
                 page.Attempts++;
+            }
+            catch (HttpRequestException e) when (Retryable(e) && page.Attempts < AutoRetries)
+            {
+                // A failing image server (5xx) or a location that no longer exists (404/410): ask the
+                // source again with the status (Hitomi then refreshes its gg.js), after a growing pause
+                // (Constitution VI). Limits (429/509) are not retried here; they stop the source.
+                page.FailedStatus = (int?)e.StatusCode;
+                page.Attempts++;
+                await Task.Delay(RetryDelay * (1 << (page.Attempts - 1)), token);
             }
         }
     }

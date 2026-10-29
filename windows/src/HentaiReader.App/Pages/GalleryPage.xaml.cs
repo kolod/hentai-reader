@@ -3,6 +3,7 @@ using HentaiReader.App.Controls;
 using HentaiReader.App.Images;
 using HentaiReader.App.Localization;
 using HentaiReader.App.Services;
+using HentaiReader.Host.Data;
 using HentaiReader.Host.Engine;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -19,6 +20,7 @@ public sealed partial class GalleryPage : Page
     private string? _webUrl;
     private JsonObject? _gallery;
     private CancellationTokenSource _cts = new();
+    private SaveInfo? _save;
 
     /// <summary>Source and gallery shown and fully loaded; going back to it reloads nothing (US2).</summary>
     private string? _loadedKey;
@@ -29,6 +31,11 @@ public sealed partial class GalleryPage : Page
         OpenInBrowser.Content = Strings.Get("Gallery_OpenInBrowser");
         ReadButton.Content = Strings.Get("Gallery_Read");
         ContinueButton.Content = Strings.Get("Gallery_Continue");
+        var cancel = Strings.Get("Save_Cancel");
+        ToolTipService.SetToolTip(CancelSaveButton, cancel);
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(CancelSaveButton, cancel);
+        Loaded += (_, _) => SaveTracker.Changed += OnSaveChanged;
+        Unloaded += (_, _) => SaveTracker.Changed -= OnSaveChanged;
     }
 
     protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -38,6 +45,7 @@ public sealed partial class GalleryPage : Page
         if (e.NavigationMode == NavigationMode.Back && key == _loadedKey)
         {
             ShowProgress();
+            ShowSave();
             return;
         }
 
@@ -48,6 +56,9 @@ public sealed partial class GalleryPage : Page
         _loadedKey = null;
         _gallery = null;
         ReadButton.IsEnabled = false;
+        SaveButton.IsEnabled = false;
+        SaveText.Text = Strings.Get("Save_ToLibrary");
+        CancelSaveButton.Visibility = Visibility.Collapsed;
         ContinueButton.Visibility = Visibility.Collapsed;
         ProgressText.Text = "";
         ErrorBar.IsOpen = false;
@@ -86,6 +97,7 @@ public sealed partial class GalleryPage : Page
         Render(res.Value!.AsObject());
         _loadedKey = key;
         ShowProgress();
+        ShowSave();
     }
 
     protected override void OnNavigatedFrom(NavigationEventArgs e) => _cts.Cancel();
@@ -153,36 +165,82 @@ public sealed partial class GalleryPage : Page
         if (e.ClickedItem is JsonObject page) OpenReader(page["index"]?.GetValue<int>() ?? 0, 0);
     }
 
+    private GalleryKey? Key => _args is null || _gallery is null ? null : new GalleryKey(_args.Source.Id, _gallery["id"]!.GetValue<string>());
+
     /// <summary>Saved progress: "Page 40 of 120" with Continue, or Finished (FR-019).</summary>
-    private void ShowProgress()
+    private async void ShowProgress()
     {
-        if (_args is null || _gallery is null) return;
-        var progress = AppServices.Progress.Get(_args.Source.Id, _gallery["id"]!.GetValue<string>());
-        var resumable = progress is { Read: false } && (progress.Page > 0 || progress.Offset > 0);
+        if (Key is not { } key) return;
+        var progress = await (await AppServices.Library).Progress.GetAsync(key);
+        if (Key != key) return;
+        var resumable = progress is { Finished: false } && (progress.Page > 0 || progress.Offset > 0);
         ContinueButton.Visibility = resumable ? Visibility.Visible : Visibility.Collapsed;
         ReadButton.Content = Strings.Get(resumable ? "Gallery_ReadFromStart" : "Gallery_Read");
         ReadButton.Style = (Style)Application.Current.Resources[resumable ? "DefaultButtonStyle" : "AccentButtonStyle"];
         ProgressText.Text = progress switch
         {
-            { Read: true } => Strings.Get("Gallery_Finished"),
+            { Finished: true } => Strings.Get("Gallery_Finished"),
             not null when resumable => Strings.Format("Gallery_Progress", progress.Page + 1, progress.PageCount),
             _ => "",
         };
     }
 
+    // --- save to library (006 US1) ----------------------------------------------------------------
+
+    private void OnSaveChanged(GalleryKey key)
+    {
+        if (Key == key) DispatcherQueue.TryEnqueue(ShowSave);
+    }
+
+    private async void ShowSave()
+    {
+        if (Key is not { } key) return;
+        var info = await SaveTracker.GetAsync(key);
+        if (Key != key) return;
+        // A late answer must not show fewer saved pages than already shown.
+        if (_save?.Download is { } shown && info.Download is { } now && shown.Id == now.Id && shown.State == now.State && now.PagesDone < shown.PagesDone) return;
+        _save = info;
+        SaveText.Text = info.Text;
+        SaveIcon.Glyph = info.IsSaved ? "" : "";   // Library / Download
+        ToolTipService.SetToolTip(SaveButton, info.ToolTip);
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(SaveButton, info.Text);
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetItemStatus(SaveButton, info.Download?.State.ToString() ?? (info.IsSaved ? "Saved" : "NotSaved"));
+        SaveButton.IsEnabled = _gallery is not null && (_gallery["pages"] as JsonArray)?.Count > 0;
+        CancelSaveButton.Visibility = info.CanCancel ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private async void SaveButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_save is null || _args is null) return;
+        var saved = await SaveTracker.ClickAsync(_save, _args.Source, _gallery);
+        if (saved is not null)
+        {
+            var progress = await (await AppServices.Library).Progress.GetAsync(saved.Archive.Key);
+            Frame.Navigate(typeof(ReaderPage), ReaderPage.Args.Offline(saved, progress?.Page ?? 0, progress?.Offset ?? 0));
+        }
+        ShowSave();
+    }
+
+    private async void CancelSaveButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_save is null) return;
+        await SaveTracker.CancelAsync(_save);
+        ShowSave();
+    }
+
     /// <summary>The reader replaces this page in the same window (FR-001).</summary>
     private void ReadButton_Click(object sender, RoutedEventArgs e) => OpenReader(0, 0);
 
-    private void ContinueButton_Click(object sender, RoutedEventArgs e)
+    private async void ContinueButton_Click(object sender, RoutedEventArgs e)
     {
-        if (_args is null || _gallery is null) return;
-        var progress = AppServices.Progress.Get(_args.Source.Id, _gallery["id"]!.GetValue<string>());
+        if (Key is not { } key) return;
+        var progress = await (await AppServices.Library).Progress.GetAsync(key);
         OpenReader(progress?.Page ?? 0, progress?.Offset ?? 0);
     }
 
     private void OpenReader(int page, double offset)
     {
-        if (_gallery is not null && _args is not null) Frame.Navigate(typeof(ReaderPage), new ReaderPage.Args(_args.Source, _gallery, page, offset));
+        if (_gallery is not null && _args is not null) Frame.Navigate(typeof(ReaderPage), ReaderPage.Args.Online(_args.Source, _gallery, page, offset));
     }
 
     private async void OpenInBrowser_Click(object sender, RoutedEventArgs e)

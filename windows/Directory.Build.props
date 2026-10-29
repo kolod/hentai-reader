@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <!-- The one version of the Windows app: assemblies, installer, file names, windows-vX.Y.Z tag. -->
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Authors>kolod</Authors>
     <Product>Hentai Reader</Product>
     <!-- Repository root: contract/, sources/ and fixtures are linked from there, never copied. -->

@@ -128,7 +128,8 @@ current code are from `main` at `208b466` (app 0.2.0, contract 1.1.1).
   monitor without title bar and taskbar but remains a normal top-level window (no exclusive mode;
   Alt+Tab, notifications and display changes work). Leaving restores `AppWindowPresenterKind.Default`
   plus the saved `OverlappedPresenter` state (maximized or the previous rect). F11 is a window-level
-  accelerator (works on every page); Escape leaves full screen in the reader. In the reader, full
+  accelerator (works on every page) and the only key for full screen (Escape only navigates since
+  the 2026-10-29 amendment of FR-003). In the reader, full
   screen also sets `NavigationView.IsPaneVisible = false`; leaving the reader restores the pane.
 - **Alternatives**: manual borderless style via Win32 (`WS_POPUP`) — the presenter does this
   correctly per monitor and DPI.

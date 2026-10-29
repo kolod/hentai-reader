@@ -12,7 +12,7 @@ SourcePage (cached) ──Read/Continue──▶ ... GalleryPage (cached) ──
 | Input | Reader | Other pages |
 |-------|--------|-------------|
 | Back button, Alt+Left, mouse back button | back to gallery | back (existing) |
-| Escape | full screen → leave full screen; otherwise back to gallery | — |
+| Escape | back to gallery (full screen unchanged) | back within the section; on its first page, close the app (amended 2026-10-29, FR-003) |
 | F11 | toggle full screen (also hides the toolbar; the pane is never shown in the reader) | toggle full screen (pane stays) |
 
 ## Reader keys

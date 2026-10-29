@@ -16,15 +16,20 @@
 
         <Grid ColumnSpacing="8">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="QueryBox" KeyDown="QueryBox_KeyDown" />
-            <Button x:Name="SearchButton" Grid.Column="1" Style="{StaticResource AccentButtonStyle}" Click="SearchButton_Click" />
-            <DropDownButton x:Name="FiltersButton" Grid.Column="2">
+            <!-- Default search of this source (006 FR-022): click saves, Ctrl+click clears. -->
+            <Button x:Name="DefaultQueryButton" AutomationProperties.AutomationId="DefaultQueryButton" Click="DefaultQueryButton_Click">
+                <FontIcon x:Name="DefaultQueryIcon" Glyph="&#xE734;" />
+            </Button>
+            <TextBox x:Name="QueryBox" Grid.Column="1" KeyDown="QueryBox_KeyDown" TextChanged="QueryBox_TextChanged" />
+            <Button x:Name="SearchButton" Grid.Column="2" Style="{StaticResource AccentButtonStyle}" Click="SearchButton_Click" />
+            <DropDownButton x:Name="FiltersButton" Grid.Column="3">
                 <DropDownButton.Flyout>
-                    <Flyout x:Name="FiltersFlyout" Placement="BottomEdgeAlignedRight" Closed="FiltersFlyout_Closed">
+                    <Flyout x:Name="FiltersFlyout" Placement="BottomEdgeAlignedRight" Opened="FiltersFlyout_Opened" Closed="FiltersFlyout_Closed">
                         <StackPanel Spacing="12">
                             <ContentPresenter x:Name="FilterHost" />
                             <Button x:Name="ResetButton" Click="ResetButton_Click" />

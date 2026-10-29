@@ -2,8 +2,8 @@ using System.Text.Json.Nodes;
 using HentaiReader.App.Localization;
 using HentaiReader.App.Reader;
 using HentaiReader.App.Services;
+using HentaiReader.Host.Data;
 using HentaiReader.Host.Reading;
-using HentaiReader.Host.Storage;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
@@ -23,7 +23,12 @@ namespace HentaiReader.App.Pages;
 /// </summary>
 public sealed partial class ReaderPage : Page, IPageInput
 {
-    public sealed record Args(SourceEntry Source, JsonObject Gallery, int StartPage = 0, double StartOffset = 0);
+    /// <summary>What to read: a gallery online through its source, or a saved copy (006).</summary>
+    public sealed record Args(SourceEntry? Source, JsonObject? Gallery, LibraryItem? Saved, int StartPage = 0, double StartOffset = 0)
+    {
+        public static Args Online(SourceEntry source, JsonObject gallery, int page = 0, double offset = 0) => new(source, gallery, null, page, offset);
+        public static Args Offline(LibraryItem saved, int page = 0, double offset = 0) => new(null, null, saved, page, offset);
+    }
 
     private const double MinZoom = 0.5, MaxZoom = 3, ZoomStep = 0.1;
     private static readonly TimeSpan ToolbarDelay = TimeSpan.FromSeconds(2);
@@ -43,6 +48,8 @@ public sealed partial class ReaderPage : Page, IPageInput
     public ReaderPage()
     {
         InitializeComponent();
+        Loaded += (_, _) => SaveTracker.Changed += OnSaveChanged;
+        Unloaded += (_, _) => SaveTracker.Changed -= OnSaveChanged;
         PageSlot.RetryRequested += OnRetryRequested;
         Unloaded += (_, _) => PageSlot.RetryRequested -= OnRetryRequested;
         _saveTimer.Tick += (_, _) =>
@@ -69,6 +76,7 @@ public sealed partial class ReaderPage : Page, IPageInput
         // Dragging the scrubber previews the target; the jump happens on release.
         // The scroll viewer handles pointer moves; the toolbar still wants to see them.
         Root.AddHandler(PointerMovedEvent, new PointerEventHandler(Root_PointerMoved), handledEventsToo: true);
+        Strip.PointerWheelChanged += Strip_PointerWheelChanged;
         Scrubber.AddHandler(PointerPressedEvent, new PointerEventHandler((_, _) => _scrubbing = true), handledEventsToo: true);
         Scrubber.AddHandler(PointerCaptureLostEvent, new PointerEventHandler((_, _) => EndScrub()), handledEventsToo: true);
         Scrubber.AddHandler(PointerReleasedEvent, new PointerEventHandler((_, _) => EndScrub()), handledEventsToo: true);
@@ -83,25 +91,70 @@ public sealed partial class ReaderPage : Page, IPageInput
         AutomationProperties.SetName(button, text);
     }
 
-    protected override void OnNavigatedTo(NavigationEventArgs e)
+    protected override async void OnNavigatedTo(NavigationEventArgs e)
     {
         if (e.Parameter is not Args args) return;
         _args = args;
+        if (MainWindow.Instance is { } window)
+        {
+            window.FullScreen.Changed += OnFullScreenChanged;
+            OnFullScreenChanged(window.FullScreen.IsOn);
+            // The reader always takes the whole window; navigation comes back with the gallery.
+            window.NavigationPaneVisible = false;
+        }
         var preferences = AppServices.Preferences;
-        _session = new ReaderSession(args.Source, args.Gallery, AppServices.PageCache, preferences.ReadingWidth)
+        IPageProvider provider;
+        try
+        {
+            provider = args.Saved is { } saved
+                ? await Task.Run(() => new ArchivePageProvider(saved.FullPath, saved.Archive.Key, saved.Archive.Title, saved.Archive.Pages))
+                : new OnlinePageProvider(args.Source!.Session!, args.Source.Id, args.Source.Settings?.Values, args.Gallery!, AppServices.PageCache);
+        }
+        catch (Exception ex) when (ex is IOException or InvalidDataException or UnauthorizedAccessException)
+        {
+            // The saved copy cannot be opened (moved, damaged): back to where the user came from.
+            MainWindow.Instance?.GoBack();
+            return;
+        }
+        var library = await AppServices.Library;
+        var remembered = await library.ReaderSettings.GetAsync(provider.Key);
+        var needsCover = (await library.History.GetAsync(provider.Key))?.CoverFile is null;
+        await library.History.TouchAsync(provider.Key, provider.Title, provider.Sizes.Count, library.Now);
+        if (_args != args)
+        {
+            provider.Dispose();   // another gallery was opened meanwhile
+            return;
+        }
+        _session = new ReaderSession(provider, preferences.ReadingWidth)
         {
             PreloadPages = Math.Clamp(preferences.PreloadPages, 3, 5),
         };
         _session.PageSizeChanged += OnPageSizeChanged;
+        if (needsCover)
+        {
+            var key = provider.Key;
+            void OnBytes(int page, byte[] bytes)
+            {
+                if (page != 0 || _session is not { } session) return;
+                session.PageBytes -= OnBytes;
+                AppServices.Track(HistoryCovers.SaveAsync(key, bytes));
+            }
+            _session.PageBytes += OnBytes;
+            // Opened further in, the first page may never load: fetch just that page for the cover
+            // (saved copy, page cache, or one download through the source).
+            if (args.StartPage > 0 && provider.Sizes.Count > 0) AppServices.Track(CoverFromFirstPageAsync(provider));
+        }
         _session.Limited += OnLimited;
         Layout.Geometry = _session.Geometry;
         Strip.ItemsSource = _session.Pages;
         _positioned = false;
         _reachedEnd = false;
-        _zoom = 1;
-        _fitWidth = preferences.FitWidth;
+        _jumpY = double.NaN;
+        // The gallery's own zoom, width mode and gaps when it was read before (FR-020).
+        _zoom = remembered?.Zoom ?? 1;
+        _fitWidth = remembered?.FitWidth ?? preferences.FitWidth;
         // Webtoons are drawn as one continuous strip: they start without gaps.
-        _gaps = preferences.PageGap > 0 && !IsWebtoon(args.Gallery);
+        _gaps = preferences.PageGap > 0 && (remembered?.Gaps ?? !IsWebtoon(args));
         _session.Geometry.SetGap(_gaps ? preferences.PageGap : 0);
         GapButton.IsChecked = _gaps;
         GapButton.IsEnabled = preferences.PageGap > 0;
@@ -110,15 +163,24 @@ public sealed partial class ReaderPage : Page, IPageInput
         Scrubber.Visibility = _session.Pages.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
         UpdateZoomText();
         LimitBar.IsOpen = false;
-        if (MainWindow.Instance is { } window)
-        {
-            window.Closed += Window_Closed;
-            window.FullScreen.Changed += OnFullScreenChanged;
-            OnFullScreenChanged(window.FullScreen.IsOn);
-            // The reader always takes the whole window; navigation comes back with the gallery.
-            window.NavigationPaneVisible = false;
-        }
         ShowChrome(true);
+        ShowSave();
+        // The viewport may already have its size (no SizeChanged will come): lay out now.
+        if (Scroller.ViewportWidth > 0) Scroller_SizeChanged(Scroller, null!);
+    }
+
+    private static async Task CoverFromFirstPageAsync(IPageProvider provider)
+    {
+        try
+        {
+            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(60));
+            var bytes = await provider.LoadAsync(0, new PageState(0, provider.Sizes.Count), null, timeout.Token);
+            await HistoryCovers.SaveAsync(provider.Key, bytes);
+        }
+        catch (Exception)
+        {
+            // No cover this time (offline, reader closed, source error); the next opening tries again.
+        }
     }
 
     protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -126,28 +188,16 @@ public sealed partial class ReaderPage : Page, IPageInput
         StopGlide();
         _saveTimer.Stop();
         _hideTimer.Stop();
-        SaveProgress();
+        SaveProgress(writeArchives: true);
         if (MainWindow.Instance is { } window)
         {
-            window.Closed -= Window_Closed;
             window.FullScreen.Changed -= OnFullScreenChanged;
             window.NavigationPaneVisible = true;
         }
         _session?.Dispose();
         _session = null;
+        _args = null;
         Strip.ItemsSource = null;
-    }
-
-    /// <summary>Escape leaves full screen first, then goes back to the gallery (FR-003).</summary>
-    public bool OnEscape()
-    {
-        if (MainWindow.Instance is { FullScreen.IsOn: true } window)
-        {
-            window.FullScreen.Leave();
-            return true;
-        }
-        MainWindow.Instance?.GoBack();
-        return true;
     }
 
     /// <summary>Keys scroll the strip, so it gets the focus (not the first toolbar button).</summary>
@@ -157,27 +207,32 @@ public sealed partial class ReaderPage : Page, IPageInput
 
     private double ColumnWidth => StripGeometry.ColumnWidthFor(ViewportWidth, AppServices.Preferences.ReadingWidth, _zoom, _fitWidth);
 
-    private static bool IsWebtoon(JsonObject gallery) =>
-        (gallery["tags"] as JsonArray ?? []).Any(t => string.Equals(t?["name"]?.GetValue<string>(), "webtoon", StringComparison.OrdinalIgnoreCase));
+    private static bool IsWebtoon(Args args) => args.Saved is { } saved
+        ? saved.Archive.Tags.Any(t => string.Equals(t.Name, "webtoon", StringComparison.OrdinalIgnoreCase))
+        : (args.Gallery?["tags"] as JsonArray ?? []).Any(t => string.Equals(t?["name"]?.GetValue<string>(), "webtoon", StringComparison.OrdinalIgnoreCase));
 
     private void Scroller_SizeChanged(object sender, SizeChangedEventArgs e)
     {
         if (_session is null || Scroller.ViewportWidth <= 0) return;
         _session.Scale = XamlRoot?.RasterizationScale ?? 1;
-        var position = _positioned ? _session.Geometry.PositionAt(Scroller.VerticalOffset) : (_args!.StartPage, _args.StartOffset);
+        var position = _positioned ? _session.Geometry.PositionAt(ScrollY) : (_args!.StartPage, _args.StartOffset);
         Relayout(position, 0);
         _positioned = true;
         if (FocusState == FocusState.Unfocused) Scroller.Focus(FocusState.Programmatic);
     }
 
-    /// <summary>Applies the current column width and puts <paramref name="position"/> at <paramref name="screenY"/>.</summary>
-    private void Relayout((int Page, double Offset) position, double screenY)
+    /// <summary>
+    /// Applies the current column width and puts <paramref name="position"/> at <paramref name="screenY"/>;
+    /// <paramref name="across"/> gives the horizontal offset for the new width (one view change for both,
+    /// a second one would cancel the first).
+    /// </summary>
+    private void Relayout((int Page, double Offset) position, double screenY, Func<double, double>? across = null)
     {
         StopGlide();
         _session!.SetColumnWidth(ColumnWidth);
         Layout.Refresh();
         Strip.UpdateLayout();
-        ScrollTo(_session.Geometry.ScrollFor(position.Page, position.Offset) - screenY);
+        ScrollTo(_session.Geometry.ScrollFor(position.Page, position.Offset) - screenY, x: across?.Invoke(_session.Geometry.ColumnWidth));
         // ChangeView to an unchanged offset raises no ViewChanged, so plan explicitly.
         Plan();
         UpdatePageIndicator();
@@ -185,28 +240,42 @@ public sealed partial class ReaderPage : Page, IPageInput
 
     private void Scroller_ViewChanged(object? sender, ScrollViewerViewChangedEventArgs e)
     {
-        if (!e.IsIntermediate) _wheelTarget = double.NaN;
+        if (!e.IsIntermediate)
+        {
+            _wheelTarget = double.NaN;
+            _acrossTarget = double.NaN;
+            _jumpY = double.NaN;
+        }
         Plan();
         if (_session is null || !_positioned) return;
-        if (Scroller.VerticalOffset + Scroller.ViewportHeight >= _session.Geometry.TotalHeight - 1) _reachedEnd = true;
+        if (ScrollY + Scroller.ViewportHeight >= _session.Geometry.TotalHeight - 1) _reachedEnd = true;
         UpdatePageIndicator();
         // Saved 5 s after scrolling stops (FR-018).
         _saveTimer.Stop();
         _saveTimer.Start();
     }
 
-    private void Window_Closed(object sender, WindowEventArgs args) => SaveProgress();
-
-    /// <summary>Page and fraction of it at the top of the view; read once the last page was fully in view.</summary>
-    private void SaveProgress()
+    /// <summary>
+    /// Page and fraction of it at the top of the view (read once the last page was fully in view) and
+    /// the reader settings, into the library; saved copies get them in their archive (FR-009, FR-020).
+    /// </summary>
+    public void SaveProgress(bool writeArchives = false)
     {
         if (_session is null || !_positioned || _session.Pages.Count == 0) return;
-        var (page, offset) = _session.Geometry.PositionAt(Scroller.VerticalOffset);
-        AppServices.Progress.Set(_session.SourceId, _session.GalleryId,
-            new ReadingProgress(page, offset, _session.Pages.Count, _reachedEnd, DateTimeOffset.UtcNow, _session.Title));
+        var (page, offset) = _session.Geometry.PositionAt(ScrollY);
+        var key = _session.Key;
+        var now = DateTimeOffset.UtcNow;
+        var progress = new Progress(page, offset, _session.Pages.Count, _reachedEnd, now);
+        var settings = new ReaderSettings(_zoom, _fitWidth, _gaps, now);
+        AppServices.Track(Task.Run(async () =>
+        {
+            var library = await AppServices.Library;
+            await library.SaveReadingAsync(key, progress, settings);
+            if (writeArchives) await library.FlushMetadataAsync();
+        }));
     }
 
-    private void Plan() => _session?.UpdateView(Scroller.VerticalOffset, Scroller.ViewportHeight);
+    private void Plan() => _session?.UpdateView(ScrollY, Scroller.ViewportHeight);
 
     /// <summary>
     /// An exact size arrived. A page entirely above the view shifts the scroll offset by exactly
@@ -216,12 +285,12 @@ public sealed partial class ReaderPage : Page, IPageInput
     {
         if (_session is null) return;
         // While gliding, the glide position is ahead of the reported offset.
-        var offset = _gliding ? _glideY : Scroller.VerticalOffset;
+        var offset = ScrollY;
         var wasAbove = _session.Geometry.TopOf(page) + _session.Geometry.HeightOf(page) - delta <= offset + 0.5;
         Layout.Refresh();
         Strip.UpdateLayout();
         if (!wasAbove || delta == 0) return;
-        if (_gliding) _glideY += delta;
+        if (_gliding && !_glideAcross) _glideY += delta;
         ScrollTo(offset + delta);
     }
 
@@ -238,12 +307,16 @@ public sealed partial class ReaderPage : Page, IPageInput
 
     private static readonly GlideProfile ArrowGlide = new(2.1, 10, 6);
     private static readonly GlideProfile PageGlide = new(7.1, 18, 10);
+    /// <summary>Left/Right: in window widths per second (the column is wider than the window then).</summary>
+    private static readonly GlideProfile AcrossGlide = new(1.2, 10, 6);
 
     private GlideProfile _glideProfile = ArrowGlide;
     private VirtualKey _glideKey;
     private int _glideDirection;
     private double _glideVelocity;
     private double _glideY;
+    private double _glideX;
+    private bool _glideAcross;
     private TimeSpan _glideLast;
     private bool _gliding;
 
@@ -252,13 +325,17 @@ public sealed partial class ReaderPage : Page, IPageInput
     /// held key moved the strip in jerks. Instead the strip moves every frame while the key is
     /// down: the speed eases in, and after release it eases out (inertia). Page keys and Space are
     /// the same, only faster: no fixed page-sized steps, so a short press never springs back.
+    /// Left/Right glide across the same way (<paramref name="across"/>).
     /// </summary>
-    private void StartGlide(VirtualKey key, int direction, GlideProfile profile)
+    private void StartGlide(VirtualKey key, int direction, GlideProfile profile, bool across = false)
     {
+        if (_gliding && _glideAcross != across) StopGlide();
         if (!_gliding)
         {
             _gliding = true;
-            _glideY = Scroller.VerticalOffset;
+            _glideAcross = across;
+            _glideY = ScrollY;
+            _glideX = Scroller.HorizontalOffset;
             _glideVelocity = 0;
             _glideLast = TimeSpan.Zero;
             Microsoft.UI.Xaml.Media.CompositionTarget.Rendering += GlideStep;
@@ -284,7 +361,7 @@ public sealed partial class ReaderPage : Page, IPageInput
         _glideLast = now;
         if (dt == 0) return;
         var p = _glideProfile;
-        var top = p.Speed * (_session?.Geometry.ColumnWidth ?? Scroller.ViewportWidth);
+        var top = p.Speed * (_glideAcross ? Scroller.ViewportWidth : _session?.Geometry.ColumnWidth ?? Scroller.ViewportWidth);
         // Key released (also when the window lost the key-up).
         if (_glideDirection != 0 && !InputKeyboardSource.GetKeyStateForCurrentThread(_glideKey).HasFlag(CoreVirtualKeyStates.Down)) _glideDirection = 0;
 
@@ -292,16 +369,42 @@ public sealed partial class ReaderPage : Page, IPageInput
         var rate = _glideDirection != 0 ? p.EaseIn : p.EaseOut;
         _glideVelocity += (target - _glideVelocity) * Math.Min(1, dt * rate);
 
-        var max = Math.Max(0, Scroller.ExtentHeight - Scroller.ViewportHeight);
-        _glideY = Math.Clamp(_glideY + _glideVelocity * dt, 0, max);
-        Scroller.ChangeView(null, _glideY, null, disableAnimation: true);
+        double position, max;
+        if (_glideAcross)
+        {
+            max = Scroller.ScrollableWidth;
+            position = _glideX = Math.Clamp(_glideX + _glideVelocity * dt, 0, max);
+            Scroller.ChangeView(_glideX, null, null, disableAnimation: true);
+        }
+        else
+        {
+            max = Math.Max(0, Scroller.ExtentHeight - Scroller.ViewportHeight);
+            position = _glideY = Math.Clamp(_glideY + _glideVelocity * dt, 0, max);
+            Scroller.ChangeView(null, _glideY, null, disableAnimation: true);
+        }
         var settled = _glideDirection == 0 && Math.Abs(_glideVelocity) < 20;
-        var atEdge = _glideY <= 0 && _glideVelocity < 0 || _glideY >= max && _glideVelocity > 0;
+        var atEdge = position <= 0 && _glideVelocity < 0 || position >= max && _glideVelocity > 0;
         if (settled || atEdge) StopGlide();
     }
 
-    private void ScrollTo(double y, bool animate = false) =>
-        Scroller.ChangeView(null, Math.Max(0, y), null, disableAnimation: !animate);
+    /// <summary>
+    /// Offset of a jump ChangeView has taken but VerticalOffset does not show yet (NaN: none). Sizes
+    /// arriving in between were measured from the old offset and the compensation was lost, so a
+    /// reader opened mid-gallery drifted by the size errors of the pages above it.
+    /// </summary>
+    private double _jumpY = double.NaN;
+
+    /// <summary>Where the view is or is about to be: glide position, pending jump, or the actual offset.</summary>
+    private double ScrollY => _gliding && !_glideAcross ? _glideY : double.IsNaN(_jumpY) ? Scroller.VerticalOffset : _jumpY;
+
+    /// <param name="x">Horizontal offset to go to as well (null: unchanged).</param>
+    private void ScrollTo(double y, bool animate = false, double? x = null)
+    {
+        y = Math.Max(0, y);
+        // An unchanged offset raises no ViewChanged, which would leave the jump pending forever.
+        _jumpY = !animate && Math.Abs(y - Scroller.VerticalOffset) >= 0.5 ? y : double.NaN;
+        Scroller.ChangeView(x is { } h ? Math.Max(0, h) : null, y, null, disableAnimation: !animate);
+    }
 
     private void JumpToPage(int page)
     {
@@ -320,7 +423,7 @@ public sealed partial class ReaderPage : Page, IPageInput
     private void UpdatePageIndicator()
     {
         if (_session is null || _session.Pages.Count == 0) return;
-        var page = _session.Geometry.PageAt(Scroller.VerticalOffset + Scroller.ViewportHeight / 3) + 1;
+        var page = _session.Geometry.PageAt(ScrollY + Scroller.ViewportHeight / 3) + 1;
         PageText.Text = Strings.Format("Reader_PageOf", page, _session.Pages.Count);
         if (_scrubbing) return;
         _syncingScrubber = true;
@@ -385,16 +488,56 @@ public sealed partial class ReaderPage : Page, IPageInput
 
     // --- zoom -------------------------------------------------------------------------------------
 
-    /// <summary>Changes the column width, keeping the strip point at <paramref name="screenY"/> in place (FR-015).</summary>
-    private void SetZoom(double zoom, double screenY)
+    /// <summary>
+    /// Changes the column width, keeping the strip point under (<paramref name="screenX"/>,
+    /// <paramref name="screenY"/>) in place (FR-015) — across too, once the page is wider than the
+    /// window (it used to stick to the left edge). Default: the middle of the view.
+    /// </summary>
+    private void SetZoom(double zoom, double screenY, double? screenX = null)
     {
         if (_session is null) return;
         zoom = Math.Clamp(Math.Round(zoom, 2), MinZoom, MaxZoom);
         if (zoom == _zoom) return;
-        var anchor = _session.Geometry.PositionAt(Scroller.VerticalOffset + screenY);
+        var x = screenX ?? Scroller.ViewportWidth / 2;
+        var anchor = _session.Geometry.PositionAt(ScrollY + screenY);
+        var oldWidth = _session.Geometry.ColumnWidth;
+        var across = (Scroller.HorizontalOffset + x - ColumnLeft(oldWidth)) / oldWidth;
         _zoom = zoom;
-        Relayout(anchor, screenY);
+        Relayout(anchor, screenY, width => across * width + ColumnLeft(width) - x);
         UpdateZoomText();
+    }
+
+    /// <summary>Left edge of the column in the scrolled content: centred while narrower than the view.</summary>
+    private double ColumnLeft(double width) => Math.Max(0, (Scroller.ViewportWidth - width) / 2);
+
+    private double _acrossTarget = double.NaN;
+
+    /// <summary>
+    /// Across the strip when it is wider than the window (arrows, Shift+wheel, tilt wheel). Steps add up
+    /// to one target while the previous animation still runs, so a turned wheel glides instead of jerking.
+    /// </summary>
+    private void ScrollAcross(double delta)
+    {
+        if (Scroller.ScrollableWidth <= 0) return;
+        var from = double.IsNaN(_acrossTarget) ? Scroller.HorizontalOffset : _acrossTarget;
+        _acrossTarget = Math.Clamp(from + delta, 0, Scroller.ScrollableWidth);
+        Scroller.ChangeView(_acrossTarget, null, null, disableAnimation: false);
+    }
+
+    /// <summary>
+    /// Shift+wheel and the tilt wheel go across. Handled on the strip, before the scroll viewer: it
+    /// scrolls down on any plain wheel turn and marks the event handled, so its own handler never saw it.
+    /// </summary>
+    private void Strip_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
+    {
+        var point = e.GetCurrentPoint(Scroller);
+        if (e.KeyModifiers.HasFlag(VirtualKeyModifiers.Control)) return;   // zoom: the scroll viewer's handler
+        if (!point.Properties.IsHorizontalMouseWheel && !e.KeyModifiers.HasFlag(VirtualKeyModifiers.Shift)) return;
+        var delta = point.Properties.MouseWheelDelta;
+        // The tilt wheel reports right as positive; Shift+wheel down (negative) also goes right.
+        var right = point.Properties.IsHorizontalMouseWheel ? delta : -delta;
+        ScrollAcross(right / 120.0 * WheelStep * Scroller.ViewportWidth);
+        e.Handled = true;
     }
 
     /// <summary>
@@ -406,7 +549,7 @@ public sealed partial class ReaderPage : Page, IPageInput
         if (_session is null) return;
         if (fit != _fitWidth || _zoom != 1)
         {
-            var anchor = _session.Geometry.PositionAt(Scroller.VerticalOffset + Scroller.ViewportHeight / 2);
+            var anchor = _session.Geometry.PositionAt(ScrollY + Scroller.ViewportHeight / 2);
             _fitWidth = fit;
             _zoom = 1;
             Relayout(anchor, Scroller.ViewportHeight / 2);
@@ -421,7 +564,7 @@ public sealed partial class ReaderPage : Page, IPageInput
         on &= gap > 0;
         GapButton.IsChecked = on;
         if (_session is null || on == _gaps) return;
-        var anchor = _session.Geometry.PositionAt(Scroller.VerticalOffset + Scroller.ViewportHeight / 2);
+        var anchor = _session.Geometry.PositionAt(ScrollY + Scroller.ViewportHeight / 2);
         _gaps = on;
         _session.Geometry.SetGap(on ? gap : 0);
         Relayout(anchor, Scroller.ViewportHeight / 2);
@@ -446,7 +589,7 @@ public sealed partial class ReaderPage : Page, IPageInput
     {
         if (!e.KeyModifiers.HasFlag(VirtualKeyModifiers.Control)) return;
         var point = e.GetCurrentPoint(Scroller);
-        SetZoom(_zoom + Math.Sign(point.Properties.MouseWheelDelta) * ZoomStep, point.Position.Y);
+        SetZoom(_zoom + Math.Sign(point.Properties.MouseWheelDelta) * ZoomStep, point.Position.Y, point.Position.X);
         e.Handled = true;
     }
 
@@ -466,12 +609,12 @@ public sealed partial class ReaderPage : Page, IPageInput
         var notches = point.Properties.MouseWheelDelta / 120.0;
         if (e.KeyModifiers.HasFlag(VirtualKeyModifiers.Control))
         {
-            SetZoom(_zoom + Math.Sign(notches) * ZoomStep, point.Position.Y);
+            SetZoom(_zoom + Math.Sign(notches) * ZoomStep, point.Position.Y, point.Position.X);
             return;
         }
         StopGlide();
         // Successive notches add up even while the previous animation is still running.
-        var from = double.IsNaN(_wheelTarget) ? Scroller.VerticalOffset : _wheelTarget;
+        var from = double.IsNaN(_wheelTarget) ? ScrollY : _wheelTarget;
         var max = Math.Max(0, Scroller.ExtentHeight - Scroller.ViewportHeight);
         _wheelTarget = Math.Clamp(from - notches * WheelStep * Scroller.ViewportHeight, 0, max);
         ScrollTo(_wheelTarget, animate: true);
@@ -489,6 +632,40 @@ public sealed partial class ReaderPage : Page, IPageInput
 
     private void BackButton_Click(object sender, RoutedEventArgs e) => MainWindow.Instance?.GoBack();
 
+    // --- save to library (006 US1): online galleries only ------------------------------------------
+
+    private SaveInfo? _save;
+
+    private void OnSaveChanged(GalleryKey key)
+    {
+        if (_session?.Key == key) DispatcherQueue.TryEnqueue(ShowSave);
+    }
+
+    private async void ShowSave()
+    {
+        if (_session is not { } session || _args?.Saved is not null)
+        {
+            SaveButton.Visibility = Visibility.Collapsed;
+            return;
+        }
+        var info = await SaveTracker.GetAsync(session.Key);
+        if (_session != session) return;
+        _save = info;
+        SaveButton.Visibility = Visibility.Visible;
+        SaveIcon.Glyph = info.IsSaved ? "" : info.Download is null ? "" : "";   // Library / Download / Pause
+        ToolTipService.SetToolTip(SaveButton, info.Text);
+        AutomationProperties.SetName(SaveButton, info.Text);
+        AutomationProperties.SetItemStatus(SaveButton, info.Download?.State.ToString() ?? (info.IsSaved ? "Saved" : "NotSaved"));
+    }
+
+    private async void SaveButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_save is null || _args is null) return;
+        // Already saved: the reader stays online; In library is shown on the gallery screen.
+        await SaveTracker.ClickAsync(_save, _args.Source, _args.Gallery);
+        ShowSave();
+    }
+
     /// <summary>
     /// The source signalled a limit: nothing more is requested until Retry (FR-021, Constitution VI).
     /// Sources with account status also show where the image limit stands.
@@ -504,7 +681,7 @@ public sealed partial class ReaderPage : Page, IPageInput
         ShowChrome(true);
 
         // No request may go out while limited, so the last known account figures are shown (FR-027).
-        if (_args?.Source.LastAccountStatus?["imageLimit"] is JsonObject limit)
+        if (_args?.Source?.LastAccountStatus?["imageLimit"] is JsonObject limit)
             LimitBar.Message = message + " " + Strings.Format("Account_ImageLimit", limit["used"]!.GetValue<double>(), limit["max"]!.GetValue<double>());
     }
 
@@ -515,11 +692,19 @@ public sealed partial class ReaderPage : Page, IPageInput
         Plan();
     }
 
-    /// <summary>The toolbar and scrubber return when the pointer is near the top or right edge (FR-017).</summary>
+    private Windows.Foundation.Point? _lastPointer;
+
+    /// <summary>
+    /// The toolbar and scrubber return when the pointer moves near the top or right edge (FR-017).
+    /// Only a real move counts: hiding the toolbar under a still pointer raises PointerMoved too, which
+    /// brought it straight back although nobody was reaching for it.
+    /// </summary>
     private void Root_PointerMoved(object sender, PointerRoutedEventArgs e)
     {
         var p = e.GetCurrentPoint(Root).Position;
-        if (p.Y < 80 || p.X > Root.ActualWidth - 80) ShowChrome(true);
+        var moved = _lastPointer is not { } last || Math.Abs(p.X - last.X) >= 1 || Math.Abs(p.Y - last.Y) >= 1;
+        _lastPointer = p;
+        if (moved && (p.Y < 80 || p.X > Root.ActualWidth - 80)) ShowChrome(true);
     }
 
     private void ShowChrome(bool show)
@@ -584,6 +769,13 @@ public sealed partial class ReaderPage : Page, IPageInput
         {
             // Held keys glide (key repeats are ignored); see GlideStep.
             if (!e.KeyStatus.WasKeyDown) StartGlide(e.Key, d, e.Key is VirtualKey.Up or VirtualKey.Down ? ArrowGlide : PageGlide);
+            e.Handled = true;
+            return;
+        }
+        if (e.Key is VirtualKey.Left or VirtualKey.Right && Scroller.ScrollableWidth > 0)
+        {
+            // Glides like Up/Down: the first repeat comes only after a pause, and repeats step unevenly.
+            if (!e.KeyStatus.WasKeyDown) StartGlide(e.Key, e.Key == VirtualKey.Right ? 1 : -1, AcrossGlide, across: true);
             e.Handled = true;
             return;
         }

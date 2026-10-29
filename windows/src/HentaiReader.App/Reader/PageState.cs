@@ -26,4 +26,7 @@ public sealed partial class PageState(int index, int total) : ObservableObject, 
 
     /// <summary>Decoded pixel width of <see cref="Image"/>; 0 when none.</summary>
     public int DecodedWidth { get; set; }
+
+    /// <summary>Pixel width of the image itself once its bytes were seen; 0 while unknown.</summary>
+    public int NaturalWidth { get; set; }
 }

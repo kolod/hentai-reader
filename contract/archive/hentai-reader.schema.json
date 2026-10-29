@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/kolod/hentai-reader/contract/archive/hentai-reader.schema.json",
+  "title": "hentai-reader.json (archive format 1)",
+  "description": "Metadata entry inside a Hentai Reader .cbz archive. Unknown fields are allowed and must be ignored by readers.",
+  "type": "object",
+  "required": ["format", "source", "title", "tags", "savedAt", "pages"],
+  "properties": {
+    "format": { "const": 1 },
+    "app": { "type": "string" },
+    "source": {
+      "type": "object",
+      "required": ["id", "galleryId"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string" },
+        "galleryId": { "type": "string", "minLength": 1 },
+        "webUrl": { "type": ["string", "null"] }
+      }
+    },
+    "title": { "type": "string" },
+    "titleOriginal": { "type": ["string", "null"] },
+    "language": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "uploader": { "type": ["string", "null"] },
+    "uploadedAt": { "type": ["string", "null"], "format": "date-time" },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "namespace": { "type": ["string", "null"] },
+          "name": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "savedAt": { "type": "string", "format": "date-time" },
+    "pages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file", "width", "height"],
+        "properties": {
+          "file": { "type": "string", "pattern": "^[0-9]{4,}\\.(webp|jpg|png|gif|avif)$" },
+          "width": { "type": "integer", "minimum": 1 },
+          "height": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "progress": {
+      "type": ["object", "null"],
+      "required": ["page", "offset", "finished", "updatedAt"],
+      "properties": {
+        "page": { "type": "integer", "minimum": 0 },
+        "offset": { "type": "number", "minimum": 0, "maximum": 1 },
+        "finished": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "reader": {
+      "type": ["object", "null"],
+      "required": ["zoom", "fitWidth", "gaps", "updatedAt"],
+      "properties": {
+        "zoom": { "type": "number", "minimum": 0.5, "maximum": 3 },
+        "fitWidth": { "type": "boolean" },
+        "gaps": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

@@ -40,6 +40,7 @@ public partial class App : Application
             .FirstOrDefault(a => a.StartsWith("--source=", StringComparison.Ordinal))?["--source=".Length..];
         _window = new MainWindow(_preferences, startSource);
         _window.Activate();
+        _window.ApplyPlacement();
         _window.StartAsync();
     }
 }

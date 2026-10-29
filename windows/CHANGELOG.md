@@ -4,6 +4,57 @@ All notable changes to this component. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+## [0.4.0] - Unreleased
+
+Requires contract 1.2 (host reports 1.2.1).
+
+### Added
+
+- Save to library (feature 006): per-source download queue through the source (page cache reused,
+  retry hints, stall timeout, rate limits and sign-in requirements stop it), pause / resume / cancel,
+  continues after a restart; Downloads screen with a count on the navigation item.
+- One `.cbz` per saved gallery: entries stored, `ComicInfo.xml`, `hentai-reader.json` (archive format
+  1); progress and reader settings written back by append-only updates (crash-safe, compacted).
+- Library screen: covers from the archives, search by title, source and read filters, three sorts,
+  open folder, delete to the Recycle Bin; several library folders with a target for new saves and
+  move-or-keep on removal; hand-placed and foreign comic archives picked up within seconds.
+- History screen: newest first with cover, progress and time; continues at the saved page with the
+  gallery's own zoom, width mode and gaps (remembered per gallery, also online).
+- Start page setting; default search per source (star button, Ctrl+click clears, listed in Settings);
+  page cache folder with a background move that continues after a restart.
+- Local database `library.db` (SQLite); the 0.3 `progress.json` is imported once.
+- Moving a library folder handles duplicates: identical pages (same page fingerprint) drop the
+  incoming copy to the Recycle Bin without asking; different pages under the same name or gallery
+  ask: keep both, replace, or keep the existing one (with "the same for the rest").
+- History covers for entries without one: from the saved copy or the page cache, and with the new
+  setting "Load covers from the network" (off by default) through the source, one visible row at a
+  time. A reader opened past the first page loads that page once for the cover.
+- Reader: Left/Right glide across a page wider than the window, Shift+wheel and the tilt wheel too;
+  zoom keeps the point under the pointer in place across as well.
+- "Open folder" and "Show in folder" bring an Explorer window already showing the folder to the
+  front (and select the file) instead of opening another.
+- `Build-Installer.ps1 -Install`: installs the new build over the installed copy and starts it.
+
+### Changed
+
+- Downloads in parallel up to the source's declared request limit.
+- Escape only navigates: back a level within the current section, and on its first page it closes
+  the app without confirmation. Full screen is F11's alone and is restored at the next start.
+- The reader's toolbar comes back only when the pointer really moves near the edge.
+
+### Fixed
+
+- A gallery opened past the first page drifted a few pages towards the start (the built-in scroll
+  anchoring and the reader's own correction both applied).
+- Long webtoons stopped showing pages (grey placeholders) until the app was left for a while: pages
+  were decoded wider than the images themselves; stalled decodes no longer block later pages.
+- Moving a library folder failed with "UNIQUE constraint failed" when the folder watcher had already
+  listed the moved file.
+- The History list showed empty rows.
+- The maximized window state was not restored at start.
+- Escape did nothing after leaving the reader until the window was clicked (focus was lost).
+- Closing the search filters without a change reloaded the results.
+
 ## [0.3.0] - Unreleased
 
 Requires contract 1.2 (host reports 1.2.0).

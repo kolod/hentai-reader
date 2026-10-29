@@ -162,7 +162,8 @@ out, enter and leave full screen.
    Ctrl+0 returns to fit width; the zoom stays for the rest of the session.
 5. **Given** the reader, **When** the user presses F11 or chooses Full screen, **Then** the window
    covers the whole monitor without navigation, title bar or taskbar, while Alt+Tab to other
-   windows keeps working; F11 or Escape leaves full screen and restores the window as it was.
+   windows keeps working; F11 leaves full screen and restores the window as it was (Escape only
+   navigates — amended 2026-10-29, see FR-003).
 6. **Given** browsing, a gallery's details or settings, **When** the user presses F11, **Then** the
    window becomes borderless full screen with the navigation still shown; opening the reader keeps
    full screen and hides the navigation; going back shows it again, still in full screen.
@@ -285,9 +286,11 @@ drop to zero.
   window in place of browsing; no additional window is opened.
 - **FR-002**: Leaving the reader MUST return to the gallery's details, and leaving those to the search,
   with query, filters, loaded results and scroll position unchanged and without repeating requests.
-- **FR-003**: Back MUST be available by the Back button, Escape (when not in full screen), Alt+Left and
-  the mouse back button. In full screen, the first Escape in the reader leaves full screen; the next
-  one goes back.
+- **FR-003**: Back MUST be available by the Back button, Escape, Alt+Left and the mouse back button.
+  *Amended 2026-10-29:* Escape only navigates and never changes full screen (F11 alone does): it goes
+  back a level within the current section (a navigation item: a source, History, Library, Downloads,
+  Settings), and on the section's first page it closes the app without confirmation, so a few
+  presses always quit. An open dialog or flyout takes Escape first.
 
 **Strip**
 
@@ -407,6 +410,8 @@ drop to zero.
 
 - **FR-035**: The main window MUST reopen with its last size, position and maximized state (also
   after the restart for a language change); a saved place no longer on any display is ignored.
+  *Amended 2026-10-29:* a window closed in full screen reopens in full screen, entered on top of the
+  restored size, position and maximized state, so F11 returns to them.
 
 **Localization**
 

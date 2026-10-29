@@ -38,6 +38,11 @@ public sealed partial class SettingsPage : Page
         FitWidthSwitch.OnContent = Strings.Get("Settings_On");
         FitWidthSwitch.OffContent = Strings.Get("Settings_Off");
         GapHint.Text = Strings.Get("Settings_PageGapHint");
+        NetworkCoversSwitch.Header = Strings.Get("Settings_NetworkCovers");
+        NetworkCoversSwitch.OnContent = Strings.Get("Settings_On");
+        NetworkCoversSwitch.OffContent = Strings.Get("Settings_Off");
+        NetworkCoversHint.Text = Strings.Get("Settings_NetworkCoversHint");
+        NetworkCoversSwitch.Toggled += (_, _) => SaveReaderSettings();
         CacheLimitBox.Header = Strings.Get("Settings_CacheLimit");
         ClearCacheButton.Content = Strings.Get("Settings_ClearCache");
         SourcesHeader.Text = Strings.Get("Settings_Sources");
@@ -79,9 +84,13 @@ public sealed partial class SettingsPage : Page
         CacheLimitBox.ItemsSource = limits;
         CacheLimitBox.SelectedItem = limits.FirstOrDefault(o => o.Tag == args.Preferences.CacheLimitMb.ToString()) ?? limits[2];
         ShowCacheSize();
+        NetworkCoversSwitch.IsOn = args.Preferences.NetworkCovers;
 
         SourcesPanel.Children.Clear();
         foreach (var source in args.Sources.Where(s => s.IsAvailable)) SourcesPanel.Children.Add(BuildSource(source));
+        BuildStartPage(args);
+        BuildCacheFolder();
+        _ = BuildLibraryAsync();
         _ready = true;
     }
 
@@ -110,6 +119,7 @@ public sealed partial class SettingsPage : Page
         preferences.ReadingWidth = (int)WidthSlider.Value;
         preferences.FitWidth = FitWidthSwitch.IsOn;
         preferences.PageGap = (int)GapSlider.Value;
+        preferences.NetworkCovers = NetworkCoversSwitch.IsOn;
         if (CacheLimitBox.SelectedItem is Option limit)
         {
             preferences.CacheLimitMb = int.Parse(limit.Tag);
@@ -173,6 +183,7 @@ public sealed partial class SettingsPage : Page
         {
             panel.Children.Add(BuildAccount(source, message));
         }
+        if (BuildDefaultQuery(source) is { } defaultQuery) panel.Children.Add(defaultQuery);
         return expander;
     }
 

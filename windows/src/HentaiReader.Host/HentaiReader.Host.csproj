@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- Source host: Jint + AngleSharp implementation of contract 1.1. No UI dependency, so the
-       parity suite runs headless. -->
+  <!-- Source host: Jint + AngleSharp implementation of the contract, plus the library (SQLite
+       database, archives, downloads). No UI dependency, so the tests run headless. -->
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>HentaiReader.Host</RootNamespace>
@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Jint" Version="4.17.0" />
     <PackageReference Include="AngleSharp" Version="1.8.5" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.13" />
   </ItemGroup>
 
   <ItemGroup>
