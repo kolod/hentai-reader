@@ -33,6 +33,8 @@ public sealed class DownloadQueueTests : IAsyncDisposable
         public int AllowViewers { get; set; } = int.MaxValue;
         /// <summary>Delay per image, to observe the queue while a download runs.</summary>
         public int ImageDelayMs { get; set; }
+        /// <summary>While set, images are held until it completes: a download stays running as long as the test needs.</summary>
+        public TaskCompletionSource? Hold { get; set; }
         private int _viewers;
 
         public Task<RawResponse> SendAsync(RawRequest request, CancellationToken token = default)
@@ -59,6 +61,7 @@ public sealed class DownloadQueueTests : IAsyncDisposable
         private async Task<RawResponse> Delayed(RawResponse response, CancellationToken token)
         {
             if (ImageDelayMs > 0) await Task.Delay(ImageDelayMs, token);
+            if (Hold is { } hold) await hold.Task.WaitAsync(token);
             return response;
         }
     }
@@ -249,7 +252,9 @@ public sealed class DownloadQueueTests : IAsyncDisposable
     [Fact]
     public async Task One_download_per_source_others_wait_two_sources_run_together()
     {
-        var site = new Site { ImageDelayMs = 150 };
+        // Images are held until both sources run: a timed delay let the first gallery finish on a slow
+        // CI runner before the other source's gallery was even queued.
+        var site = new Site { Hold = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously) };
         var (library, _, _, cache) = await CreateAsync(site);
         var session = _sessions[0];
         var second = await SourceSession.OpenAsync(await File.ReadAllTextAsync(Path.Combine(RepoPaths.Sources, "ehentai", "ehentai.js"), Token),
@@ -268,10 +273,13 @@ public sealed class DownloadQueueTests : IAsyncDisposable
         var g3 = Gallery(4);
         g3["id"] = "e/3333333/3333333333";
         var done = Task.WhenAll(WaitFor(queue, 1, DownloadState.Done), WaitFor(queue, 2, DownloadState.Done), WaitFor(queue, 3, DownloadState.Done));
+        var bothRunning = Task.WhenAll(WaitFor(queue, 1, DownloadState.Downloading), WaitFor(queue, 3, DownloadState.Downloading));
 
         await queue.EnqueueAsync("a", Gallery(4), null, Token);
         await queue.EnqueueAsync("a", g2, null, Token);
         await queue.EnqueueAsync("b", g3, null, Token);
+        await bothRunning;
+        site.Hold.SetResult();
         await done;
 
         var order = states.ToList();
