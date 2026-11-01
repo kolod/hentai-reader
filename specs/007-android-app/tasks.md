@@ -405,7 +405,7 @@ the task.
   - Aligned with circuitopedia's release system: `build` job in the `release` environment (approval, read-only, only job with the secrets `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`), tag must be on `main`, Gradle wrapper validation, actions pinned by SHA, `app/keystore.properties` written and deleted by CI, version from the tag (`-PappVersionName`, `-PappVersionCode` = run number), separate `publish` job with generated release notes; application ID `io.github.kolod.hentaireader`.
 - [X] T086 [P] Docs: `D/README.md` (build, test, desktop native prerequisites, signing, install); `D/CHANGELOG.md` `[0.1.0]` with everything added; `specs/product-overview.md` roadmap item 7 marked done; root `README.md` Android section (Constitution X).
 - [ ] T087 Run the full [quickstart.md](quickstart.md): automated checks, then the manual checklist on a real phone (reference and 3 GB). Record unchecked items as follow-up tasks here.
-  - 2026-11-01, automated: `:host:test` (187), `:app:lintDebug` (6 known warnings), `l10n:android --check`, 4 instrumented tests on the emulator, signed `assembleRelease` with a test key: all pass.
+  - 2026-11-01, automated: `:host:test` (185), `:app:lintDebug` (6 known warnings), `l10n:android --check`, 4 instrumented tests on the emulator, signed `assembleRelease` with a test key: all pass.
   - Open, needs a real phone (reference and 3 GB): T081 measurements, T082 rest, the manual checklist (pinch and rotation, SD card and revoked folder access, Windows ↔ Android archive exchange, real sign-in and pasted cookies, 30 min in the background without requests, storage nearly full).
 
 ---
