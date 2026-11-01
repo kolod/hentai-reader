@@ -131,7 +131,8 @@ function main() {
   for (const [tag, folder] of Object.entries(LANGUAGES)) {
     const xml = generate(readResw(join(RESW, tag, "Resources.resw")), english, families, tag);
     const file = join(RES, folder, "strings_shared.xml");
-    const current = existsSync(file) ? readFileSync(file, "utf8") : null;
+    // A checkout may have turned LF into CRLF; only the content matters.
+    const current = existsSync(file) ? readFileSync(file, "utf8").replace(/\r\n/g, "\n") : null;
     if (current === xml) continue;
     if (check) {
       stale.push(file);
