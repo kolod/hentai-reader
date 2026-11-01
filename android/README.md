@@ -58,16 +58,18 @@ To release:
 
 1. Merge to `main` through a pull request, with the version added to [CHANGELOG.md](CHANGELOG.md).
 2. Tag the merge commit `android-vX.Y.Z` and push the tag.
-3. Approve the run of [android-release](../.github/workflows/android-release.yml) (the `build`
-   job runs in the `release` environment). It refuses tags not on `main`, validates the Gradle
+3. The tag starts [android-release](../.github/workflows/android-release.yml); its `build` job
+   runs in the `release` environment. It refuses tags not on `main`, validates the Gradle
    wrapper, checks the generated strings, runs the tests and the parity suite, builds and lints the
    signed APK and checks the 40 MB limit.
 4. The `publish` job, which never sees the secrets, creates the GitHub Release with
    `hentai-reader.apk`, `hentai-reader.apk.sha256` and generated release notes.
 
-Repository setup (once): an environment `release` with required reviewers, and the secrets
-`ANDROID_KEYSTORE_BASE64` (the keystore, base64), `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`
-and `ANDROID_KEY_PASSWORD`, named as in the other projects.
+Repository setup (done): an environment `release` whose deployment rules admit the branch
+`main` and tags `android-v*`, holding the secrets `ANDROID_KEYSTORE_BASE64` (the keystore,
+base64), `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS` and `ANDROID_KEY_PASSWORD`, named as in
+the other projects. It has no required reviewers, so a pushed tag releases without a further
+step; adding reviewers there would make each run wait for an approval.
 
 To try a signed release build locally, put a `keystore.properties` next to `app/build.gradle.kts`
 (`storeFile` relative to `app/`, `storePassword`, `keyAlias`, `keyPassword`) and run

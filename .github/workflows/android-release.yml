@@ -14,8 +14,9 @@ permissions:
   contents: read
 
 jobs:
-  # Builds and signs the APK. This is the only job that can read the signing secrets; it runs in
-  # the "release" environment, so every run needs an approval, and it has no write access.
+  # Builds and signs the APK. This is the only job that can read the signing secrets: they are
+  # secrets of the "release" environment, which admits only main and android-v* tags. It has no
+  # write access.
   build:
     if: startsWith(github.ref, 'refs/tags/android-v')
     runs-on: ubuntu-latest

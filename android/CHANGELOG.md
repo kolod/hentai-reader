@@ -35,5 +35,5 @@ First Android release (feature 007). Requires contract 1.2 (host reports 1.2.1).
   downloads, page cache paused when storage is nearly full, screens restored after the system
   stops the app.
 - Release workflow for tags `android-vX.Y.Z`, the same system as the other Android projects:
-  signed only in CI after an approval, tag must be on `main`, version from the tag, signed APK
+  signed only in CI from the `release` environment, tag must be on `main`, version from the tag, signed APK
   with its SHA-256 on the GitHub Release. Application ID `io.github.kolod.hentaireader`.
