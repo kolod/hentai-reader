@@ -189,26 +189,26 @@ the task.
 
 **Independent Test**: quickstart "Shell" and the first two "Browse and read" items: Hitomi `female:glasses` with English + Japanese, three pages of results, open an E-Hentai gallery, sprite thumbnails correct, a tag tap searches.
 
-- [ ] T037 [P] [US2] `A/images/ThumbnailCache.kt`:
+- [X] T037 [P] [US2] `A/images/ThumbnailCache.kt`:
   - in-memory LRU (16 MiB) of covers and thumbnails decoded at cell size;
   - fetched through the source session (cookies, limiter, headers) per contract 1.1;
   - sprite `crop` applied; failed or refused images leave a placeholder of the same size.
-- [ ] T038 [P] [US2] `A/ui/common/ErrorPanel.kt`: per-kind messages (`Error_<Kind>_Title/_Body`), Retry, "copy details". After `RateLimited` nothing is sent to that source until Retry (FR-013 of 003).
-- [ ] T039 [US2] `A/ui/search/SearchViewModel.kt` (port `WA/ViewModels/SearchViewModel.cs`):
+- [X] T038 [P] [US2] `A/ui/common/ErrorPanel.kt`: per-kind messages (`Error_<Kind>_Title/_Body`), Retry, "copy details". After `RateLimited` nothing is sent to that source until Retry (FR-013 of 003).
+- [X] T039 [US2] `A/ui/search/SearchViewModel.kt` (port `WA/ViewModels/SearchViewModel.cs`):
   - query, declared filters (multi-language), cursor paging;
   - cancel on a new search; end and empty states;
   - `SavedStateHandle` (text, filters, cursor chain, first visible index) per [data-model.md](data-model.md#saved-screen-state-savedstatehandle).
-- [ ] T040 [US2] `A/ui/search/SearchScreen.kt`:
+- [X] T040 [US2] `A/ui/search/SearchScreen.kt`:
   - top bar (☰, search field, star placeholder wired in US6, filter button);
   - filter bottom sheet with exactly the declared filters and translated labels; closing it without a change does not reload;
   - adaptive grid (min 160 dp) of `ResultCard` (cover, title, language, type, page count, key tags);
   - append without jump.
-- [ ] T041 [P] [US2] `A/ui/gallery/GalleryViewModel.kt` + `A/ui/gallery/GalleryScreen.kt`:
+- [X] T041 [P] [US2] `A/ui/gallery/GalleryViewModel.kt` + `A/ui/gallery/GalleryScreen.kt`:
   - metadata, tags grouped by namespace (`Namespace_<ns>`), thumbnail grid with sprite crop;
   - tag tap → search in the same source; not-found message;
   - actions Read (US3), Continue/progress (US3), Save to library (US4), Open in browser.
-- [ ] T042 [US2] Wire the source list into the drawer from `SourceCatalog`, with an unavailable state and reason (003 FR-010). Remember `LastSourceId`.
-- [ ] T043 [P] [US2] Compose UI test `D/app/src/androidTest/kotlin/hentaireader/app/ShellTest.kt`: the drawer opens with ☰, closes on an item, scrim and Back; no system bars are visible; Back on the first screen finishes the activity.
+- [X] T042 [US2] Wire the source list into the drawer from `SourceCatalog`, with an unavailable state and reason (003 FR-010). Remember `LastSourceId`.
+- [X] T043 [P] [US2] Compose UI test `D/app/src/androidTest/kotlin/hentaireader/app/ShellTest.kt`: the drawer opens with ☰, closes on an item, scrim and Back; no system bars are visible; Back on the first screen finishes the activity.
 
 **Checkpoint**: browse loop works on a phone, immersive, with the hidden drawer.
 

@@ -1,9 +1,11 @@
 package hentaireader.app
 
 import android.content.Context
+import hentaireader.app.images.ThumbnailCache
 import hentaireader.app.storage.AssetScriptStore
 import hentaireader.host.Preferences
 import hentaireader.host.data.LibraryDatabase
+import hentaireader.host.engine.CallResult
 import hentaireader.host.engine.LoadException
 import hentaireader.host.http.CookieJar
 import hentaireader.host.http.LiveTransport
@@ -22,6 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 
@@ -53,6 +56,9 @@ class AppServices(context: Context) {
 
     private val sessionLock = Mutex()
     private val sessions = HashMap<String, SourceSession>()
+    /** Covers and thumbnails of every screen. */
+    val thumbnails = ThumbnailCache()
+
     private val dbLock = Mutex()
     private var db: LibraryDatabase? = null
 
@@ -89,6 +95,10 @@ class AppServices(context: Context) {
             SourceSession.open(bundle.script, "$id.js", options).also { sessions[id] = it }
         }
     }
+
+    /** Calls a source function with the user's settings for that source (005 FR-026). */
+    suspend fun call(session: SourceSession, sourceId: String, fn: String, args: List<JsonElement?>): CallResult =
+        session.call(fn, args, _prefs.value.sourceSettings[sourceId])
 
     /** The local database, created on first use (after the adult confirmation). */
     suspend fun database(): LibraryDatabase = dbLock.withLock {

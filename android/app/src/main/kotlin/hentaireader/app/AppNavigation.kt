@@ -53,6 +53,15 @@ import hentaireader.app.ui.common.LocalOpenMenu
 import hentaireader.host.Preferences
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.contentOrNull
+import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import hentaireader.app.ui.gallery.GalleryScreen
+import hentaireader.app.ui.gallery.GalleryViewModel
+import hentaireader.app.ui.search.SearchScreen
+import hentaireader.app.ui.search.SearchViewModel
 
 // Section roots (one back stack each, as the Windows navigation items) and the screens below them.
 @Serializable data class SourceRoute(val sourceId: String)
@@ -60,6 +69,8 @@ import kotlinx.serialization.Serializable
 @Serializable data object LibraryRoute
 @Serializable data object DownloadsRoute
 @Serializable data object SettingsRoute
+@Serializable data class TagSearchRoute(val sourceId: String, val query: String)
+@Serializable data class GalleryRoute(val sourceId: String, val galleryId: String, val title: String)
 
 /**
  * The navigation shell (007 FR-007, FR-008, FR-030; contracts/android-ui.md): the pane is a modal
@@ -96,6 +107,17 @@ fun AppNavigation(services: AppServices) {
                 Column(Modifier.verticalScroll(rememberScrollState()).padding(vertical = 12.dp)) {
                     Text(stringResource(R.string.Nav_Sources), style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(16.dp, 8.dp))
                     for (source in list) {
+                        // A source that cannot run stays listed with the reason (003 FR-010).
+                        if (source.error != null) {
+                            NavigationDrawerItem(
+                                label = { Column { Text(source.name); Text(stringResource(R.string.Source_Unavailable), style = MaterialTheme.typography.labelSmall) } },
+                                icon = { Icon(Icons.Filled.TravelExplore, null) },
+                                selected = false,
+                                onClick = {},
+                                modifier = Modifier.padding(horizontal = 12.dp),
+                            )
+                            continue
+                        }
                         NavigationDrawerItem(
                             label = { Text(source.name) },
                             icon = { Icon(Icons.Filled.TravelExplore, null) },
@@ -129,7 +151,19 @@ fun AppNavigation(services: AppServices) {
             NavHost(nav, startDestination = start) {
                 composable<SourceRoute> { e ->
                     val id = e.toRoute<SourceRoute>().sourceId
-                    Placeholder(list.firstOrNull { it.id == id }?.name ?: id)
+                    val vm = viewModel(key = "search:$id") { SearchViewModel(services, id, null, createSavedStateHandle()) }
+                    SearchScreen(vm, services.thumbnails, onOpenGallery = { nav.openGallery(id, it) }, onBack = null)
+                }
+                composable<TagSearchRoute> { e ->
+                    val r = e.toRoute<TagSearchRoute>()
+                    val vm = viewModel { SearchViewModel(services, r.sourceId, r.query, createSavedStateHandle()) }
+                    SearchScreen(vm, services.thumbnails, onOpenGallery = { nav.openGallery(r.sourceId, it) }, onBack = { nav.popBackStack() })
+                }
+                composable<GalleryRoute> { e ->
+                    val r = e.toRoute<GalleryRoute>()
+                    val vm = viewModel { GalleryViewModel(services, r.sourceId, r.galleryId) }
+                    GalleryScreen(vm, services.thumbnails, r.title, onBack = { nav.popBackStack() },
+                        onSearchTag = { q -> nav.navigate(TagSearchRoute(r.sourceId, q)) })
                 }
                 composable<HistoryRoute> { Placeholder(stringResource(R.string.Nav_History)) }
                 composable<LibraryRoute> { Placeholder(stringResource(R.string.Nav_Library)) }
@@ -145,6 +179,12 @@ fun AppNavigation(services: AppServices) {
 }
 
 private val SECTION_ROOTS = listOf(SourceRoute::class, HistoryRoute::class, LibraryRoute::class, DownloadsRoute::class, SettingsRoute::class)
+
+/** Opens a gallery from a result card. */
+fun NavHostController.openGallery(sourceId: String, item: JsonObject) {
+    val id = (item["id"] as? JsonPrimitive)?.contentOrNull ?: return
+    navigate(GalleryRoute(sourceId, id, (item["title"] as? JsonPrimitive)?.contentOrNull ?: ""))
+}
 
 /** Switches to a section, keeping each section's own back stack (state saved and restored). */
 fun NavHostController.openSection(route: Any) {

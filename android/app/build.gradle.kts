@@ -126,4 +126,11 @@ dependencies {
     implementation(libs.coroutines.android)
     implementation(libs.serialization.json)
     debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.test.manifest)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.junit)
+    // Compose's UI test pulls an older Espresso that fails on API 36 (InputManager.getInstance).
+    androidTestImplementation(libs.androidx.test.espresso)
 }
