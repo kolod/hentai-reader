@@ -3,7 +3,9 @@ package hentaireader.host.http
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -45,9 +47,12 @@ class LiveTransport(userAgent: String = DEFAULT_USER_AGENT) : Transport {
 
         val call = client.newBuilder().callTimeout(request.timeoutMs, TimeUnit.MILLISECONDS).build().newCall(builder.build())
         val response = call.await()
-        return response.use { r ->
-            val headers = r.headers.map { (k, v) -> k.lowercase() to v }
-            RawResponse(r.code, headers, r.body.bytes())
+        // The body is read here, not in the callback: off the caller's thread (never the UI thread).
+        return withContext(Dispatchers.IO) {
+            response.use { r ->
+                val headers = r.headers.map { (k, v) -> k.lowercase() to v }
+                RawResponse(r.code, headers, r.body.bytes())
+            }
         }
     }
 

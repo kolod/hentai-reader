@@ -60,6 +60,8 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hentaireader.app.ui.gallery.GalleryScreen
 import hentaireader.app.ui.gallery.GalleryViewModel
+import hentaireader.app.ui.reader.ReaderScreen
+import hentaireader.app.ui.reader.ReaderViewModel
 import hentaireader.app.ui.search.SearchScreen
 import hentaireader.app.ui.search.SearchViewModel
 
@@ -71,6 +73,8 @@ import hentaireader.app.ui.search.SearchViewModel
 @Serializable data object SettingsRoute
 @Serializable data class TagSearchRoute(val sourceId: String, val query: String)
 @Serializable data class GalleryRoute(val sourceId: String, val galleryId: String, val title: String)
+/** [page] = page to open at; -1 = continue at the saved position. */
+@Serializable data class ReaderRoute(val sourceId: String, val galleryId: String, val title: String, val page: Int)
 
 /**
  * The navigation shell (007 FR-007, FR-008, FR-030; contracts/android-ui.md): the pane is a modal
@@ -98,10 +102,12 @@ fun AppNavigation(services: AppServices) {
     // With gesture navigation the left edge belongs to the system's Back.
     val gestureNav = WindowInsets.systemGestures.getLeft(LocalDensity.current, LocalLayoutDirection.current) > 0
     val atSectionRoot = destination != null && SECTION_ROOTS.any { destination.hasRoute(it) }
+    val inReader = destination?.hasRoute(ReaderRoute::class) == true
 
     ModalNavigationDrawer(
         drawerState = drawer,
-        gesturesEnabled = drawer.isOpen || !gestureNav,
+        // The reader never shows the pane (005 FR-016, 007 FR-008).
+        gesturesEnabled = !inReader && (drawer.isOpen || !gestureNav),
         drawerContent = {
             ModalDrawerSheet(Modifier.safeControls()) {
                 Column(Modifier.verticalScroll(rememberScrollState()).padding(vertical = 12.dp)) {
@@ -163,7 +169,13 @@ fun AppNavigation(services: AppServices) {
                     val r = e.toRoute<GalleryRoute>()
                     val vm = viewModel { GalleryViewModel(services, r.sourceId, r.galleryId) }
                     GalleryScreen(vm, services.thumbnails, r.title, onBack = { nav.popBackStack() },
-                        onSearchTag = { q -> nav.navigate(TagSearchRoute(r.sourceId, q)) })
+                        onSearchTag = { q -> nav.navigate(TagSearchRoute(r.sourceId, q)) },
+                        onRead = { page -> nav.navigate(ReaderRoute(r.sourceId, r.galleryId, vm.gallery?.let { (it["title"] as? JsonPrimitive)?.contentOrNull } ?: r.title, page)) })
+                }
+                composable<ReaderRoute> { e ->
+                    val r = e.toRoute<ReaderRoute>()
+                    val vm = viewModel { ReaderViewModel(services, r.sourceId, r.galleryId, r.title, r.page, createSavedStateHandle()) }
+                    ReaderScreen(vm, keepScreenOn = prefs.keepScreenOn, onBack = { nav.popBackStack() })
                 }
                 composable<HistoryRoute> { Placeholder(stringResource(R.string.Nav_History)) }
                 composable<LibraryRoute> { Placeholder(stringResource(R.string.Nav_Library)) }

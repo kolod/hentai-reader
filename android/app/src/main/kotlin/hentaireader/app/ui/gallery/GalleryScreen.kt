@@ -27,6 +27,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,7 +40,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewModelScope
 import hentaireader.app.AppServices
 import hentaireader.app.R
@@ -49,6 +52,9 @@ import hentaireader.app.ui.common.ErrorInfo
 import hentaireader.app.ui.common.ErrorPanel
 import hentaireader.app.ui.common.HrTopBar
 import hentaireader.app.ui.common.rememberStrings
+import hentaireader.host.data.GalleryKey
+import hentaireader.host.data.Progress
+import hentaireader.host.data.ProgressRepository
 import hentaireader.host.engine.LoadException
 import hentaireader.host.sources.SourceSession
 import kotlinx.coroutines.launch
@@ -65,6 +71,8 @@ class GalleryViewModel(private val services: AppServices, val sourceId: String, 
     var gallery by mutableStateOf<JsonObject?>(null)
         private set
     var error by mutableStateOf<ErrorInfo?>(null)
+        private set
+    var progress by mutableStateOf<Progress?>(null)
         private set
 
     private val sourceName get() = services.sources.value?.firstOrNull { it.id == sourceId }?.name ?: sourceId
@@ -84,8 +92,18 @@ class GalleryViewModel(private val services: AppServices, val sourceId: String, 
             }
             session = s
             val result = services.call(s, sourceId, "getGallery", listOf(JsonPrimitive(galleryId)))
-            if (result.ok) gallery = result.value as JsonObject else error = ErrorInfo.of(result.error!!, sourceName)
+            if (result.ok) {
+                gallery = result.value as JsonObject
+                services.galleries.put("$sourceId|$galleryId", result.value as JsonObject)
+            } else {
+                error = ErrorInfo.of(result.error!!, sourceName)
+            }
         }
+    }
+
+    /** Saved progress (005 FR-019); refreshed when the screen comes back from the reader. */
+    fun refreshProgress() {
+        viewModelScope.launch { progress = ProgressRepository(services.database()).get(GalleryKey(sourceId, galleryId)) }
     }
 
     /** The user's explicit retry also clears a rate limit (003 FR-013). */
@@ -114,6 +132,7 @@ fun GalleryScreen(
     val strings = rememberStrings()
     val context = LocalContext.current
     val g = vm.gallery
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { vm.refreshProgress() }
     Scaffold(
         topBar = {
             HrTopBar(g?.str("title") ?: title, onBack = onBack) {
@@ -152,8 +171,23 @@ fun GalleryScreen(
                                 Meta(stringResource(R.string.Gallery_Uploader), g.str("uploader"))
                             }
                         }
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            if (onRead != null) Button(onClick = { onRead(0) }) { Text(stringResource(R.string.Gallery_Read)) }
+                        val progress = vm.progress
+                        if (progress != null) {
+                            Text(
+                                if (progress.finished) stringResource(R.string.Gallery_Finished)
+                                else stringResource(R.string.Gallery_Progress, strings.number(progress.page + 1), strings.number(progress.pageCount)),
+                                style = MaterialTheme.typography.labelLarge,
+                            )
+                        }
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            if (onRead != null) {
+                                if (progress != null && !progress.finished) {
+                                    Button(onClick = { onRead(-1) }) { Text(stringResource(R.string.Gallery_Continue)) }
+                                    OutlinedButton(onClick = { onRead(0) }) { Text(stringResource(R.string.Gallery_ReadFromStart)) }
+                                } else {
+                                    Button(onClick = { onRead(0) }) { Text(stringResource(R.string.Gallery_Read)) }
+                                }
+                            }
                             actions(g)
                         }
                         // Tags grouped by namespace, in the order the source gives them.

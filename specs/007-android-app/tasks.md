@@ -220,45 +220,45 @@ the task.
 
 **Independent Test**: quickstart "Browse and read" on a mid-range phone: a 200-page E-Hentai gallery and a long webtoon, no jump, no blank page in view, zoom, rotate, scrubber.
 
-- [ ] T044 [P] [US3] Port `WH/Reading/StripGeometry.cs` and `WH/Reading/LoadPlanner.cs` → `H/reading/StripGeometry.kt` and `H/reading/LoadPlanner.kt`. Port their tests from `WT` to `HT/reading/`:
+- [X] T044 [P] [US3] Port `WH/Reading/StripGeometry.cs` and `WH/Reading/LoadPlanner.cs` → `H/reading/StripGeometry.kt` and `H/reading/LoadPlanner.kt`. Port their tests from `WT` to `HT/reading/`:
   - (page, offset) anchor;
   - corrections above the view leave the visible content unchanged;
   - preload by pages + screen height; visible pages first; jump targets first.
-- [ ] T045 [P] [US3] `H/reading/ImageBudget.kt` per [contracts/resource-budgets.md](contracts/resource-budgets.md):
+- [X] T045 [P] [US3] `H/reading/ImageBudget.kt` per [contracts/resource-budgets.md](contracts/resource-budgets.md):
   - budget bytes and max entry (budget / 8);
   - release order behind → ahead beyond 1 page + 1 screen → rest ahead, never visible;
   - `shrink(factor)` and `restore()`.
 
   Tests `HT/reading/ImageBudgetTest.kt`.
-- [ ] T046 [P] [US3] Port `WH/Storage/PageCache.cs` → `H/storage/PageCache.kt` (same key, file naming, `index.json`, LRU) with the free-space reserve check (min(1 GiB, 10 %), skip write and raise `CacheReserveNotice` once). Tests `HT/storage/PageCacheTest.kt` (eviction, reserve via a fake free-space provider, index rebuild).
-- [ ] T047 [US3] Port `WH/Reading/PageImageLoader.cs` and `WH/Reading/PageProviders.cs` → `H/reading/PageImageLoader.kt` and `H/reading/PageProviders.kt`:
+- [X] T046 [P] [US3] Port `WH/Storage/PageCache.cs` → `H/storage/PageCache.kt` (same key, file naming, `index.json`, LRU) with the free-space reserve check (min(1 GiB, 10 %), skip write and raise `CacheReserveNotice` once). Tests `HT/storage/PageCacheTest.kt` (eviction, reserve via a fake free-space provider, index rebuild).
+- [X] T047 [US3] Port `WH/Reading/PageImageLoader.cs` and `WH/Reading/PageProviders.cs` → `H/reading/PageImageLoader.kt` and `H/reading/PageProviders.kt`:
   - online provider: `getPageUrl` through the session, cache first, 20 s stall → retry hint up to 2×, failure with Retry, rate limit stops the source, exact size from the image refines estimates;
   - archive provider stub filled in US4.
 
   Port the related `WT` tests.
-- [ ] T048 [P] [US3] `A/images/Decoder.kt`:
+- [X] T048 [P] [US3] `A/images/Decoder.kt`:
   - decode bytes at the target width: `ImageDecoder` on API 28+ (`HARDWARE` allocator where possible), `BitmapFactory` + `inSampleSize` on API 26–27;
   - `BitmapRegionDecoder` tiles for pages taller than 2 × screen height or above the max entry;
   - animated GIF/WebP as `AnimatedImageDrawable` on API 28+ (first frame on 26–27);
   - every decode on `Dispatchers.Default`, cancellable.
-- [ ] T049 [US3] `A/ui/reader/ReaderViewModel.kt` (port the logic of `WA/Reader/ReaderSession.cs`):
+- [X] T049 [US3] `A/ui/reader/ReaderViewModel.kt` (port the logic of `WA/Reader/ReaderSession.cs`):
   - pages with expected sizes and load states; position (page, offset); zoom 0.5–3.0, fit width, gaps;
   - the planner drives provider requests and decodes into `ImageBudget`;
   - progress saved 5 s after scrolling stops, on leaving and on `onStop` (005 FR-018); `SavedStateHandle` restore;
   - webtoon → no gap.
-- [ ] T050 [US3] `A/ui/reader/StripCanvas.kt` per [research R7](research.md):
+- [X] T050 [US3] `A/ui/reader/StripCanvas.kt` per [research R7](research.md):
   - one `Canvas` drawing visible slots (bitmap, tiles or placeholder of the reserved size);
   - drag and `splineBasedDecay` fling, overscroll, pinch zoom around the focal point with the anchor recomputed, horizontal pan when wider than the screen;
   - straight edges (every page at strip width), gap in the geometry;
   - centred strip with `ReadingWidth` when fit width is off and the screen is wider;
   - small overlays (progress, error + Retry) only for visible slots.
-- [ ] T051 [US3] `A/ui/reader/ReaderToolbar.kt` + `A/ui/reader/ReaderScreen.kt`:
+- [X] T051 [US3] `A/ui/reader/ReaderToolbar.kt` + `A/ui/reader/ReaderScreen.kt`:
   - tap toggles the toolbar, which auto-hides after 3 s;
   - bottom: "57 / 312" and scrubber (target bubble, jump on release);
   - top: back, title, go to page (dialog, invalid → message), fit width (lit only at exact screen width), gaps, first page, last page, save to library (US4);
   - safe-area insets; no drawer or top bar of the app; rate-limit banner with waiting time and Retry.
-- [ ] T052 [P] [US3] `A/system/KeepScreenOn.kt`: keep the screen on while the reader is shown and the last touch was < 10 min ago, if `KeepScreenOn` (FR-014).
-- [ ] T053 [US3] Wire Read/Continue/thumbnail-tap from the gallery screen and the details' progress line ("page 40 of 120", read mark) to `ProgressRepository`. Rotation and fold keep (page, offset) through the in-process configuration change (FR-015). Back returns to the details and then to the unchanged search without requests.
+- [X] T052 [P] [US3] `A/system/KeepScreenOn.kt`: keep the screen on while the reader is shown and the last touch was < 10 min ago, if `KeepScreenOn` (FR-014).
+- [X] T053 [US3] Wire Read/Continue/thumbnail-tap from the gallery screen and the details' progress line ("page 40 of 120", read mark) to `ProgressRepository`. Rotation and fold keep (page, offset) through the in-process configuration change (FR-015). Back returns to the details and then to the unchanged search without requests.
 - [ ] T054 [P] [US3] Compose UI test `D/app/src/androidTest/kotlin/hentaireader/app/ReaderToolbarTest.kt`: tap toggles the toolbar; Back from the reader returns to the gallery; the drawer cannot open in the reader. Uses the offline transport with fixture pages.
 
 **Checkpoint**: online reading is complete; together with US1–US2 this is a usable phone reader.

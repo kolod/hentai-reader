@@ -1,6 +1,8 @@
 package hentaireader.app
 
+import android.app.ActivityManager
 import android.content.Context
+import android.util.LruCache
 import hentaireader.app.images.ThumbnailCache
 import hentaireader.app.storage.AssetScriptStore
 import hentaireader.host.Preferences
@@ -9,6 +11,8 @@ import hentaireader.host.engine.CallResult
 import hentaireader.host.engine.LoadException
 import hentaireader.host.http.CookieJar
 import hentaireader.host.http.LiveTransport
+import hentaireader.host.reading.ImageBudget
+import hentaireader.host.storage.PageCache
 import hentaireader.host.sources.SessionOptions
 import hentaireader.host.sources.SourceCatalog
 import hentaireader.host.sources.SourceSession
@@ -25,6 +29,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 
@@ -58,6 +63,15 @@ class AppServices(context: Context) {
     private val sessions = HashMap<String, SourceSession>()
     /** Covers and thumbnails of every screen. */
     val thumbnails = ThumbnailCache()
+
+    /** Galleries just loaded by the gallery screen, handed to the reader without a second request. */
+    val galleries = LruCache<String, JsonObject>(8)
+
+    /** Memory for decoded pages, from what the device grants the app (007 FR-016). */
+    val imageBudget: ImageBudget = ImageBudget.forMemoryClass((app.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).memoryClass)
+
+    private val cacheLock = Mutex()
+    private var cache: PageCache? = null
 
     private val dbLock = Mutex()
     private var db: LibraryDatabase? = null
@@ -99,6 +113,14 @@ class AppServices(context: Context) {
     /** Calls a source function with the user's settings for that source (005 FR-026). */
     suspend fun call(session: SourceSession, sourceId: String, fn: String, args: List<JsonElement?>): CallResult =
         session.call(fn, args, _prefs.value.sourceSettings[sourceId])
+
+    /** The on-disk page cache (005 FR-023, 007 FR-020), created on first use after the adult confirmation. */
+    suspend fun pageCache(): PageCache = cacheLock.withLock {
+        check(_prefs.value.adultConfirmed) { "nothing is written before the adult confirmation" }
+        cache ?: withContext(Dispatchers.IO) {
+            PageCache(File(app.cacheDir, "pages"), _prefs.value.cacheLimitMb * 1024L * 1024)
+        }.also { cache = it }
+    }
 
     /** The local database, created on first use (after the adult confirmation). */
     suspend fun database(): LibraryDatabase = dbLock.withLock {
