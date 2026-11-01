@@ -48,27 +48,34 @@ Android-only strings live in `res/values*/strings_android.xml`, in all six langu
 
 ## Signing and release
 
-`assembleRelease` signs when a keystore is configured, either through environment variables
-(`HR_KEYSTORE`, `HR_KEYSTORE_PASSWORD`, `HR_KEY_ALIAS`, `HR_KEY_PASSWORD`) or a git-ignored
-`android/keystore.properties`:
+The same release system as the other Android projects (circuitopedia). Only CI signs: the release
+build is signed when `app/keystore.properties` exists, which the release workflow writes and
+deletes again; it is git-ignored, as is `*.jks`. The version comes from the tag, never from the
+repository: `-PappVersionName` (the tag without `android-v`) and `-PappVersionCode` (the workflow
+run number). Local builds are `0.1.0-dev` with version code 1.
 
-```properties
-storeFile=C:/path/to/release.jks
-storePassword=...
-keyAlias=...
-keyPassword=...
-```
+To release:
 
-Without one, the release APK is built unsigned.
+1. Merge to `main` through a pull request, with the version added to [CHANGELOG.md](CHANGELOG.md).
+2. Tag the merge commit `android-vX.Y.Z` and push the tag.
+3. Approve the run of [android-release](../.github/workflows/android-release.yml) (the `build`
+   job runs in the `release` environment). It refuses tags not on `main`, validates the Gradle
+   wrapper, checks the generated strings, runs the tests and the parity suite, builds and lints the
+   signed APK and checks the 40 MB limit.
+4. The `publish` job, which never sees the secrets, creates the GitHub Release with
+   `hentai-reader.apk`, `hentai-reader.apk.sha256` and generated release notes.
 
-Releases: set `versionName` / `versionCode` in `gradle.properties`, add the version to
-[CHANGELOG.md](CHANGELOG.md), and push a tag `android-vX.Y.Z`. The
-[android-release](../.github/workflows/android-release.yml) workflow tests, builds the signed APK
-from the repository secrets and attaches it with its SHA-256 to the GitHub Release.
+Repository setup (once): an environment `release` with required reviewers, and the secrets
+`ANDROID_KEYSTORE_BASE64` (the keystore, base64), `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`
+and `ANDROID_KEY_PASSWORD`, named as in the other projects.
+
+To try a signed release build locally, put a `keystore.properties` next to `app/build.gradle.kts`
+(`storeFile` relative to `app/`, `storePassword`, `keyAlias`, `keyPassword`) and run
+`./gradlew :app:assembleRelease -PappVersionName=X.Y.Z`; delete it afterwards.
 
 ## Install
 
-Download `hentai-reader-android-X.Y.Z.apk` from the release, check it against the `.sha256` file,
+Download `hentai-reader.apk` from the release, check it against `hentai-reader.apk.sha256`,
 and open it on the phone (allow installing from that app when asked). Updates install over the
 previous version; the library, history and settings stay. A debug build installs with
 `adb install -r app/build/outputs/apk/debug/app-debug.apk`.

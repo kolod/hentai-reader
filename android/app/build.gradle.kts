@@ -47,11 +47,9 @@ val packAssets = tasks.register<PackAssets>("packAssets") {
     output.set(layout.buildDirectory.dir("generated/hrassets"))
 }
 
-// Release signing: environment (CI secrets) or a git-ignored android/keystore.properties.
-val keystoreProps = Properties().apply {
-    rootDir.resolve("keystore.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) }
-}
-fun signing(name: String, env: String): String? = System.getenv(env) ?: keystoreProps.getProperty(name)
+// Written by .github/workflows/android-release.yml; never committed (see .gitignore). The same
+// release system as the other Android projects (circuitopedia).
+val keystorePropertiesFile = file("keystore.properties")
 
 android {
     namespace = "hentaireader.app"
@@ -59,23 +57,24 @@ android {
     ndkVersion = libs.versions.ndk.get()
 
     defaultConfig {
-        applicationId = "hentaireader.app"
+        applicationId = "io.github.kolod.hentaireader"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = providers.gradleProperty("versionCode").get().toInt()
-        versionName = providers.gradleProperty("versionName").get()
+        // From the release tag (android-vX.Y.Z) and the workflow run number; local builds are dev builds.
+        versionCode = providers.gradleProperty("appVersionCode").orNull?.toInt() ?: 1
+        versionName = providers.gradleProperty("appVersionName").orNull ?: "0.1.0-dev"
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
-        val store = signing("storeFile", "HR_KEYSTORE")
-        if (store != null) {
+        if (keystorePropertiesFile.isFile) {
+            val keystore = Properties().apply { keystorePropertiesFile.inputStream().use(::load) }
             create("release") {
-                storeFile = file(store)
-                storePassword = signing("storePassword", "HR_KEYSTORE_PASSWORD")
-                keyAlias = signing("keyAlias", "HR_KEY_ALIAS")
-                keyPassword = signing("keyPassword", "HR_KEY_PASSWORD")
+                storeFile = file(keystore.getProperty("storeFile"))
+                storePassword = keystore.getProperty("storePassword")
+                keyAlias = keystore.getProperty("keyAlias")
+                keyPassword = keystore.getProperty("keyPassword")
             }
         }
     }
@@ -85,7 +84,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.findByName("release")
+            signingConfigs.findByName("release")?.let { signingConfig = it }
         }
     }
 

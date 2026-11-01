@@ -125,7 +125,7 @@ specs/007-android-app/
 
 ```text
 android/
-├── settings.gradle.kts, build.gradle.kts, gradle.properties (versionName/versionCode)
+├── settings.gradle.kts, build.gradle.kts, gradle.properties (version from the release tag, not here)
 ├── gradle/libs.versions.toml
 ├── quickjs/
 │   ├── QUICKJS_VERSION                       # 2025-09-13 f1139494 (checked against the runner)

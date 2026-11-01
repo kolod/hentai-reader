@@ -32,11 +32,11 @@ A deliberately changed snapshot makes `:host:test` fail.
 Optional, emulator connected: `./gradlew :app:connectedDebugAndroidTest` (pane, Back order, reader
 toolbar).
 
-Release build (keystore outside the repo):
+Release build (only CI signs; locally, a temporary `app/keystore.properties` with `storeFile`,
+`storePassword`, `keyAlias`, `keyPassword`, deleted afterwards — see `android/README.md`):
 
 ```sh
-export HR_KEYSTORE=/path/to/release.jks HR_KEYSTORE_PASSWORD=… HR_KEY_ALIAS=… HR_KEY_PASSWORD=…
-./gradlew :app:assembleRelease           # app/build/outputs/apk/release/*.apk, < 40 MB (SC-012)
+./gradlew :app:assembleRelease -PappVersionName=0.1.0   # app/build/outputs/apk/release/*.apk, < 40 MB (SC-012)
 adb install -r app/build/outputs/apk/release/app-release.apk
 ```
 

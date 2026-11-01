@@ -359,10 +359,14 @@ database agree (SC-010).
 ## R15. Distribution
 
 **Decision**: `:app:assembleRelease` produces one universal APK (`arm64-v8a`, `armeabi-v7a`,
-`x86_64`), R8 minified and resource-shrunk, signed from a keystore outside the repository (path and
-passwords from environment variables or a git-ignored `android/keystore.properties`). A workflow on
-tags `android-v*` builds, tests and attaches the APK to the GitHub Release; the signing key comes
-from repository secrets. Version from `android/gradle.properties` (`versionName`, `versionCode`).
+`x86_64`), R8 minified and resource-shrunk, signed only in CI. The release system is the
+same as in the owner's other Android projects (circuitopedia, aligned 2026-11-01): a tag
+`android-vX.Y.Z` on `main` starts the workflow; its `build` job runs in the `release` environment
+(approval required, read-only, the only job with the signing secrets `ANDROID_KEYSTORE_BASE64`,
+`ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`), writes and deletes
+`app/keystore.properties`; a separate `publish` job creates the GitHub Release with generated
+notes. Version from the tag (`-PappVersionName`) and the run number (`-PappVersionCode`); local
+builds are `0.1.0-dev`. Application ID `io.github.kolod.hentaireader`.
 The first tag is `android-v0.1.0`. Size target < 40 MB (SC-012); expected about 12–18 MB (QuickJS
 and SQLite are about 1–1.5 MB per ABI).
 
