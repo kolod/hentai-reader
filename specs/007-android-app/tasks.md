@@ -271,44 +271,44 @@ the task.
 
 **Independent Test**: quickstart "Downloads and library" items 1–6: first-save folder prompt, save with the screen off, force-stop resume, Wi-Fi only, offline read, Windows ↔ Android archive exchange.
 
-- [ ] T055 [P] [US4] Port `WH/Archive/ZipDirectory.cs`, `ImageFormat.cs`, `ArchiveMetadata.cs` and `CbzReader.cs` → `H/archive/*.kt` over `SeekableSource`:
+- [X] T055 [P] [US4] Port `WH/Archive/ZipDirectory.cs`, `ImageFormat.cs`, `ArchiveMetadata.cs` and `CbzReader.cs` → `H/archive/*.kt` over `SeekableSource`:
   - end record and central directory, entry bytes, metadata format 1, `ComicInfo.xml`;
   - content ID per the 006 data model;
   - `app` = "Hentai Reader <version> (Android)".
-- [ ] T056 [P] [US4] Port `WH/Archive/CbzWriter.cs` and `MetadataUpdater.cs` → `H/archive/CbzWriter.kt` and `H/archive/MetadataUpdater.kt`:
+- [X] T056 [P] [US4] Port `WH/Archive/CbzWriter.cs` and `MetadataUpdater.cs` → `H/archive/CbzWriter.kt` and `H/archive/MetadataUpdater.kt`:
   - stream STORED entries with precomputed CRC into a writable `SeekableSource`;
   - append-only metadata update with compaction;
   - `H/archive/FileNames.kt` with the Windows rules + FAT/exFAT (no `"*/:<>?\|`, no trailing dot or space, ≤ 120 UTF-8 bytes, collision suffix).
-- [ ] T057 [US4] Port archive tests from `WT/Archive/*` → `HT/archive/*Test.kt`:
+- [X] T057 [US4] Port archive tests from `WT/Archive/*` → `HT/archive/*Test.kt`:
   - every entry STORED; names and order;
   - metadata validates against `contract/archive/hentai-reader.schema.json`;
   - foreign archive by name order + stable content ID; images byte-identical after update;
   - simulated crash at several offsets; compaction keeps unknown fields.
 
   Add `CrossPlatformArchiveTest`: builds, at test time, an archive in the exact layout of `contract/archive/README.md` (Windows entry names, `ComicInfo.xml`, metadata with `"app": "… (Windows)"`, tiny generated PNG pages) and checks it opens with identity, pages, progress and reader settings. Real archives in both directions are covered by the manual check (SC-009).
-- [ ] T058 [US4] Port `WH/Downloads/DownloadQueue.cs` → `H/downloads/DownloadQueue.kt`:
+- [X] T058 [US4] Port `WH/Downloads/DownloadQueue.cs` → `H/downloads/DownloadQueue.kt`:
   - per-source workers up to the source's limit; states and transitions of [data-model.md](data-model.md#download-android) incl. `waiting_wifi` and `stopped_by_system`;
   - staging in a host-provided directory, cache reuse, limits and sign-in stop, resume without re-fetch, cancel removes staging and partial file;
   - free-space check before start;
   - assembling into `DocumentTree` as `<name>.cbz.partial`, then rename.
 
   Port `WT/Downloads/*` tests with a fake transport and an in-memory `DocumentTree`.
-- [ ] T059 [P] [US4] `A/storage/SafDocumentTree.kt` and `A/storage/SafSeekableSource.kt`:
+- [X] T059 [P] [US4] `A/storage/SafDocumentTree.kt` and `A/storage/SafSeekableSource.kt`:
   - `DocumentsContract` child queries (one query per folder), create, rename, delete;
   - `openFileDescriptor` `r`/`rw` + `FileChannel`;
   - persisted URI permissions (`takePersistableUriPermission`); availability reasons `ok`, `missing`, `no_access`.
-- [ ] T060 [US4] First-save flow in `A/ui/gallery/SaveToLibrary.kt`:
+- [X] T060 [US4] First-save flow in `A/ui/gallery/SaveToLibrary.kt`:
   - with no library folder, open `OPEN_DOCUMENT_TREE` at Documents with a prompt (`Library_ChooseFolder_Prompt`) and store the folder as the target;
   - request `POST_NOTIFICATIONS` once on API 33+ (`NotificationAsked`);
   - Save to library / "12 / 40" progress / In library states on the gallery screen and the reader toolbar (006 FR-001).
-- [ ] T061 [US4] `A/downloads/DownloadService.kt`:
+- [X] T061 [US4] `A/downloads/DownloadService.kt`:
   - foreground service type `dataSync`, started from a user action or at app start with unfinished downloads; hosts the `DownloadQueue`;
   - stops itself when idle; `onTimeout` (API 35+) → queue paused as `stopped_by_system`;
   - `A/system/Notifications.kt` per [android-ui.md](contracts/android-ui.md#download-notification): channel, ongoing progress, Pause/Resume actions, tap → Downloads, final notification.
-- [ ] T062 [P] [US4] `A/system/NetworkStateImpl.kt`: `NetworkCallback` with `NET_CAPABILITY_NOT_METERED` feeding `NetworkState`; the queue waits while `WifiOnlyDownloads` and the network is metered, and resumes automatically (FR-023).
-- [ ] T063 [US4] Archive page provider in `H/reading/PageProviders.kt` (sizes from metadata, bytes off the main thread). Opening a saved gallery uses the same reader (006 FR-012). Progress and reader settings are written back via `MetadataUpdater` on leaving and `onStop`; a refused `rw` leaves `metadata_dirty`.
-- [ ] T064 [US4] `A/ui/downloads/DownloadsScreen.kt`: list with state, progress and reason (limit, waiting for Wi-Fi, stopped by system, failed), Pause/Resume/Cancel, banner when notifications are off.
-- [ ] T065 [US4] Minimal `A/ui/library/LibraryScreen.kt`: list saved galleries (cover, title, source, pages, progress, folder), open in the reader offline, long press → delete with confirmation (`Library_DeleteFromDevice_Body`) via `DocumentsContract.deleteDocument`; the history entry is kept. Search, filters and sorts follow in US5.
+- [X] T062 [P] [US4] `A/system/NetworkStateImpl.kt`: `NetworkCallback` with `NET_CAPABILITY_NOT_METERED` feeding `NetworkState`; the queue waits while `WifiOnlyDownloads` and the network is metered, and resumes automatically (FR-023).
+- [X] T063 [US4] Archive page provider in `H/reading/PageProviders.kt` (sizes from metadata, bytes off the main thread). Opening a saved gallery uses the same reader (006 FR-012). Progress and reader settings are written back via `MetadataUpdater` on leaving and `onStop`; a refused `rw` leaves `metadata_dirty`.
+- [X] T064 [US4] `A/ui/downloads/DownloadsScreen.kt`: list with state, progress and reason (limit, waiting for Wi-Fi, stopped by system, failed), Pause/Resume/Cancel, banner when notifications are off.
+- [X] T065 [US4] Minimal `A/ui/library/LibraryScreen.kt`: list saved galleries (cover, title, source, pages, progress, folder), open in the reader offline, long press → delete with confirmation (`Library_DeleteFromDevice_Body`) via `DocumentsContract.deleteDocument`; the history entry is kept. Search, filters and sorts follow in US5.
 
 **Checkpoint (MVP complete)**: US1–US4 are an Android reader at parity for browsing, reading and saving; tag `android-v0.1.0` may be cut here after the Polish release tasks.
 

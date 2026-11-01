@@ -44,6 +44,12 @@ interface DocumentTree {
     /** Every file below the root (recursively), one platform query per folder. */
     fun listFiles(): List<DocumentEntry>
 
+    /** One file's entry, or null when it does not exist. */
+    fun stat(relPath: String): DocumentEntry?
+
+    /** One file as an archive (read, append, replace). */
+    fun archive(relPath: String): ArchiveFile
+
     fun openRead(relPath: String): SeekableSource
     fun openWrite(relPath: String): SeekableSource
 

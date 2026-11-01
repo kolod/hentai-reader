@@ -9,6 +9,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hentaireader.app.system.AppLocale
 import hentaireader.app.system.Immersive
+import hentaireader.app.system.Notifications
 import hentaireader.app.ui.gate.AdultGateScreen
 import hentaireader.app.ui.theme.HentaiReaderTheme
 import hentaireader.host.Preferences
@@ -26,6 +27,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Immersive.apply(this)
         val services = services
+        intent?.getStringExtra(Notifications.EXTRA_OPEN)?.let { services.openRequests.tryEmit(it) }
         setContent {
             HentaiReaderTheme {
                 val prefs by services.prefs.collectAsStateWithLifecycle()
@@ -45,6 +47,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        intent.getStringExtra(Notifications.EXTRA_OPEN)?.let { services.openRequests.tryEmit(it) }
     }
 
     override fun onResume() {

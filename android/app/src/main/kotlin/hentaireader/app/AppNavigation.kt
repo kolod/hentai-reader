@@ -62,6 +62,12 @@ import hentaireader.app.ui.gallery.GalleryScreen
 import hentaireader.app.ui.gallery.GalleryViewModel
 import hentaireader.app.ui.reader.ReaderScreen
 import hentaireader.app.ui.reader.ReaderViewModel
+import hentaireader.app.ui.downloads.DownloadsScreen
+import hentaireader.app.ui.gallery.SaveToLibraryButton
+import hentaireader.app.ui.library.LibraryScreen
+import hentaireader.app.system.Notifications
+import hentaireader.host.data.LibraryItem
+import androidx.compose.runtime.LaunchedEffect
 import hentaireader.app.ui.search.SearchScreen
 import hentaireader.app.ui.search.SearchViewModel
 
@@ -74,7 +80,7 @@ import hentaireader.app.ui.search.SearchViewModel
 @Serializable data class TagSearchRoute(val sourceId: String, val query: String)
 @Serializable data class GalleryRoute(val sourceId: String, val galleryId: String, val title: String)
 /** [page] = page to open at; -1 = continue at the saved position. */
-@Serializable data class ReaderRoute(val sourceId: String, val galleryId: String, val title: String, val page: Int)
+@Serializable data class ReaderRoute(val sourceId: String, val galleryId: String, val title: String, val page: Int, val archiveId: Long = -1)
 
 /**
  * The navigation shell (007 FR-007, FR-008, FR-030; contracts/android-ui.md): the pane is a modal
@@ -170,18 +176,27 @@ fun AppNavigation(services: AppServices) {
                     val vm = viewModel { GalleryViewModel(services, r.sourceId, r.galleryId) }
                     GalleryScreen(vm, services.thumbnails, r.title, onBack = { nav.popBackStack() },
                         onSearchTag = { q -> nav.navigate(TagSearchRoute(r.sourceId, q)) },
-                        onRead = { page -> nav.navigate(ReaderRoute(r.sourceId, r.galleryId, vm.gallery?.let { (it["title"] as? JsonPrimitive)?.contentOrNull } ?: r.title, page)) })
+                        onRead = { page -> nav.navigate(ReaderRoute(r.sourceId, r.galleryId, vm.gallery?.let { (it["title"] as? JsonPrimitive)?.contentOrNull } ?: r.title, page)) },
+                        actions = { g -> SaveToLibraryButton(services, r.sourceId, g) { item -> nav.openSaved(item) } })
                 }
                 composable<ReaderRoute> { e ->
                     val r = e.toRoute<ReaderRoute>()
-                    val vm = viewModel { ReaderViewModel(services, r.sourceId, r.galleryId, r.title, r.page, createSavedStateHandle()) }
+                    val vm = viewModel { ReaderViewModel(services, r.sourceId, r.galleryId, r.title, r.page, r.archiveId, createSavedStateHandle()) }
                     ReaderScreen(vm, keepScreenOn = prefs.keepScreenOn, onBack = { nav.popBackStack() })
                 }
                 composable<HistoryRoute> { Placeholder(stringResource(R.string.Nav_History)) }
-                composable<LibraryRoute> { Placeholder(stringResource(R.string.Nav_Library)) }
-                composable<DownloadsRoute> { Placeholder(stringResource(R.string.Nav_Downloads)) }
+                composable<LibraryRoute> { LibraryScreen(services) { item -> nav.openSaved(item) } }
+                composable<DownloadsRoute> { DownloadsScreen(services) }
                 composable<SettingsRoute> { Placeholder(stringResource(R.string.Nav_Settings)) }
             }
+        }
+    }
+
+    // The download notification opens Downloads.
+    LaunchedEffect(nav) {
+        services.openRequests.collect {
+            services.openRequests.resetReplayCache()
+            if (it == Notifications.OPEN_DOWNLOADS) nav.openSection(DownloadsRoute)
         }
     }
 
@@ -191,6 +206,11 @@ fun AppNavigation(services: AppServices) {
 }
 
 private val SECTION_ROOTS = listOf(SourceRoute::class, HistoryRoute::class, LibraryRoute::class, DownloadsRoute::class, SettingsRoute::class)
+
+/** Opens a saved gallery offline in the reader, at its saved position. */
+fun NavHostController.openSaved(item: LibraryItem) {
+    navigate(ReaderRoute(item.archive.key.sourceId, item.archive.key.galleryId, item.archive.title, -1, item.archive.id))
+}
 
 /** Opens a gallery from a result card. */
 fun NavHostController.openGallery(sourceId: String, item: JsonObject) {

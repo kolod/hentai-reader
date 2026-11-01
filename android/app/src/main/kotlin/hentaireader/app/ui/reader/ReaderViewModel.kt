@@ -16,7 +16,10 @@ import hentaireader.host.data.ProgressRepository
 import hentaireader.host.data.ReaderSettings
 import hentaireader.host.data.ReaderSettingsRepository
 import hentaireader.host.engine.LoadException
+import hentaireader.host.data.ArchiveRepository
+import hentaireader.host.reading.ArchivePageProvider
 import hentaireader.host.reading.OnlinePageProvider
+import hentaireader.host.reading.PageProvider
 import hentaireader.host.reading.StripGeometry
 import java.time.Instant
 import kotlinx.coroutines.Job
@@ -41,6 +44,8 @@ class ReaderViewModel(
     val title: String,
     /** Page to open at; -1 = continue at the saved position. */
     private val startPage: Int,
+    /** A saved archive to read offline (library row id), or -1 for online reading. */
+    private val archiveId: Long,
     private val saved: SavedStateHandle,
 ) : ViewModel() {
     var session by mutableStateOf<ReaderSession?>(null)
@@ -74,24 +79,10 @@ class ReaderViewModel(
     }
 
     private suspend fun open() {
-        val s = try {
-            services.session(sourceId)
-        } catch (e: LoadException) {
-            error = ErrorInfo("ScriptError", null, e.message ?: "")
-            return
-        }
-        val gallery = services.galleries.get(key.toString()) ?: run {
-            val result = services.call(s, sourceId, "getGallery", listOf(JsonPrimitive(galleryId)))
-            if (!result.ok) {
-                error = ErrorInfo.of(result.error!!, sourceId)
-                return
-            }
-            (result.value as JsonObject).also { services.galleries.put(key.toString(), it) }
-        }
         val db = services.database()
+        val provider = (if (archiveId >= 0) archiveProvider() else onlineProvider()) ?: return
         val settings = ReaderSettingsRepository(db).get(key)
         val progress = ProgressRepository(db).get(key)
-        val provider = OnlinePageProvider(s, sourceId, services.prefs.value.sourceSettings[sourceId], gallery, services.pageCache())
         HistoryRepository(db).touch(key, provider.title, provider.sizes.size, Instant.now())
 
         val webtoon = provider.tags.any { it.equals("webtoon", ignoreCase = true) }
@@ -112,6 +103,39 @@ class ReaderViewModel(
         }
         session = created
         if (viewportWidth > 0) applyLayout(keepPosition = false)
+    }
+
+    private suspend fun onlineProvider(): PageProvider? {
+        val s = try {
+            services.session(sourceId)
+        } catch (e: LoadException) {
+            error = ErrorInfo("ScriptError", null, e.message ?: "")
+            return null
+        }
+        val gallery = services.galleries.get(key.toString()) ?: run {
+            val result = services.call(s, sourceId, "getGallery", listOf(JsonPrimitive(galleryId)))
+            if (!result.ok) {
+                error = ErrorInfo.of(result.error!!, sourceId)
+                return null
+            }
+            (result.value as JsonObject).also { services.galleries.put(key.toString(), it) }
+        }
+        return OnlinePageProvider(s, sourceId, services.prefs.value.sourceSettings[sourceId], gallery, services.pageCache())
+    }
+
+    /** A saved gallery read from its archive, no network (006 FR-012). */
+    private suspend fun archiveProvider(): PageProvider? {
+        val item = ArchiveRepository(services.database()).find(key).firstOrNull { it.archive.id == archiveId }
+        if (item == null) {
+            error = ErrorInfo("NotFound", null, "archive $archiveId")
+            return null
+        }
+        return try {
+            ArchivePageProvider(services.openArchive(item), key, item.archive.title, item.archive.pages, item.archive.tags.map { it.name })
+        } catch (e: Exception) {
+            error = ErrorInfo("Network", null, e.message ?: "")
+            null
+        }
     }
 
     /** The strip's size on screen (first layout, rotation, fold): the position stays (005 edge cases). */
@@ -252,6 +276,8 @@ class ReaderViewModel(
                 val db = services.database()
                 ProgressRepository(db).set(key, Progress(page, offset, count, finished, Instant.now()))
                 ReaderSettingsRepository(db).set(key, ReaderSettings(zoom, fitWidth, gaps, Instant.now()))
+                // A saved gallery keeps its progress and reader settings inside the archive too (006 FR-009).
+                services.writeBack(key)
             }
             s.close()
         }

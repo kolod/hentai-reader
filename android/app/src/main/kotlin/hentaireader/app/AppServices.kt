@@ -2,11 +2,33 @@ package hentaireader.app
 
 import android.app.ActivityManager
 import android.content.Context
+import android.net.Uri
 import android.util.LruCache
+import hentaireader.app.downloads.DownloadService
 import hentaireader.app.images.ThumbnailCache
 import hentaireader.app.storage.AssetScriptStore
+import hentaireader.app.storage.SafDocumentTree
+import hentaireader.app.system.NetworkStateImpl
 import hentaireader.host.Preferences
+import hentaireader.host.archive.ArchiveMetadata
+import hentaireader.host.archive.CbzReader
+import hentaireader.host.archive.MetadataUpdater
+import hentaireader.host.data.ArchiveRepository
+import hentaireader.host.data.DownloadReason
+import hentaireader.host.data.DownloadRepository
+import hentaireader.host.data.FolderRepository
+import hentaireader.host.data.GalleryKey
 import hentaireader.host.data.LibraryDatabase
+import hentaireader.host.data.LibraryFolder
+import hentaireader.host.data.LibraryItem
+import hentaireader.host.data.ProgressRepository
+import hentaireader.host.data.ReaderSettingsRepository
+import hentaireader.host.downloads.DownloadQueue
+import hentaireader.host.downloads.DownloadSource
+import java.time.Instant
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.map
 import hentaireader.host.engine.CallResult
 import hentaireader.host.engine.LoadException
 import hentaireader.host.http.CookieJar
@@ -76,6 +98,15 @@ class AppServices(context: Context) {
     private val dbLock = Mutex()
     private var db: LibraryDatabase? = null
 
+    /** Screens asked for from outside (the download notification opens Downloads). */
+    val openRequests = kotlinx.coroutines.flow.MutableSharedFlow<String>(replay = 1, extraBufferCapacity = 4)
+
+    /** The device network as downloads see it (Wi-Fi only, 007 FR-023). */
+    val network by lazy { NetworkStateImpl(app) }
+
+    private val queueLock = Mutex()
+    private var queue: DownloadQueue? = null
+
     /** Changes and saves the preferences; nothing is written before the adult confirmation. */
     suspend fun updatePrefs(change: (Preferences) -> Preferences) {
         val next = change(_prefs.value).sanitised()
@@ -95,6 +126,10 @@ class AppServices(context: Context) {
                     SourceEntry(bundle.id, bundle.id, e.message ?: "")
                 }
             }
+            // Downloads that were running continue (007 FR-026).
+            val q = downloads()
+            q.start()
+            if (q.hasWork()) DownloadService.start(app)
         }
     }
 
@@ -126,5 +161,86 @@ class AppServices(context: Context) {
     suspend fun database(): LibraryDatabase = dbLock.withLock {
         check(_prefs.value.adultConfirmed) { "nothing is written before the adult confirmation" }
         db ?: LibraryDatabase.open(File(dataDir, "library.db")).also { db = it }
+    }
+
+    /** The download queue (007 FR-026), created on first use after the adult confirmation. */
+    suspend fun downloads(): DownloadQueue = queueLock.withLock {
+        queue ?: run {
+            val db = database()
+            DownloadQueue(
+                DownloadRepository(db), FolderRepository(db), ArchiveRepository(db), ProgressRepository(db), ReaderSettingsRepository(db),
+                sources = { id ->
+                    runCatching { session(id) }.getOrNull()?.let { s ->
+                        DownloadSource(s, (s.manifest["name"] as? JsonPrimitive)?.contentOrNull ?: id, _prefs.value.sourceSettings[id])
+                    }
+                },
+                tree = ::tree,
+                stagingRoot = dataDir,
+                cache = pageCache(),
+                app = "Hentai Reader ${BuildConfig.VERSION_NAME} (Android)",
+                blockedReason = { if (_prefs.value.wifiOnlyDownloads && network.status.value.metered) DownloadReason.WAITING_WIFI else null },
+            ).also { q ->
+                queue = q
+                // A network or setting change may let held-back downloads start.
+                scope.launch {
+                    network.status.map { it.metered }.distinctUntilChanged().drop(1).collect {
+                        q.conditionsChanged()
+                        if (q.hasWork()) DownloadService.start(app)
+                    }
+                }
+                scope.launch {
+                    _prefs.map { it.wifiOnlyDownloads }.distinctUntilChanged().drop(1).collect {
+                        q.conditionsChanged()
+                        if (q.hasWork()) DownloadService.start(app)
+                    }
+                }
+            }
+        }
+    }
+
+    suspend fun downloadRepository() = DownloadRepository(database())
+
+    /** A library folder's document tree. */
+    fun tree(folder: LibraryFolder): SafDocumentTree = SafDocumentTree(app, Uri.parse(folder.path))
+
+    /** Adds a folder picked with the system folder picker and keeps access to it (007 FR-028). */
+    suspend fun addLibraryFolder(treeUri: Uri): LibraryFolder {
+        SafDocumentTree.persist(app, treeUri)
+        val display = SafDocumentTree.displayPath(treeUri, app.getString(R.string.Settings_CacheLocation_Internal))
+        return FolderRepository(database()).add(treeUri.toString(), display, Instant.now())
+    }
+
+    /** Opens a saved gallery's archive for reading (off the main thread). */
+    suspend fun openArchive(item: LibraryItem): CbzReader = withContext(Dispatchers.IO) {
+        val folder = FolderRepository(database()).list().first { it.id == item.archive.folderId }
+        CbzReader(tree(folder).openRead(item.archive.relPath))
+    }
+
+    /**
+     * Writes progress and reader settings into the saved archives of a gallery (006 FR-009):
+     * when leaving the reader, not on every scroll; a failed write leaves the row dirty.
+     */
+    suspend fun writeBack(key: GalleryKey) = withContext(Dispatchers.IO) {
+        val db = database()
+        val archives = ArchiveRepository(db)
+        val progress = ProgressRepository(db).get(key)
+        val reader = ReaderSettingsRepository(db).get(key)
+        for (item in archives.find(key).filter { it.archive.format == "hentai-reader-1" }) {
+            try {
+                val folder = FolderRepository(db).list().first { it.id == item.archive.folderId }
+                val tree = tree(folder)
+                val file = tree.archive(item.archive.relPath)
+                val current = file.openRead().use { CbzReader(it).readMetadata() } ?: continue
+                val next = current.copy(
+                    progress = progress?.let { ArchiveMetadata.ProgressBlock(it.page, it.offset, it.finished, it.updatedAt) } ?: current.progress,
+                    reader = reader?.let { ArchiveMetadata.ReaderBlock(it.zoom, it.fitWidth, it.gaps, it.updatedAt) } ?: current.reader,
+                )
+                MetadataUpdater.update(file, next.toUtf8())
+                tree.stat(item.archive.relPath)?.let { archives.setFileStamp(item.archive.id, it.size, it.modifiedAt) }
+                archives.setDirty(item.archive.id, false)
+            } catch (e: Exception) {
+                archives.setDirty(item.archive.id, true)
+            }
+        }
     }
 }

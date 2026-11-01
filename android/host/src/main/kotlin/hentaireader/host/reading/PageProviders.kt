@@ -74,3 +74,25 @@ class OnlinePageProvider(
 
     override fun close() {}
 }
+
+/** A saved gallery: entries read straight from the archive, off the main thread, no network (006 FR-012). */
+class ArchivePageProvider(
+    private val reader: hentaireader.host.archive.CbzReader,
+    override val key: GalleryKey,
+    override val title: String,
+    /** Page sizes from the library (metadata or measured); used when they match the archive. */
+    pages: List<hentaireader.host.data.ArchivePage>?,
+    override val tags: List<String> = emptyList(),
+) : PageProvider {
+    private val byName = pages.orEmpty().associateBy { it.file }
+    override val sizes = reader.pages.map { e -> byName[e.name]?.let { it.width.toDouble() to it.height.toDouble() } ?: (0.0 to 0.0) }
+    override val concurrency = 3
+    override val isLimited = false
+    override val retryAfterSeconds: Double? = null
+    override fun clearLimit() {}
+
+    override suspend fun load(index: Int, page: PageAttempts, onLocated: ((Double?, Double?) -> Unit)?): ByteArray =
+        withContext(Dispatchers.IO) { reader.readEntry(reader.pages[index]) }
+
+    override fun close() = reader.close()
+}
