@@ -88,3 +88,9 @@ contract/schema/
 !windows/build/
 artifacts/
 .tools/
+
+# --- Android (007) ---
+.kotlin/
+# The .NET rules [Dd]ebug/ and [Rr]elease/ above must not hide Android source sets.
+!android/**/src/debug/
+!android/**/src/release/
