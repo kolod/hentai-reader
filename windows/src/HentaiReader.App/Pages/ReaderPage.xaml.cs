@@ -332,10 +332,12 @@ public sealed partial class ReaderPage : Page, IPageInput
         if (_gliding && _glideAcross != across) StopGlide();
         if (!_gliding)
         {
-            _gliding = true;
-            _glideAcross = across;
+            // Read before _gliding is set: ScrollY returns _glideY while gliding, so reading it after
+            // started every glide from where the previous one had ended (0 at first).
             _glideY = ScrollY;
             _glideX = Scroller.HorizontalOffset;
+            _gliding = true;
+            _glideAcross = across;
             _glideVelocity = 0;
             _glideLast = TimeSpan.Zero;
             Microsoft.UI.Xaml.Media.CompositionTarget.Rendering += GlideStep;
