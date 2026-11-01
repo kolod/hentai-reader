@@ -67,6 +67,9 @@ import hentaireader.app.ui.gallery.SaveToLibraryButton
 import hentaireader.app.ui.library.LibraryScreen
 import hentaireader.app.system.Notifications
 import hentaireader.host.data.LibraryItem
+import hentaireader.host.data.ArchiveRepository
+import hentaireader.host.data.ArchiveState
+import hentaireader.app.ui.history.HistoryScreen
 import androidx.compose.runtime.LaunchedEffect
 import hentaireader.app.ui.search.SearchScreen
 import hentaireader.app.ui.search.SearchViewModel
@@ -184,7 +187,15 @@ fun AppNavigation(services: AppServices) {
                     val vm = viewModel { ReaderViewModel(services, r.sourceId, r.galleryId, r.title, r.page, r.archiveId, createSavedStateHandle()) }
                     ReaderScreen(vm, keepScreenOn = prefs.keepScreenOn, onBack = { nav.popBackStack() })
                 }
-                composable<HistoryRoute> { Placeholder(stringResource(R.string.Nav_History)) }
+                composable<HistoryRoute> {
+                    HistoryScreen(services, services.historyCovers) { entry ->
+                        // The saved copy when there is one, otherwise online at the saved position (006 FR-019).
+                        scope.launch {
+                            val saved = ArchiveRepository(services.database()).find(entry.key).firstOrNull { it.archive.state == ArchiveState.OK }
+                            if (saved != null) nav.openSaved(saved) else nav.navigate(ReaderRoute(entry.key.sourceId, entry.key.galleryId, entry.title, -1))
+                        }
+                    }
+                }
                 composable<LibraryRoute> { LibraryScreen(services) { item -> nav.openSaved(item) } }
                 composable<DownloadsRoute> { DownloadsScreen(services) }
                 composable<SettingsRoute> { Placeholder(stringResource(R.string.Nav_Settings)) }

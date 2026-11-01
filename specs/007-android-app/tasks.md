@@ -320,21 +320,21 @@ the task.
 
 **Independent Test**: quickstart "History: three partly read galleries…" and library items: pull-to-refresh lists copied archives, SD card removal shows the folder as unavailable.
 
-- [ ] T066 [P] [US5] Port `WH/Library/LibraryScanner.cs`, `LibraryFolders.cs` and `LibraryService.cs` → `H/library/*.kt` over `DocumentTree`:
+- [X] T066 [P] [US5] Port `WH/Library/LibraryScanner.cs`, `LibraryFolders.cs` and `LibraryService.cs` → `H/library/*.kt` over `DocumentTree`:
   - change detection by size and time;
   - foreign comic archives by file name with content ID; unreadable files listed as such;
   - identity survives rename and move;
   - folder removal with Move (background, progress, duplicate handling as Windows 0.4.0) or Keep files.
 
   Port `WT/Library/*` tests with an in-memory tree.
-- [ ] T067 [US5] Rescan triggers in `A/ui/library/LibraryViewModel.kt`: on app start (after the first frame), on opening the Library and on pull-to-refresh. Folder states `missing` and `no_access` are shown with "Grant access" (re-pick) and "Remove folder".
-- [ ] T068 [US5] Complete `A/ui/library/LibraryScreen.kt`: search by title while typing, source and read filters, three sorts, pull-to-refresh, folder name per card, unavailable galleries greyed (006 FR-011, FR-013, FR-017).
-- [ ] T069 [P] [US5] `A/ui/history/HistoryViewModel.kt` + `A/ui/history/HistoryScreen.kt`:
+- [X] T067 [US5] Rescan triggers in `A/ui/library/LibraryViewModel.kt`: on app start (after the first frame), on opening the Library and on pull-to-refresh. Folder states `missing` and `no_access` are shown with "Grant access" (re-pick) and "Remove folder".
+- [X] T068 [US5] Complete `A/ui/library/LibraryScreen.kt`: search by title while typing, source and read filters, three sorts, pull-to-refresh, folder name per card, unavailable galleries greyed (006 FR-011, FR-013, FR-017).
+- [X] T069 [P] [US5] `A/ui/history/HistoryViewModel.kt` + `A/ui/history/HistoryScreen.kt`:
   - newest first with cover, progress and relative time; progressive paging;
   - open at the saved position (library copy first) with per-gallery zoom, width mode and gaps;
   - swipe/long press removes; Clear history with confirmation;
   - "not found" with remove (006 FR-018 – FR-020).
-- [ ] T070 [P] [US5] Port `WA/Services/HistoryCovers.cs` → `A/images/HistoryCovers.kt`: covers from the archive or page cache; network only with `NetworkCovers`, one visible row at a time; ≤ 300 px JPEG q85 in `covers/`.
+- [X] T070 [P] [US5] Port `WA/Services/HistoryCovers.cs` → `A/images/HistoryCovers.kt`: covers from the archive or page cache; network only with `NetworkCovers`, one visible row at a time; ≤ 300 px JPEG q85 in `covers/`.
 
 **Checkpoint**: history and library behave as on Windows.
 

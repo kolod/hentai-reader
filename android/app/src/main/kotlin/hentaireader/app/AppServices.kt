@@ -130,6 +130,8 @@ class AppServices(context: Context) {
             val q = downloads()
             q.start()
             if (q.hasWork()) DownloadService.start(app)
+            // Archives copied in by other apps or a computer appear (007 FR-029).
+            runCatching { scanLibrary() }
         }
     }
 
@@ -199,6 +201,20 @@ class AppServices(context: Context) {
     }
 
     suspend fun downloadRepository() = DownloadRepository(database())
+
+    /** History covers (saved copy, page cache, network only when allowed). */
+    val historyCovers by lazy { hentaireader.app.images.HistoryCovers(this) }
+
+    /** Rescans every library folder (start, Library opened, pull-to-refresh; 007 FR-029). */
+    suspend fun scanLibrary() {
+        val db = database()
+        hentaireader.host.library.LibraryScanner(FolderRepository(db), ArchiveRepository(db), ::tree).scanAll()
+    }
+
+    suspend fun libraryFolders(): hentaireader.host.library.LibraryFolders {
+        val db = database()
+        return hentaireader.host.library.LibraryFolders(FolderRepository(db), ArchiveRepository(db), DownloadRepository(db), ::tree)
+    }
 
     /** A library folder's document tree. */
     fun tree(folder: LibraryFolder): SafDocumentTree = SafDocumentTree(app, Uri.parse(folder.path))

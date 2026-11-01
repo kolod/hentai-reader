@@ -10,7 +10,13 @@ import java.util.zip.Inflater
  * inflated), this app's metadata when present, and a content id for archives without it.
  */
 class CbzReader(private val file: SeekableSource) : AutoCloseable {
-    val directory = ZipDirectory.read(file)
+    // A file that is not a ZIP must not stay open (the caller never gets a reader to close).
+    val directory = try {
+        ZipDirectory.read(file)
+    } catch (e: Exception) {
+        file.close()
+        throw e
+    }
 
     /** Page entries in reading order (natural file-name order). */
     val pages: List<ZipEntry> = directory.entries
