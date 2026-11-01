@@ -32,6 +32,7 @@ import hentaireader.host.storage.PageCache
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -260,12 +261,23 @@ class DownloadQueue(
             // As many pages at once as the source allows requests at once (its politeness applies to each).
             val concurrency = ((source.session.manifest["politeness"] as? JsonObject)?.get("maxConcurrency")?.jsonPrimitive?.int ?: 1).coerceIn(1, 4)
             val slots = Semaphore(concurrency)
+            // The first failure (rate limit, sign-in, network) starts no further pages, but pages
+            // already being fetched finish and are kept: their requests are not wasted.
+            val failure = AtomicReference<Exception?>(null)
             coroutineScope {
                 for (index in pages.indices.filter { it !in done }) {
                     launch {
                         slots.withPermit {
+                            if (failure.get() != null) return@withPermit
                             blockedReason()?.let { reason -> stopWorker(row.id, DownloadState.QUEUED, reason) }
-                            val (bytes, located) = fetchPage(source, row.key.sourceId, settings, gallery, index, fingerprint)
+                            val (bytes, located) = try {
+                                fetchPage(source, row.key.sourceId, settings, gallery, index, fingerprint)
+                            } catch (e: CancellationException) {
+                                throw e
+                            } catch (e: Exception) {
+                                failure.compareAndSet(null, e)
+                                return@withPermit
+                            }
                             val extension = ImageFormat.sniff(bytes) ?: "jpg"
                             val size = ImageFormat.size(bytes) ?: located ?: estimated(pages[index])
                             val file = "$index.$extension"
@@ -281,6 +293,7 @@ class DownloadQueue(
                     }
                 }
             }
+            failure.get()?.let { throw it }
 
             downloads.setState(row.id, DownloadState.ASSEMBLING, at = clock.now())
             notify(row.id)
