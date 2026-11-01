@@ -76,6 +76,7 @@ import androidx.compose.material3.SnackbarHostState
 import hentaireader.app.ui.search.SearchScreen
 import hentaireader.app.ui.search.DefaultSearchStar
 import hentaireader.app.ui.settings.SettingsScreen
+import hentaireader.app.ui.settings.LicencesScreen
 import hentaireader.app.ui.login.LoginScreen
 import hentaireader.app.ui.search.SearchViewModel
 
@@ -86,6 +87,7 @@ import hentaireader.app.ui.search.SearchViewModel
 @Serializable data object DownloadsRoute
 @Serializable data object SettingsRoute
 @Serializable data class LoginRoute(val sourceId: String)
+@Serializable data object LicencesRoute
 @Serializable data class TagSearchRoute(val sourceId: String, val query: String)
 @Serializable data class GalleryRoute(val sourceId: String, val galleryId: String, val title: String)
 /** [page] = page to open at; -1 = continue at the saved position. */
@@ -207,7 +209,8 @@ fun AppNavigation(services: AppServices) {
                     }
                     composable<LibraryRoute> { LibraryScreen(services) { item -> nav.openSaved(item) } }
                     composable<DownloadsRoute> { DownloadsScreen(services) }
-                    composable<SettingsRoute> { SettingsScreen(services, onSignIn = { id -> nav.navigate(LoginRoute(id)) }) }
+                    composable<SettingsRoute> { SettingsScreen(services, onSignIn = { id -> nav.navigate(LoginRoute(id)) }, onLicences = { nav.navigate(LicencesRoute) }) }
+                    composable<LicencesRoute> { LicencesScreen(onBack = { nav.popBackStack() }) }
                     composable<LoginRoute> { e -> LoginScreen(services, e.toRoute<LoginRoute>().sourceId, onDone = { nav.popBackStack() }) }
                 }
                 SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).safeControls())

@@ -35,4 +35,7 @@
     <string name="Login_NoWebView_Android">システムの WebView を利用できません。代わりに Cookie を貼り付けてください。</string>
     <string name="Paste_Hint_Android">Cookie を name=value; name=value の形式、または cookies.txt の内容で貼り付けてください。この端末に暗号化して保存され、%1$s にのみ送信されます。</string>
     <string name="Downloads_NoSpace_Android">このギャラリーを保存するための空き容量が端末にありません。</string>
+    <string name="Settings_About_Android">このアプリについて</string>
+    <string name="Settings_Version_Android">バージョン %1$s</string>
+    <string name="Settings_Licences_Android">オープンソースライセンス</string>
 </resources>

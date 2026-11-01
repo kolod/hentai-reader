@@ -259,7 +259,8 @@ the task.
   - safe-area insets; no drawer or top bar of the app; rate-limit banner with waiting time and Retry.
 - [X] T052 [P] [US3] `A/system/KeepScreenOn.kt`: keep the screen on while the reader is shown and the last touch was < 10 min ago, if `KeepScreenOn` (FR-014).
 - [X] T053 [US3] Wire Read/Continue/thumbnail-tap from the gallery screen and the details' progress line ("page 40 of 120", read mark) to `ProgressRepository`. Rotation and fold keep (page, offset) through the in-process configuration change (FR-015). Back returns to the details and then to the unchanged search without requests.
-- [ ] T054 [P] [US3] Compose UI test `D/app/src/androidTest/kotlin/hentaireader/app/ReaderToolbarTest.kt`: tap toggles the toolbar; Back from the reader returns to the gallery; the drawer cannot open in the reader. Uses the offline transport with fixture pages.
+- [X] T054 [P] [US3] Compose UI test `D/app/src/androidTest/kotlin/hentaireader/app/ReaderToolbarTest.kt`: tap toggles the toolbar; Back from the reader returns to the gallery; the drawer cannot open in the reader. Uses the offline transport with fixture pages.
+  - Uses the live E-Hentai front page instead of fixture pages (the instrumented app has no fixture transport); needs the network.
 
 **Checkpoint**: online reading is complete; together with US1–US2 this is a usable phone reader.
 
@@ -397,11 +398,14 @@ the task.
 ## Phase 10: Polish & Cross-Cutting Concerns
 
 - [ ] T082 [P] Layout pass at 360 dp and font scale 1.3 in German and Japanese on every screen and dialog; fix clipping (SC-013); content descriptions for icon-only buttons; touch targets ≥ 48 dp.
-- [ ] T083 [P] Complete translations: every key in `strings_android.xml` in all six languages; Ukrainian plural forms for `Notify_Progress` and `Notify_MoreQueued`; `npm run l10n:android -- --check` clean (Constitution IX).
-- [ ] T084 [P] `D/THIRD-PARTY-NOTICES.md` (QuickJS MIT, jsoup MIT, OkHttp Apache-2.0, AndroidX/Compose Apache-2.0, Kotlin libraries Apache-2.0, SQLite public domain) and an in-app licences screen entry under Settings → About.
-- [ ] T085 Release workflow `.github/workflows/android-release.yml`: on tags `android-v*`, run `:host:test`, `assembleRelease` signed from repository secrets (keystore base64 decoded to a temp file, never cached), attach the APK and its SHA-256 to the GitHub Release; verify the APK size < 40 MB (SC-012).
-- [ ] T086 [P] Docs: `D/README.md` (build, test, desktop native prerequisites, signing, install); `D/CHANGELOG.md` `[0.1.0]` with everything added; `specs/product-overview.md` roadmap item 7 marked done; root `README.md` Android section (Constitution X).
+  - Done: German at 360 dp / font scale 1.3 on Settings, search, gallery, reader; the account buttons in Settings now wrap. Open: Japanese, every dialog and sheet; the reader top bar leaves the title only a few characters at 360 dp.
+- [X] T083 [P] Complete translations: every key in `strings_android.xml` in all six languages; Ukrainian plural forms for `Notify_Progress` and `Notify_MoreQueued`; `npm run l10n:android -- --check` clean (Constitution IX).
+- [X] T084 [P] `D/THIRD-PARTY-NOTICES.md` (QuickJS MIT, jsoup MIT, OkHttp Apache-2.0, AndroidX/Compose Apache-2.0, Kotlin libraries Apache-2.0, SQLite public domain) and an in-app licences screen entry under Settings → About.
+- [X] T085 Release workflow `.github/workflows/android-release.yml`: on tags `android-v*`, run `:host:test`, `assembleRelease` signed from repository secrets (keystore base64 decoded to a temp file, never cached), attach the APK and its SHA-256 to the GitHub Release; verify the APK size < 40 MB (SC-012).
+- [X] T086 [P] Docs: `D/README.md` (build, test, desktop native prerequisites, signing, install); `D/CHANGELOG.md` `[0.1.0]` with everything added; `specs/product-overview.md` roadmap item 7 marked done; root `README.md` Android section (Constitution X).
 - [ ] T087 Run the full [quickstart.md](quickstart.md): automated checks, then the manual checklist on a real phone (reference and 3 GB). Record unchecked items as follow-up tasks here.
+  - 2026-11-01, automated: `:host:test` (187), `:app:lintDebug` (6 known warnings), `l10n:android --check`, 4 instrumented tests on the emulator, signed `assembleRelease` with a test key: all pass.
+  - Open, needs a real phone (reference and 3 GB): T081 measurements, T082 rest, the manual checklist (pinch and rotation, SD card and revoked folder access, Windows ↔ Android archive exchange, real sign-in and pasted cookies, 30 min in the background without requests, storage nearly full).
 
 ---
 

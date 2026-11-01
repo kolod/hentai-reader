@@ -38,4 +38,7 @@
     <string name="Login_NoWebView_Android">Системний WebView недоступний. Вставте файли cookie натомість.</string>
     <string name="Paste_Hint_Android">Вставте cookie як name=value; name=value або вміст файлу cookies.txt. Вони зберігаються зашифрованими на цьому пристрої й надсилаються лише до %1$s.</string>
     <string name="Downloads_NoSpace_Android">Недостатньо вільного місця на телефоні, щоб зберегти цю галерею.</string>
+    <string name="Settings_About_Android">Про застосунок</string>
+    <string name="Settings_Version_Android">Версія %1$s</string>
+    <string name="Settings_Licences_Android">Ліцензії відкритого коду</string>
 </resources>

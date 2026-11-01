@@ -31,6 +31,8 @@ abstract class PackAssets : DefaultTask() {
         for (name in listOf("prelude.js", "host-glue.js")) {
             root.resolve("contract/$name").copyTo(out.resolve("contract/$name"))
         }
+        // Shown under Settings → About (licence texts that must travel with the app).
+        root.resolve("android/THIRD-PARTY-NOTICES.md").copyTo(out.resolve("THIRD-PARTY-NOTICES.md"))
         root.resolve("sources").listFiles()?.filter { it.resolve("${it.name}.js").exists() }?.forEach { dir ->
             dir.resolve("${dir.name}.js").copyTo(out.resolve("sources/${dir.name}/${dir.name}.js"))
         }
@@ -40,6 +42,7 @@ abstract class PackAssets : DefaultTask() {
 val packAssets = tasks.register<PackAssets>("packAssets") {
     repo.set(repoRoot)
     sourceFiles.from(repoRoot.resolve("contract/prelude.js"), repoRoot.resolve("contract/host-glue.js"))
+    sourceFiles.from(repoRoot.resolve("android/THIRD-PARTY-NOTICES.md"))
     sourceFiles.from(fileTree(repoRoot.resolve("sources")) { include("*/*.js") })
     output.set(layout.buildDirectory.dir("generated/hrassets"))
 }

@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -44,6 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hentaireader.app.AppServices
+import hentaireader.app.BuildConfig
 import hentaireader.app.R
 import hentaireader.app.storage.SafDocumentTree
 import hentaireader.app.system.AppLocale
@@ -74,7 +76,7 @@ import kotlinx.serialization.json.jsonPrimitive
  * site's page or with pasted cookies, status and image limit, sign out).
  */
 @Composable
-fun SettingsScreen(services: AppServices, onSignIn: (String) -> Unit) {
+fun SettingsScreen(services: AppServices, onSignIn: (String) -> Unit, onLicences: () -> Unit) {
     val prefs by services.prefs.collectAsStateWithLifecycle()
     val strings = rememberStrings()
     val scope = rememberCoroutineScope()
@@ -140,6 +142,14 @@ fun SettingsScreen(services: AppServices, onSignIn: (String) -> Unit) {
 
             item { Section(stringResource(R.string.Settings_Sources)) }
             for (s in sources) item { SourceSection(services, s.id, s.name, onSignIn) }
+
+            item { Section(stringResource(R.string.Settings_About_Android)) }
+            item {
+                Column {
+                    Text(stringResource(R.string.Settings_Version_Android, BuildConfig.VERSION_NAME))
+                    TextButton(onClick = onLicences) { Text(stringResource(R.string.Settings_Licences_Android)) }
+                }
+            }
         }
     }
 }
@@ -288,7 +298,8 @@ private fun SourceSection(services: AppServices, sourceId: String, name: String,
                 Text(stringResource(R.string.Account_ImageLimit, strings.number(used), strings.number(max)))
                 (limit["resetsAt"] as? JsonPrimitive)?.contentOrNull?.let { Text(stringResource(R.string.Account_LimitResets, strings.date(it))) }
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            // Wraps: long labels (German at a large font) do not fit in one row on a phone.
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 if (!signedIn && manifest["loginPage"] != null) Button(onClick = { onSignIn(sourceId) }) { Text(stringResource(R.string.Account_SignIn)) }
                 if (!signedIn) OutlinedButton(onClick = { paste = true }) { Text(stringResource(R.string.Account_PasteCookies)) }
                 if (signedIn) OutlinedButton(onClick = { s.http.cookies.clear(); refresh++ }) { Text(stringResource(R.string.Account_SignOut)) }

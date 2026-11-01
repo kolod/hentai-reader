@@ -37,4 +37,7 @@
     <string name="Login_NoWebView_Android">La WebView du système n’est pas disponible. Collez vos cookies à la place.</string>
     <string name="Paste_Hint_Android">Collez les cookies sous la forme nom=valeur; nom=valeur ou le contenu d’un fichier cookies.txt. Ils sont chiffrés sur cet appareil et envoyés uniquement à %1$s.</string>
     <string name="Downloads_NoSpace_Android">Pas assez d’espace libre sur le téléphone pour enregistrer cette galerie.</string>
+    <string name="Settings_About_Android">À propos</string>
+    <string name="Settings_Version_Android">Version %1$s</string>
+    <string name="Settings_Licences_Android">Licences open source</string>
 </resources>
