@@ -362,7 +362,7 @@ database agree (SC-010).
 `x86_64`), R8 minified and resource-shrunk, signed only in CI. The release system is the
 same as in the owner's other Android projects (circuitopedia, aligned 2026-11-01): a tag
 `android-vX.Y.Z` on `main` starts the workflow; its `build` job runs in the `release` environment
-(approval required, read-only, the only job with the signing secrets `ANDROID_KEYSTORE_BASE64`,
+(admits only `main` and `android-v*` tags, no required reviewers; read-only, the only job with the signing secrets `ANDROID_KEYSTORE_BASE64`,
 `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`), writes and deletes
 `app/keystore.properties`; a separate `publish` job creates the GitHub Release with generated
 notes. Version from the tag (`-PappVersionName`) and the run number (`-PappVersionCode`); local
