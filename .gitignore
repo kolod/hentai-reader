@@ -18,6 +18,7 @@ downloads/
 # Code folders of the download queue are not downloaded content ("downloads/" also matches
 # "Downloads/" on Windows, where git ignores case).
 !windows/src/HentaiReader.Host/Downloads/
+!android/**/src/**/downloads/
 !windows/tests/HentaiReader.Host.Tests/Downloads/
 # Fixtures hold HTML/JSON only — no images
 **/fixtures/**/*.png
