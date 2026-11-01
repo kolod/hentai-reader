@@ -4,7 +4,7 @@ All notable changes to this component. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
-## [0.1.0] - Unreleased
+## [0.1.0] - 2026-11-01
 
 First Android release (feature 007). Requires contract 1.2 (host reports 1.2.1). Android 8.0+.
 

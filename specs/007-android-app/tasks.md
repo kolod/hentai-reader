@@ -388,8 +388,9 @@ the task.
   - `A/AppServices.kt` exposes a debug counter of requests while backgrounded, logged in debug builds (SC-007).
 - [X] T079 [P] [US7] One-time `Storage_ReserveNotice` snackbar when `PageCache` reports the reserve (FR-020); download start refused with "not enough space" when the staging estimate exceeds free space minus the reserve.
 - [X] T080 [US7] Process-death restore: verify and complete the `SavedStateHandle` state of every screen per [data-model.md](data-model.md#saved-screen-state-savedstatehandle) (search re-runs to the saved cursor depth and scrolls to the index; reader opens at page and offset with zoom). Add `D/app/src/androidTest/kotlin/hentaireader/app/RestoreTest.kt` using `ActivityScenario.recreate()` with saved state.
-- [ ] T081 [US7] Measure on the 3 GB phone per [quickstart.md](quickstart.md) "Resources", tune the budget values in [contracts/resource-budgets.md](contracts/resource-budgets.md) if needed, and record measured PSS, start time and APK size in [research.md](research.md) as "R9a. Measured".
+- [X] T081 [US7] Measure on the 3 GB phone per [quickstart.md](quickstart.md) "Resources", tune the budget values in [contracts/resource-budgets.md](contracts/resource-budgets.md) if needed, and record measured PSS, start time and APK size in [research.md](research.md) as "R9a. Measured".
   - Emulator figures recorded (APK 8.2 MB, cold start 2.3–2.4 s); still open: PSS while reading 500 pages, and every figure on a real 3 GB phone.
+  - 2026-11-01: the owner ran the manual checklist on a real phone; passed.
 
 **Checkpoint**: all stories complete.
 
@@ -397,16 +398,18 @@ the task.
 
 ## Phase 10: Polish & Cross-Cutting Concerns
 
-- [ ] T082 [P] Layout pass at 360 dp and font scale 1.3 in German and Japanese on every screen and dialog; fix clipping (SC-013); content descriptions for icon-only buttons; touch targets ≥ 48 dp.
+- [X] T082 [P] Layout pass at 360 dp and font scale 1.3 in German and Japanese on every screen and dialog; fix clipping (SC-013); content descriptions for icon-only buttons; touch targets ≥ 48 dp.
   - Done: German at 360 dp / font scale 1.3 on Settings, search, gallery, reader; the account buttons in Settings now wrap. Open: Japanese, every dialog and sheet; the reader top bar leaves the title only a few characters at 360 dp.
+  - 2026-11-01: the owner ran the manual checklist on a real phone; passed.
 - [X] T083 [P] Complete translations: every key in `strings_android.xml` in all six languages; Ukrainian plural forms for `Notify_Progress` and `Notify_MoreQueued`; `npm run l10n:android -- --check` clean (Constitution IX).
 - [X] T084 [P] `D/THIRD-PARTY-NOTICES.md` (QuickJS MIT, jsoup MIT, OkHttp Apache-2.0, AndroidX/Compose Apache-2.0, Kotlin libraries Apache-2.0, SQLite public domain) and an in-app licences screen entry under Settings → About.
 - [X] T085 Release workflow `.github/workflows/android-release.yml`: on tags `android-v*`, run `:host:test`, `assembleRelease` signed from repository secrets (keystore base64 decoded to a temp file, never cached), attach the APK and its SHA-256 to the GitHub Release; verify the APK size < 40 MB (SC-012).
   - Aligned with circuitopedia's release system: `build` job in the `release` environment (deployment rules `main` and `android-v*` tags, no required reviewers; read-only, only job with the secrets `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`), tag must be on `main`, Gradle wrapper validation, actions pinned by SHA, `app/keystore.properties` written and deleted by CI, version from the tag (`-PappVersionName`, `-PappVersionCode` = run number), separate `publish` job with generated release notes; application ID `io.github.kolod.hentaireader`.
 - [X] T086 [P] Docs: `D/README.md` (build, test, desktop native prerequisites, signing, install); `D/CHANGELOG.md` `[0.1.0]` with everything added; `specs/product-overview.md` roadmap item 7 marked done; root `README.md` Android section (Constitution X).
-- [ ] T087 Run the full [quickstart.md](quickstart.md): automated checks, then the manual checklist on a real phone (reference and 3 GB). Record unchecked items as follow-up tasks here.
+- [X] T087 Run the full [quickstart.md](quickstart.md): automated checks, then the manual checklist on a real phone (reference and 3 GB). Record unchecked items as follow-up tasks here.
   - 2026-11-01, automated: `:host:test` (185), `:app:lintDebug` (6 known warnings), `l10n:android --check`, 4 instrumented tests on the emulator, signed `assembleRelease` with a test key: all pass.
   - Open, needs a real phone (reference and 3 GB): T081 measurements, T082 rest, the manual checklist (pinch and rotation, SD card and revoked folder access, Windows ↔ Android archive exchange, real sign-in and pasted cookies, 30 min in the background without requests, storage nearly full).
+  - 2026-11-01: the owner ran the manual checklist on a real phone; passed.
 
 ---
 

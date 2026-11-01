@@ -263,8 +263,9 @@ the Java heap small, but their pixels still cost RAM, so they count against the 
 
 ### R9a. Measured (2026-11-01, emulator only)
 
-Emulator `sdk_gphone64_x86_64`, Android 16, 2.5 GB RAM, heap growth limit 192 MB. **Not yet
-measured on a real 3 GB phone**; T081 stays open until it is.
+Emulator `sdk_gphone64_x86_64`, Android 16, 2.5 GB RAM, heap growth limit 192 MB. The owner ran
+the manual checklist on a real phone on 2026-11-01 and it passed; figures from the phone were not
+recorded here.
 
 | What | Value | Target |
 |------|-------|--------|
