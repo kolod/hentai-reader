@@ -33,6 +33,7 @@ val configureDesktopNative = tasks.register<Exec>("configureDesktopNative") {
 tasks.register<Exec>("buildDesktopNative") {
     dependsOn(configureDesktopNative)
     inputs.dir("src/main/cpp")
+    inputs.file("CMakeLists.txt")
     outputs.dir(desktopDir)
     commandLine("cmake", "--build", desktopDir.get().asFile.absolutePath, "--config", "Release")
 }

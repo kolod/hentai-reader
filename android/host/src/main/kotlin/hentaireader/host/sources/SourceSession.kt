@@ -19,7 +19,10 @@ import hentaireader.host.http.ImageRateLimitException
 import hentaireader.host.http.Politeness
 import hentaireader.host.http.Transport
 import hentaireader.host.storage.SourceStorage
+import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
@@ -46,7 +49,8 @@ class SessionOptions(
 /**
  * One running source: engine, HTTP, HTML and storage, implementing the bridge (port of the Windows
  * SourceSession). Limited after RateLimited (no requests until the user retries), Broken after a
- * limit hit (fresh engine on the next call).
+ * limit hit (fresh engine on the next call). An idle engine may be closed ([closeIdleEngine]) and
+ * the next call starts it again, with the same storage, cookies and settings.
  */
 class SourceSession private constructor(
     private val script: String,
@@ -55,6 +59,14 @@ class SourceSession private constructor(
 ) : HostBridge, AutoCloseable {
     private val html = HtmlHost()
     private var engine: SourceEngine? = null
+    private val engineLock = Mutex()
+    private val active = AtomicInteger()
+
+    /** Called when the last running call ends (the session pool starts its idle timer). */
+    var onIdle: (() -> Unit)? = null
+
+    /** Whether an engine is loaded now. */
+    val engineRunning: Boolean get() = engine != null
     @Volatile private var fatalError: Throwable? = null
 
     val http = HttpHost(options.transport, options.enforcePoliteness, options.cookies).also { h -> h.onFatal = { if (fatalError == null) fatalError = it } }
@@ -98,19 +110,39 @@ class SourceSession private constructor(
             return CallResult.failure(CallError("SourceError", SourceErrorKind.RATE_LIMITED, null,
                 "the source is rate-limited; retry explicitly", retryAfterSeconds))
         }
-        if (state == SessionState.BROKEN || engine?.broken != null) startEngine()
-        val callArgs = CallArgs.build(manifest, fn, args, CallArgs.resolveSettings(manifest, settings))
-        state = SessionState.BUSY
-        fatalError = null
-        val result = engine!!.call(fn, callArgs.toString())
-        val error = result.error
-        if (error != null && error.type == "SourceError" && error.kind == SourceErrorKind.RATE_LIMITED) {
-            state = SessionState.LIMITED
-            retryAfterSeconds = error.retryAfterSeconds
-        } else {
-            state = if (engine!!.broken == null) SessionState.IDLE else SessionState.BROKEN
+        active.incrementAndGet()
+        try {
+            val e = engineLock.withLock {
+                if (engine == null || state == SessionState.BROKEN || engine?.broken != null) startEngine()
+                engine!!
+            }
+            val callArgs = CallArgs.build(manifest, fn, args, CallArgs.resolveSettings(manifest, settings))
+            state = SessionState.BUSY
+            fatalError = null
+            val result = e.call(fn, callArgs.toString())
+            val error = result.error
+            if (error != null && error.type == "SourceError" && error.kind == SourceErrorKind.RATE_LIMITED) {
+                state = SessionState.LIMITED
+                retryAfterSeconds = error.retryAfterSeconds
+            } else {
+                state = if (e.broken == null) SessionState.IDLE else SessionState.BROKEN
+            }
+            return result
+        } finally {
+            if (active.decrementAndGet() == 0) onIdle?.invoke()
         }
-        return result
+    }
+
+    /**
+     * Closes the engine if no call is running (007 FR-017: its memory goes back to the system);
+     * the next call starts a fresh one. Returns whether it was closed.
+     */
+    suspend fun closeIdleEngine(): Boolean = engineLock.withLock {
+        val e = engine
+        if (e == null || active.get() > 0) return@withLock false
+        e.close()
+        engine = null
+        true
     }
 
     /**

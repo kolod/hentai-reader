@@ -35,4 +35,5 @@
     <string name="Search_DefaultSaved_Touch">This is the default search (long press clears it)</string>
     <string name="Login_NoWebView_Android">The system web view is not available. Paste your cookies instead.</string>
     <string name="Paste_Hint_Android">Paste cookies as name=value; name=value or the content of a cookies.txt file. They are stored encrypted on this device and sent only to %1$s.</string>
+    <string name="Downloads_NoSpace_Android">Not enough free space on the phone to save this gallery.</string>
 </resources>

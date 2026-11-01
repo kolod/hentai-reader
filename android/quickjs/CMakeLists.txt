@@ -28,6 +28,8 @@ if(ANDROID)
 else()
     find_package(JNI REQUIRED)
     target_include_directories(hrquickjs PRIVATE ${JNI_INCLUDE_DIRS})
+    # The JVM tests keep QuickJS's own assertions (e.g. values still alive when a runtime is freed).
+    target_compile_options(hrquickjs PRIVATE -UNDEBUG)
     if(WIN32)
         target_compile_definitions(hrquickjs PRIVATE __USE_MINGW_ANSI_STDIO)
         # No runtime DLL dependencies for the JVM to find.

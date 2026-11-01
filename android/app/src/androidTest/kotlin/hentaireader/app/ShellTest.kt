@@ -39,7 +39,7 @@ class ShellTest {
     fun drawerOpensWithMenuAndClosesOnItemAndBack() {
         rule.waitUntil(15_000) { rule.onAllNodes(androidx.compose.ui.test.hasContentDescription(text(R.string.Nav_OpenMenu))).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithContentDescription(text(R.string.Nav_OpenMenu)).performClick()
-        rule.onNodeWithText(text(R.string.Nav_Settings)).assertIsDisplayed().performClick()
+        rule.onNodeWithText(text(R.string.Nav_Downloads)).assertIsDisplayed().performClick()
         rule.waitForIdle()
         rule.onNodeWithContentDescription(text(R.string.Nav_OpenMenu)).performClick()
         rule.onNodeWithText(text(R.string.Nav_Library)).assertIsDisplayed()

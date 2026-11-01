@@ -59,6 +59,16 @@ class MainActivity : ComponentActivity() {
         Immersive.hideBars(this)
     }
 
+    override fun onStart() {
+        super.onStart()
+        services.shown(true)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        services.shown(false)
+    }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) Immersive.hideBars(this)

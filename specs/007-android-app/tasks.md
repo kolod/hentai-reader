@@ -375,19 +375,20 @@ the task.
 
 **Independent Test**: quickstart "Resources" on a 3 GB phone: PSS < 400 MB on 500 pages, kill-and-return restore, 30 min background with 0 requests, reserve notice.
 
-- [ ] T076 [US7] `onTrimMemory` in `A/App.kt`:
+- [X] T076 [US7] `onTrimMemory` in `A/App.kt`:
   - `UI_HIDDEN` → `ImageBudget` keeps only visible pages, thumbnails and covers off screen are dropped;
   - `RUNNING_LOW` and above → budget × 0.5, `ThumbnailCache` cleared, idle source engines closed;
   - restore when shown again (FR-017).
-- [ ] T077 [P] [US7] Engine pool in `H/sources/SessionPool.kt`: close a source engine after 2 min idle or on demand; reopen transparently with persistent storage, cookies and settings. Tests `HT/sources/SessionPoolTest.kt`.
-- [ ] T078 [US7] Background audit:
+- [X] T077 [P] [US7] Engine pool in `H/sources/SessionPool.kt`: close a source engine after 2 min idle or on demand; reopen transparently with persistent storage, cookies and settings. Tests `HT/sources/SessionPoolTest.kt`.
+- [X] T078 [US7] Background audit:
   - every coroutine of the UI layer is lifecycle-scoped (`repeatOnLifecycle(STARTED)`);
   - no timers or polling; history network covers off by default;
   - animated images animate only within 1 screen of the view;
   - `A/AppServices.kt` exposes a debug counter of requests while backgrounded, logged in debug builds (SC-007).
-- [ ] T079 [P] [US7] One-time `Storage_ReserveNotice` snackbar when `PageCache` reports the reserve (FR-020); download start refused with "not enough space" when the staging estimate exceeds free space minus the reserve.
-- [ ] T080 [US7] Process-death restore: verify and complete the `SavedStateHandle` state of every screen per [data-model.md](data-model.md#saved-screen-state-savedstatehandle) (search re-runs to the saved cursor depth and scrolls to the index; reader opens at page and offset with zoom). Add `D/app/src/androidTest/kotlin/hentaireader/app/RestoreTest.kt` using `ActivityScenario.recreate()` with saved state.
+- [X] T079 [P] [US7] One-time `Storage_ReserveNotice` snackbar when `PageCache` reports the reserve (FR-020); download start refused with "not enough space" when the staging estimate exceeds free space minus the reserve.
+- [X] T080 [US7] Process-death restore: verify and complete the `SavedStateHandle` state of every screen per [data-model.md](data-model.md#saved-screen-state-savedstatehandle) (search re-runs to the saved cursor depth and scrolls to the index; reader opens at page and offset with zoom). Add `D/app/src/androidTest/kotlin/hentaireader/app/RestoreTest.kt` using `ActivityScenario.recreate()` with saved state.
 - [ ] T081 [US7] Measure on the 3 GB phone per [quickstart.md](quickstart.md) "Resources", tune the budget values in [contracts/resource-budgets.md](contracts/resource-budgets.md) if needed, and record measured PSS, start time and APK size in [research.md](research.md) as "R9a. Measured".
+  - Emulator figures recorded (APK 8.2 MB, cold start 2.3–2.4 s); still open: PSS while reading 500 pages, and every figure on a real 3 GB phone.
 
 **Checkpoint**: all stories complete.
 

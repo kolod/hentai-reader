@@ -1,5 +1,7 @@
 package hentaireader.host.reading
 
+import kotlinx.coroutines.flow.MutableStateFlow
+
 /**
  * The memory budget for decoded pages (007 FR-016, contracts/resource-budgets.md): the Windows
  * load window decides what should be decoded, and the budget decides what may stay. When it is
@@ -14,13 +16,29 @@ class ImageBudget(baseBytes: Long) {
     /** The largest single decode; a bigger page is decoded at a lower scale or in tiles. */
     val maxEntryBytes: Long get() = limitBytes / 8
 
+    /** While the app is not shown, only the visible pages are kept (007 FR-017). */
+    @Volatile var visibleOnly: Boolean = false
+        private set
+
+    /** Bumped on every change, so holders release what no longer fits. */
+    val changes = MutableStateFlow(0)
+
     /** Halves the budget after a low-memory signal (until [restore]). */
     fun shrink(factor: Double = 0.5) {
         limitBytes = (base * factor).toLong()
+        changes.value++
     }
 
+    fun keepVisibleOnly() {
+        visibleOnly = true
+        changes.value++
+    }
+
+    /** The app is shown again: the full budget. */
     fun restore() {
         limitBytes = base
+        visibleOnly = false
+        changes.value++
     }
 
     /**
@@ -29,6 +47,7 @@ class ImageBudget(baseBytes: Long) {
      * further preload). Pages outside the plan go first in any case.
      */
     fun release(held: Map<Int, Long>, plan: LoadPlan, minimumAhead: Set<Int>): List<Int> {
+        if (visibleOnly) return held.keys.filter { it !in plan.visible }
         val out = ArrayList<Int>()
         var total = held.values.sum()
         // Anything outside the plan is not needed at all.

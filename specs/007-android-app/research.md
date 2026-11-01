@@ -261,6 +261,30 @@ section (sources, History, Library, Downloads, Settings) as on Windows.
 **Rationale**: `memoryClass` reflects what the device grants a normal app; hardware bitmaps keep
 the Java heap small, but their pixels still cost RAM, so they count against the same budget.
 
+### R9a. Measured (2026-11-01, emulator only)
+
+Emulator `sdk_gphone64_x86_64`, Android 16, 2.5 GB RAM, heap growth limit 192 MB. **Not yet
+measured on a real 3 GB phone**; T081 stays open until it is.
+
+| What | Value | Target |
+|------|-------|--------|
+| APK, release (R8; natives for arm64-v8a, armeabi-v7a, x86_64) | 8.2 MB | < 40 MB (SC-012) |
+| Cold start to first frame, release build signed with the debug key, 4 runs | 2.33–2.42 s | < 3 s (SC-002) |
+| Cold start, debug build | 3.4–3.7 s | (debuggable, not optimised) |
+| PSS on the search screen after start | 50 MB | — |
+| PSS while reading 500 pages | not measured | < 400 MB (SC-005) |
+
+Found while measuring:
+
+- Closing a source engine (the 2-minute idle close, low memory) aborted the app: the JNI shim
+  freed the runtime while Kotlin still held value handles (the adapter's `settle`, `settleHttp`,
+  `watch` and the call invoker), and QuickJS asserts that no object is alive. Engines were never
+  closed while the app ran before T077. The shim now keeps every handle on a list and frees what
+  is left before `JS_FreeRuntime`. The desktop build used for the JVM tests is `Release` and so had
+  assertions off; it now keeps them (`-UNDEBUG`), though the leak did not reproduce there.
+- The engine thread woke up every second while idle (`poll(1 s)`); it now blocks until work
+  arrives, so an idle app does nothing.
+
 ## R10. Localisation shared with Windows
 
 **Decision**: the Windows `.resw` files stay the single source for every shared string. A Node

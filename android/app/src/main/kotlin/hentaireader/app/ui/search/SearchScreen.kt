@@ -108,6 +108,23 @@ fun SearchScreen(
     var showFilters by rememberSaveable { mutableStateOf(false) }
     val grid = rememberLazyGridState()
 
+    // The position survives the system stopping the app: saved while scrolling, scrolled back
+    // to once the restored pages are loaded (007 FR-025).
+    LaunchedEffect(vm, grid) {
+        snapshotFlow { grid.firstVisibleItemIndex to grid.firstVisibleItemScrollOffset }.collect { (i, o) -> vm.scrolledTo(i, o) }
+    }
+    val pending = vm.pendingIndex
+    LaunchedEffect(pending, vm.items.size, vm.status) {
+        if (pending == null) return@LaunchedEffect
+        if (pending < vm.items.size) {
+            grid.scrollToItem(pending, vm.pendingOffset)
+            vm.restored()
+        } else if (vm.status != SearchStatus.LOADING && (vm.items.isNotEmpty() || vm.status != SearchStatus.IDLE)) {
+            // All restored pages are in and the index is not among them.
+            vm.restored()
+        }
+    }
+
     // Endless results: the next page loads as the grid nears its end (003 FR-012).
     LaunchedEffect(vm, grid) {
         snapshotFlow { grid.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0 }

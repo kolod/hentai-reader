@@ -47,9 +47,10 @@ internal class EngineThread(name: String) {
         }
     }
 
+    // Blocks while there is no work: an idle engine never wakes up (007 FR-019).
     private fun run() {
         while (!closed) {
-            val action = queue.poll(1, TimeUnit.SECONDS) ?: continue
+            val action = queue.take()
             try {
                 action.run()
             } catch (_: Throwable) {
@@ -61,6 +62,7 @@ internal class EngineThread(name: String) {
 
     fun close() {
         closed = true
+        queue.add(Runnable {})   // wakes the thread so it can end
     }
 
     private companion object {

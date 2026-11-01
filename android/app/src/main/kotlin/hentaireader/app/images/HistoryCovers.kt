@@ -42,6 +42,9 @@ class HistoryCovers(private val services: AppServices) {
         return withContext(Dispatchers.IO) { BitmapFactory.decodeFile(file.path)?.asImageBitmap() }?.also { memory.put(key, it) }
     }
 
+    /** Drops the decoded covers (low memory); they are read from disk again when shown. */
+    fun clearMemory() = memory.evictAll()
+
     fun forget(coverFile: String?) {
         coverFile?.let { File(dir, it).delete() }
     }

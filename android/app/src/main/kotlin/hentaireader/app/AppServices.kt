@@ -36,6 +36,8 @@ import hentaireader.host.http.LiveTransport
 import hentaireader.host.reading.ImageBudget
 import hentaireader.host.storage.PageCache
 import hentaireader.host.sources.SessionOptions
+import hentaireader.host.sources.SessionPool
+import hentaireader.app.system.BackgroundAudit
 import hentaireader.host.sources.SourceCatalog
 import hentaireader.host.sources.SourceSession
 import hentaireader.host.storage.SourceStorage
@@ -75,7 +77,10 @@ class AppServices(context: Context) {
     private val scripts = AssetScriptStore(app.assets)
     private val contract by lazy { scripts.contractScripts() }
     private val bundles by lazy { SourceCatalog.load(scripts) }
-    private val transport by lazy { LiveTransport() }
+    private val transport by lazy { BackgroundAudit(LiveTransport()) { visible } }
+
+    /** Whether the app is on screen (started); requests made otherwise are counted (SC-007). */
+    @Volatile private var visible = false
 
     private val _sources = MutableStateFlow<List<SourceEntry>?>(null)
     /** null while the bundled sources are being loaded. */
@@ -85,6 +90,8 @@ class AppServices(context: Context) {
 
     private val sessionLock = Mutex()
     private val sessions = HashMap<String, SourceSession>()
+    /** Engines idle for 2 minutes are closed and reopened on the next call (007 T077). */
+    private val pool = SessionPool(scope)
     /** Covers and thumbnails of every screen. */
     val thumbnails = ThumbnailCache()
 
@@ -108,6 +115,24 @@ class AppServices(context: Context) {
 
     private val queueLock = Mutex()
     private var queue: DownloadQueue? = null
+
+    /** The app went to the foreground or the background. */
+    fun shown(isShown: Boolean) {
+        visible = isShown
+        if (isShown) imageBudget.restore()
+    }
+
+    /**
+     * Gives memory back (007 FR-017, T076): hidden → only the visible pages stay and covers are
+     * dropped; low → half the page budget and idle source engines closed as well.
+     */
+    fun trimMemory(hidden: Boolean, low: Boolean) {
+        if (hidden) imageBudget.keepVisibleOnly() else if (low) imageBudget.shrink(0.5)
+        thumbnails.clear()
+        historyCovers.clearMemory()
+        galleries.evictAll()
+        if (low) scope.launch { pool.closeIdle() }
+    }
 
     /** Changes and saves the preferences; nothing is written before the adult confirmation. */
     suspend fun updatePrefs(change: (Preferences) -> Preferences) {
@@ -151,7 +176,10 @@ class AppServices(context: Context) {
                 }
             }
             val options = SessionOptions(transport, enforcePoliteness = true, storage = storage, scripts = contract, cookies = jar)
-            SourceSession.open(bundle.script, "$id.js", options).also { sessions[id] = it }
+            SourceSession.open(bundle.script, "$id.js", options).also {
+                sessions[id] = it
+                pool.add(it)
+            }
         }
     }
 
@@ -173,8 +201,8 @@ class AppServices(context: Context) {
         }
     }
 
-    /** Raised once when a page was not cached because storage is nearly full (007 FR-020). */
-    val reserveNotices = kotlinx.coroutines.flow.MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    /** Raised once when a page was not cached because storage is nearly full (007 FR-020); kept until shown. */
+    val reserveNotices = kotlinx.coroutines.flow.MutableSharedFlow<Unit>(replay = 1)
 
     /** Files still to move and all files while the page cache moves, else null (006 FR-024). */
     val cacheMove = MutableStateFlow<Pair<Int, Int>?>(null)

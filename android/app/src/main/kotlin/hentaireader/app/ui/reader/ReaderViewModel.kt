@@ -231,8 +231,6 @@ class ReaderViewModel(
     fun originX(columnWidth: Double = session?.geometry?.columnWidth ?: viewportWidth): Double =
         if (columnWidth < viewportWidth) (viewportWidth - columnWidth) / 2 else -offsetX
 
-    fun trimMemory() = session?.trimToVisible()
-
     private fun maxX() = maxOf(0.0, (session?.geometry?.columnWidth ?: 0.0) - viewportWidth)
 
     private fun clampY(y: Double): Double {

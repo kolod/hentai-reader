@@ -97,6 +97,8 @@ enum class DownloadState(val sql: String) {
 object DownloadReason {
     const val WAITING_WIFI = "waiting_wifi"
     const val STOPPED_BY_SYSTEM = "stopped_by_system"
+    /** Failed before starting: the staged pages would not fit above the storage reserve. */
+    const val NO_SPACE = "no_space"
 }
 
 data class DownloadRow(

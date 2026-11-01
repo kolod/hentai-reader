@@ -37,4 +37,5 @@
     <string name="Search_DefaultSaved_Touch">Це типовий пошук (довге натискання скасовує)</string>
     <string name="Login_NoWebView_Android">Системний WebView недоступний. Вставте файли cookie натомість.</string>
     <string name="Paste_Hint_Android">Вставте cookie як name=value; name=value або вміст файлу cookies.txt. Вони зберігаються зашифрованими на цьому пристрої й надсилаються лише до %1$s.</string>
+    <string name="Downloads_NoSpace_Android">Недостатньо вільного місця на телефоні, щоб зберегти цю галерею.</string>
 </resources>

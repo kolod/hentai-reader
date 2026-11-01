@@ -106,6 +106,10 @@ class SearchViewModel(
     val sourceName: String get() = services.sources.value?.firstOrNull { it.id == sourceId }?.name ?: sourceId
     val hasMore: Boolean get() = status != SearchStatus.END && status != SearchStatus.ERROR && (!started || cursor != null)
 
+    /** First visible result to scroll back to once the restored pages are loaded (007 FR-025). */
+    var pendingIndex by mutableStateOf(saved.get<Int>(KEY_INDEX)?.takeIf { it > 0 })
+        private set
+
     private var cursor: String? = null
     private var started = false
     private var pages = 0
@@ -131,7 +135,10 @@ class SearchViewModel(
                 services.prefs.value.defaultQueries[sourceId]?.let { query = it.text; applyFilters(it.filters) }
             }
             session = s
+            val index = pendingIndex
             search(restorePages = saved.get<Int>(KEY_PAGES) ?: 1)
+            pendingIndex = index
+            index?.let { saved[KEY_INDEX] = it }
         }
     }
 
@@ -160,6 +167,21 @@ class SearchViewModel(
 
     fun clearDefault() = viewModelScope.launch { services.updatePrefs { it.copy(defaultQueries = it.defaultQueries - sourceId) } }
 
+    /** The grid scrolled; kept so the position survives the system stopping the app. */
+    fun scrolledTo(index: Int, offset: Int) {
+        if (pendingIndex != null) return
+        saved[KEY_INDEX] = index
+        saved[KEY_OFFSET] = offset
+    }
+
+    /** Pixel offset of [pendingIndex] within the grid's top. */
+    val pendingOffset: Int get() = saved.get<Int>(KEY_OFFSET) ?: 0
+
+    /** The grid is back at [pendingIndex] (or it will never be: fewer results came back). */
+    fun restored() {
+        pendingIndex = null
+    }
+
     /** Starts a new search; the one still running is abandoned. */
     fun search(restorePages: Int = 1) {
         job?.cancel()
@@ -171,8 +193,10 @@ class SearchViewModel(
         total = null
         error = null
         status = SearchStatus.IDLE
+        pendingIndex = null
         saved[KEY_TEXT] = query
         saved[KEY_FILTERS] = currentFilters().toString()
+        saved[KEY_INDEX] = 0
         loadMore(restorePages)
     }
 
@@ -220,5 +244,7 @@ class SearchViewModel(
         const val KEY_TEXT = "text"
         const val KEY_FILTERS = "filters"
         const val KEY_PAGES = "pages"
+        const val KEY_INDEX = "index"
+        const val KEY_OFFSET = "offset"
     }
 }

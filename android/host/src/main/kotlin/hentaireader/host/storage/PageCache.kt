@@ -213,7 +213,7 @@ class PageCache(
     private fun belowReserve(dir: File): Boolean {
         val (free, total) = freeSpace(dir)
         if (total <= 0) return false
-        return free < minOf(GIB, total / 10)
+        return free < reserveBytes(total)
     }
 
     private fun pathOf(name: String, entry: Entry) = File(if (entry.inOld && old != null) old!! else folder, name)
@@ -274,6 +274,9 @@ class PageCache(
         private const val GIB = 1024L * 1024 * 1024
         private val FLUSH_INTERVAL: Duration = Duration.ofSeconds(10)
         private val INDEX_SERIALIZER = MapSerializer(String.serializer(), LongArraySerializer())
+
+        /** Free space kept on a volume (007 FR-020): min(1 GiB, 10 % of the volume). */
+        fun reserveBytes(totalBytes: Long): Long = minOf(GIB, totalBytes / 10)
 
         /** Cache key of a page; the fingerprint separates different setting values (e.g. image quality). */
         fun key(sourceId: String, galleryId: String, page: Int, fingerprint: String) = "$sourceId|$galleryId|$page|$fingerprint"

@@ -71,6 +71,8 @@ import hentaireader.host.data.ArchiveRepository
 import hentaireader.host.data.ArchiveState
 import hentaireader.app.ui.history.HistoryScreen
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import hentaireader.app.ui.search.SearchScreen
 import hentaireader.app.ui.search.DefaultSearchStar
 import hentaireader.app.ui.settings.SettingsScreen
@@ -107,6 +109,7 @@ fun AppNavigation(services: AppServices) {
     val start: Any = remember(list) { startRoute(prefs, list) }
     val nav = rememberNavController()
     val drawer = rememberDrawerState(DrawerValue.Closed)
+    val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val activity = LocalActivity.current
     val entry by nav.currentBackStackEntryAsState()
@@ -167,45 +170,57 @@ fun AppNavigation(services: AppServices) {
         },
     ) {
         CompositionLocalProvider(LocalOpenMenu provides { scope.launch { drawer.open() } }) {
-            NavHost(nav, startDestination = start) {
-                composable<SourceRoute> { e ->
-                    val id = e.toRoute<SourceRoute>().sourceId
-                    val vm = viewModel(key = "search:$id") { SearchViewModel(services, id, null, createSavedStateHandle()) }
-                    SearchScreen(vm, services.thumbnails, onOpenGallery = { nav.openGallery(id, it) }, onBack = null,
-                        star = { DefaultSearchStar(vm, prefs.defaultQueries) })
-                }
-                composable<TagSearchRoute> { e ->
-                    val r = e.toRoute<TagSearchRoute>()
-                    val vm = viewModel { SearchViewModel(services, r.sourceId, r.query, createSavedStateHandle()) }
-                    SearchScreen(vm, services.thumbnails, onOpenGallery = { nav.openGallery(r.sourceId, it) }, onBack = { nav.popBackStack() })
-                }
-                composable<GalleryRoute> { e ->
-                    val r = e.toRoute<GalleryRoute>()
-                    val vm = viewModel { GalleryViewModel(services, r.sourceId, r.galleryId) }
-                    GalleryScreen(vm, services.thumbnails, r.title, onBack = { nav.popBackStack() },
-                        onSearchTag = { q -> nav.navigate(TagSearchRoute(r.sourceId, q)) },
-                        onRead = { page -> nav.navigate(ReaderRoute(r.sourceId, r.galleryId, vm.gallery?.let { (it["title"] as? JsonPrimitive)?.contentOrNull } ?: r.title, page)) },
-                        actions = { g -> SaveToLibraryButton(services, r.sourceId, g) { item -> nav.openSaved(item) } })
-                }
-                composable<ReaderRoute> { e ->
-                    val r = e.toRoute<ReaderRoute>()
-                    val vm = viewModel { ReaderViewModel(services, r.sourceId, r.galleryId, r.title, r.page, r.archiveId, createSavedStateHandle()) }
-                    ReaderScreen(vm, keepScreenOn = prefs.keepScreenOn, onBack = { nav.popBackStack() })
-                }
-                composable<HistoryRoute> {
-                    HistoryScreen(services, services.historyCovers) { entry ->
-                        // The saved copy when there is one, otherwise online at the saved position (006 FR-019).
-                        scope.launch {
-                            val saved = ArchiveRepository(services.database()).find(entry.key).firstOrNull { it.archive.state == ArchiveState.OK }
-                            if (saved != null) nav.openSaved(saved) else nav.navigate(ReaderRoute(entry.key.sourceId, entry.key.galleryId, entry.title, -1))
+            Box(Modifier.fillMaxSize()) {
+                NavHost(nav, startDestination = start) {
+                    composable<SourceRoute> { e ->
+                        val id = e.toRoute<SourceRoute>().sourceId
+                        val vm = viewModel(key = "search:$id") { SearchViewModel(services, id, null, createSavedStateHandle()) }
+                        SearchScreen(vm, services.thumbnails, onOpenGallery = { nav.openGallery(id, it) }, onBack = null,
+                            star = { DefaultSearchStar(vm, prefs.defaultQueries) })
+                    }
+                    composable<TagSearchRoute> { e ->
+                        val r = e.toRoute<TagSearchRoute>()
+                        val vm = viewModel { SearchViewModel(services, r.sourceId, r.query, createSavedStateHandle()) }
+                        SearchScreen(vm, services.thumbnails, onOpenGallery = { nav.openGallery(r.sourceId, it) }, onBack = { nav.popBackStack() })
+                    }
+                    composable<GalleryRoute> { e ->
+                        val r = e.toRoute<GalleryRoute>()
+                        val vm = viewModel { GalleryViewModel(services, r.sourceId, r.galleryId) }
+                        GalleryScreen(vm, services.thumbnails, r.title, onBack = { nav.popBackStack() },
+                            onSearchTag = { q -> nav.navigate(TagSearchRoute(r.sourceId, q)) },
+                            onRead = { page -> nav.navigate(ReaderRoute(r.sourceId, r.galleryId, vm.gallery?.let { (it["title"] as? JsonPrimitive)?.contentOrNull } ?: r.title, page)) },
+                            actions = { g -> SaveToLibraryButton(services, r.sourceId, g) { item -> nav.openSaved(item) } })
+                    }
+                    composable<ReaderRoute> { e ->
+                        val r = e.toRoute<ReaderRoute>()
+                        val vm = viewModel { ReaderViewModel(services, r.sourceId, r.galleryId, r.title, r.page, r.archiveId, createSavedStateHandle()) }
+                        ReaderScreen(vm, keepScreenOn = prefs.keepScreenOn, onBack = { nav.popBackStack() })
+                    }
+                    composable<HistoryRoute> {
+                        HistoryScreen(services, services.historyCovers) { entry ->
+                            // The saved copy when there is one, otherwise online at the saved position (006 FR-019).
+                            scope.launch {
+                                val saved = ArchiveRepository(services.database()).find(entry.key).firstOrNull { it.archive.state == ArchiveState.OK }
+                                if (saved != null) nav.openSaved(saved) else nav.navigate(ReaderRoute(entry.key.sourceId, entry.key.galleryId, entry.title, -1))
+                            }
                         }
                     }
+                    composable<LibraryRoute> { LibraryScreen(services) { item -> nav.openSaved(item) } }
+                    composable<DownloadsRoute> { DownloadsScreen(services) }
+                    composable<SettingsRoute> { SettingsScreen(services, onSignIn = { id -> nav.navigate(LoginRoute(id)) }) }
+                    composable<LoginRoute> { e -> LoginScreen(services, e.toRoute<LoginRoute>().sourceId, onDone = { nav.popBackStack() }) }
                 }
-                composable<LibraryRoute> { LibraryScreen(services) { item -> nav.openSaved(item) } }
-                composable<DownloadsRoute> { DownloadsScreen(services) }
-                composable<SettingsRoute> { SettingsScreen(services, onSignIn = { id -> nav.navigate(LoginRoute(id)) }) }
-                composable<LoginRoute> { e -> LoginScreen(services, e.toRoute<LoginRoute>().sourceId, onDone = { nav.popBackStack() }) }
+                SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).safeControls())
             }
+        }
+    }
+
+    // Storage nearly full: pages are not cached; said once (007 FR-020).
+    val reserveText = stringResource(R.string.Storage_ReserveNotice)
+    LaunchedEffect(Unit) {
+        services.reserveNotices.collect {
+            services.reserveNotices.resetReplayCache()
+            snackbar.showSnackbar(reserveText)
         }
     }
 

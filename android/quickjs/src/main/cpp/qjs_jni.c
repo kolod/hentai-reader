@@ -22,6 +22,14 @@
 #include <time.h>
 #endif
 
+// A value handed to Kotlin. Every live handle is on its engine's list, so destroy can free the
+// ones Kotlin still holds (the module namespace, functions) before the runtime goes away.
+typedef struct Handle {
+    JSValue value;         // first member: a handle pointer is also a JSValue pointer
+    struct Handle *prev;
+    struct Handle *next;
+} Handle;
+
 typedef struct {
     JSRuntime *rt;
     JSContext *ctx;
@@ -32,6 +40,7 @@ typedef struct {
     volatile int cancel;   // set from any thread
     int interrupted;       // the interrupt handler stopped the script
     char *last_error;      // JSON {name, message, stack, interrupted}
+    Handle *handles;       // live handles
 } Engine;
 
 static jclass g_object_class;
@@ -70,10 +79,21 @@ static int interrupt_handler(JSRuntime *rt, void *opaque) {
     return 0;
 }
 
-static jlong wrap(JSValue v) {
-    JSValue *p = malloc(sizeof(JSValue));
-    *p = v;
-    return (jlong)(intptr_t)p;
+static jlong wrap(Engine *e, JSValue v) {
+    Handle *h = malloc(sizeof(Handle));
+    h->value = v;
+    h->prev = NULL;
+    h->next = e->handles;
+    if (e->handles) e->handles->prev = h;
+    e->handles = h;
+    return (jlong)(intptr_t)h;
+}
+
+static void free_handle(Engine *e, Handle *h) {
+    if (h->prev) h->prev->next = h->next; else e->handles = h->next;
+    if (h->next) h->next->prev = h->prev;
+    JS_FreeValue(e->ctx, h->value);
+    free(h);
 }
 
 // --- strings ------------------------------------------------------------------------------------
@@ -355,6 +375,7 @@ JNIEXPORT void JNICALL FN(destroy)(JNIEnv *env, jclass cls, jlong engine) {
     (void)cls;
     Engine *e = ENGINE(engine);
     e->env = env;
+    while (e->handles) free_handle(e, e->handles);
     JS_FreeContext(e->ctx);
     JS_FreeRuntime(e->rt);
     (*env)->DeleteGlobalRef(env, e->callbacks);
@@ -396,7 +417,7 @@ JNIEXPORT jlong JNICALL FN(evalGlobal)(JNIEnv *env, jclass cls, jlong engine, js
         capture_exception(e);
         return 0;
     }
-    return wrap(v);
+    return wrap(e, v);
 }
 
 // Evaluates an ES module and returns its namespace object (the source's exports).
@@ -431,7 +452,7 @@ JNIEXPORT jlong JNICALL FN(evalModule)(JNIEnv *env, jclass cls, jlong engine, js
         return 0;
     }
     JS_FreeValue(e->ctx, evaluated);
-    return wrap(JS_GetModuleNamespace(e->ctx, def));
+    return wrap(e, JS_GetModuleNamespace(e->ctx, def));
 }
 
 JNIEXPORT jlong JNICALL FN(call)(JNIEnv *env, jclass cls, jlong engine, jlong fn, jobjectArray args) {
@@ -452,7 +473,7 @@ JNIEXPORT jlong JNICALL FN(call)(JNIEnv *env, jclass cls, jlong engine, jlong fn
         capture_exception(e);
         return 0;
     }
-    return wrap(result);
+    return wrap(e, result);
 }
 
 JNIEXPORT jlong JNICALL FN(getProperty)(JNIEnv *env, jclass cls, jlong engine, jlong obj, jstring name) {
@@ -466,7 +487,7 @@ JNIEXPORT jlong JNICALL FN(getProperty)(JNIEnv *env, jclass cls, jlong engine, j
         capture_exception(e);
         return 0;
     }
-    return wrap(v);
+    return wrap(e, v);
 }
 
 JNIEXPORT jstring JNICALL FN(toJavaString)(JNIEnv *env, jclass cls, jlong engine, jlong h) {
@@ -483,8 +504,7 @@ JNIEXPORT void JNICALL FN(free)(JNIEnv *env, jclass cls, jlong engine, jlong h) 
     Engine *e = ENGINE(engine);
     e->env = env;
     if (h == 0) return;
-    JS_FreeValue(e->ctx, HANDLE(h));
-    free((JSValue *)(intptr_t)h);
+    free_handle(e, (Handle *)(intptr_t)h);
 }
 
 // Runs every pending job. Returns false when a job threw (interrupt, out of memory); the error is

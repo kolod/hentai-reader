@@ -36,4 +36,5 @@
     <string name="Search_DefaultSaved_Touch">C’est la recherche par défaut (un appui long l’efface)</string>
     <string name="Login_NoWebView_Android">La WebView du système n’est pas disponible. Collez vos cookies à la place.</string>
     <string name="Paste_Hint_Android">Collez les cookies sous la forme nom=valeur; nom=valeur ou le contenu d’un fichier cookies.txt. Ils sont chiffrés sur cet appareil et envoyés uniquement à %1$s.</string>
+    <string name="Downloads_NoSpace_Android">Pas assez d’espace libre sur le téléphone pour enregistrer cette galerie.</string>
 </resources>

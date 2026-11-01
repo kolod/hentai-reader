@@ -77,6 +77,7 @@ object Notifications {
     fun reasonText(context: Context, reason: String): String? = when (reason) {
         "waiting_wifi" -> context.getString(R.string.Downloads_WaitingWifi)
         "stopped_by_system" -> context.getString(R.string.Downloads_StoppedBySystem)
+        "no_space" -> context.getString(R.string.Downloads_NoSpace_Android)
         else -> null
     }
 

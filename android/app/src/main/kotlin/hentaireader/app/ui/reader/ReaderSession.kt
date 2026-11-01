@@ -26,6 +26,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
@@ -66,6 +67,12 @@ class ReaderSession(
 ) {
     val geometry = StripGeometry(provider.sizes, columnWidth)
     val pages = List(provider.sizes.size) { PageState(it) }
+
+    // A low-memory signal releases what no longer fits at once (007 FR-017); when the budget
+    // comes back, the pages ahead load again from the cache.
+    private val budgetWatch = scope.launch {
+        budget.changes.drop(1).collect { if (plan != LoadPlan.EMPTY && !budget.visibleOnly) updateView(scrollY, viewport) else enforceBudget() }
+    }
 
     /** Pages to keep ahead (preload setting, 3–5). */
     var preloadPages = 3
@@ -143,13 +150,9 @@ class ReaderSession(
         updateView(scrollY, viewport)
     }
 
-    /** Low memory (007 FR-017): everything but the pages in view goes; it comes back from the cache. */
-    fun trimToVisible() {
-        for (page in pages) if (page.index !in plan.visible) release(page)
-    }
-
     fun close() {
         closed = true
+        budgetWatch.cancel()
         loading.values.forEach { it.cancel() }
         loading.clear()
         tileJobs.values.forEach { it.cancel() }
