@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android-only strings (specs/007-android-app/contracts/l10n-android.md). Shared strings are generated into strings_shared.xml. -->
+<resources>
+    <string name="Nav_OpenMenu">メニューを開く</string>
+    <string name="Reader_FirstPage">最初のページ</string>
+    <string name="Reader_LastPage">最後のページ</string>
+    <string name="Settings_Downloads">ダウンロード</string>
+    <string name="Settings_KeepScreenOn">読書中は画面をオンのままにする</string>
+    <string name="Settings_KeepScreenOn_Hint">10 分間操作がないと画面はオフになります。</string>
+    <string name="Settings_WifiOnly">Wi-Fi 接続時のみダウンロード</string>
+    <string name="Settings_WifiOnly_Hint">モバイルデータ通信中は待機し、Wi-Fi で再開します。</string>
+    <string name="Settings_CacheLocation">キャッシュの保存先</string>
+    <string name="Settings_CacheLocation_Internal">内部ストレージ</string>
+    <string name="Settings_CacheLocation_Card">SD カード</string>
+    <string name="Library_GrantAccess">アクセスを許可</string>
+    <string name="Library_NoAccess">このフォルダにアクセスできなくなりました。</string>
+    <string name="Library_FolderMissing">このフォルダは利用できません（カードの取り外しまたはフォルダの削除）。</string>
+    <string name="Library_ChooseFolder_Prompt">ライブラリ用のフォルダを選択してください。アプリをアンインストールしても保存したギャラリーは残ります。</string>
+    <string name="Library_DeleteFromDevice_Body">ファイルは端末から削除されます。元に戻せません。</string>
+    <string name="Downloads_WaitingWifi">Wi-Fi を待機中</string>
+    <string name="Downloads_StoppedBySystem">システムにより停止しました。アプリを開くと再開します</string>
+    <string name="Downloads_NotificationsOff">通知がオフです。ダウンロードはアプリを開いている間のみ続きます。</string>
+    <string name="Notify_Channel_Downloads">ダウンロード</string>
+    <string name="Notify_Progress">%1$s / %2$s</string>
+    <plurals name="Notify_MoreQueued">
+        <item quantity="other">ほか %1$s 件が待機中</item>
+    </plurals>
+    <string name="Notify_Pause">一時停止</string>
+    <string name="Notify_Resume">再開</string>
+    <string name="Notify_Done">ライブラリに保存しました</string>
+    <string name="Notify_Stopped">ダウンロードを停止しました</string>
+    <string name="Storage_ReserveNotice">ストレージがほぼいっぱいです。しばらくページをキャッシュしません。</string>
+</resources>

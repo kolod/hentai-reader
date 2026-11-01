@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android-only strings (specs/007-android-app/contracts/l10n-android.md). Shared strings are generated into strings_shared.xml. -->
+<resources>
+    <string name="Nav_OpenMenu">Ouvrir le menu</string>
+    <string name="Reader_FirstPage">Première page</string>
+    <string name="Reader_LastPage">Dernière page</string>
+    <string name="Settings_Downloads">Téléchargements</string>
+    <string name="Settings_KeepScreenOn">Garder l’écran allumé pendant la lecture</string>
+    <string name="Settings_KeepScreenOn_Hint">L’écran s’éteint quand même après 10 minutes sans contact.</string>
+    <string name="Settings_WifiOnly">Télécharger uniquement en Wi-Fi</string>
+    <string name="Settings_WifiOnly_Hint">Les téléchargements attendent pendant l’utilisation des données mobiles et reprennent en Wi-Fi.</string>
+    <string name="Settings_CacheLocation">Emplacement du cache</string>
+    <string name="Settings_CacheLocation_Internal">Stockage interne</string>
+    <string name="Settings_CacheLocation_Card">Carte SD</string>
+    <string name="Library_GrantAccess">Autoriser l’accès</string>
+    <string name="Library_NoAccess">L’application n’a plus accès à ce dossier.</string>
+    <string name="Library_FolderMissing">Ce dossier n’est pas disponible (carte retirée ou dossier supprimé).</string>
+    <string name="Library_ChooseFolder_Prompt">Choisissez un dossier pour votre bibliothèque. Les galeries enregistrées y restent même si l’application est désinstallée.</string>
+    <string name="Library_DeleteFromDevice_Body">Le fichier sera supprimé de l’appareil. Cette action est irréversible.</string>
+    <string name="Downloads_WaitingWifi">En attente du Wi-Fi</string>
+    <string name="Downloads_StoppedBySystem">Arrêté par le système ; reprend à l’ouverture de l’application</string>
+    <string name="Downloads_NotificationsOff">Les notifications sont désactivées : les téléchargements ne continuent que si l’application est ouverte.</string>
+    <string name="Notify_Channel_Downloads">Téléchargements</string>
+    <string name="Notify_Progress">%1$s / %2$s</string>
+    <plurals name="Notify_MoreQueued">
+        <item quantity="one">et %1$s autre en attente</item>
+        <item quantity="many">et %1$s autres en attente</item>
+        <item quantity="other">et %1$s autres en attente</item>
+    </plurals>
+    <string name="Notify_Pause">Pause</string>
+    <string name="Notify_Resume">Reprendre</string>
+    <string name="Notify_Done">Enregistré dans la bibliothèque</string>
+    <string name="Notify_Stopped">Téléchargement arrêté</string>
+    <string name="Storage_ReserveNotice">Le stockage est presque plein : les pages ne sont plus mises en cache pour l’instant.</string>
+</resources>

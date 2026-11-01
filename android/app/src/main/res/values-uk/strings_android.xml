@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android-only strings (specs/007-android-app/contracts/l10n-android.md). Shared strings are generated into strings_shared.xml. -->
+<resources>
+    <string name="Nav_OpenMenu">Відкрити меню</string>
+    <string name="Reader_FirstPage">Перша сторінка</string>
+    <string name="Reader_LastPage">Остання сторінка</string>
+    <string name="Settings_Downloads">Завантаження</string>
+    <string name="Settings_KeepScreenOn">Не вимикати екран під час читання</string>
+    <string name="Settings_KeepScreenOn_Hint">Екран однаково вимкнеться через 10 хвилин без дотику.</string>
+    <string name="Settings_WifiOnly">Завантажувати лише через Wi-Fi</string>
+    <string name="Settings_WifiOnly_Hint">Завантаження чекають, поки телефон використовує мобільні дані, і продовжуються через Wi-Fi.</string>
+    <string name="Settings_CacheLocation">Розташування кешу</string>
+    <string name="Settings_CacheLocation_Internal">Внутрішня пам’ять</string>
+    <string name="Settings_CacheLocation_Card">SD-картка</string>
+    <string name="Library_GrantAccess">Надати доступ</string>
+    <string name="Library_NoAccess">Застосунок більше не має доступу до цієї папки.</string>
+    <string name="Library_FolderMissing">Ця папка недоступна (картку вийнято або папку видалено).</string>
+    <string name="Library_ChooseFolder_Prompt">Виберіть папку для бібліотеки. Збережені галереї залишаться в ній, навіть якщо видалити застосунок.</string>
+    <string name="Library_DeleteFromDevice_Body">Файл буде видалено з пристрою. Цю дію не можна скасувати.</string>
+    <string name="Downloads_WaitingWifi">Очікування Wi-Fi</string>
+    <string name="Downloads_StoppedBySystem">Зупинено системою; продовжиться, коли ви відкриєте застосунок</string>
+    <string name="Downloads_NotificationsOff">Сповіщення вимкнено: завантаження тривають, лише поки застосунок відкритий.</string>
+    <string name="Notify_Channel_Downloads">Завантаження</string>
+    <string name="Notify_Progress">%1$s / %2$s</string>
+    <plurals name="Notify_MoreQueued">
+        <item quantity="one">і ще %1$s у черзі</item>
+        <item quantity="few">і ще %1$s у черзі</item>
+        <item quantity="many">і ще %1$s у черзі</item>
+        <item quantity="other">і ще %1$s у черзі</item>
+    </plurals>
+    <string name="Notify_Pause">Пауза</string>
+    <string name="Notify_Resume">Продовжити</string>
+    <string name="Notify_Done">Збережено в бібліотеку</string>
+    <string name="Notify_Stopped">Завантаження зупинено</string>
+    <string name="Storage_ReserveNotice">Пам’ять майже заповнена: сторінки тимчасово не кешуються.</string>
+</resources>
