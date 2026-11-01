@@ -73,6 +73,24 @@ Needs Inno Setup 7.1.0 (pinned in [installer/tools.json](installer/tools.json)):
 JRSoftware.InnoSetup.7`, or pass `-BootstrapTools` to download the pinned, hash-checked copy into
 `.tools/`. Code signing: set `HENTAIREADER_SIGN_COMMAND` to a `signtool sign … $f` command line.
 The app version is `<Version>` in [Directory.Build.props](Directory.Build.props).
+`-Install` then installs the new build over the installed copy right away and starts it.
+
+## Releasing
+
+The same release system as Android ([android/README.md](../android/README.md)):
+
+1. Merge to `main` through a pull request, with `<Version>` in
+   [Directory.Build.props](Directory.Build.props) raised and its section in
+   [CHANGELOG.md](CHANGELOG.md).
+2. Tag the merge commit `windows-vX.Y.Z` (the same version) and push the tag.
+3. The tag starts [windows-release](../.github/workflows/windows-release.yml); its `build` job
+   refuses tags not on `main` or not matching `<Version>`, then runs `Build-Installer.ps1
+   -BootstrapTools -SmokeTest` (tests, verification, installer, portable ZIP, install smoke test).
+4. The `publish` job creates the GitHub Release "Hentai Reader for Windows X.Y.Z" with the installer,
+   the portable ZIP, a `.sha256` file for each and the version's changelog section as notes.
+
+Releases are unsigned for now, so the build needs no secrets; signing would add an environment
+holding the certificate and a `HENTAIREADER_SIGN_COMMAND` for the build job.
 
 ## Reader
 
