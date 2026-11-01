@@ -1,0 +1,125 @@
+name: Windows release
+
+# Same release system as Android (android-release.yml): a tag starts it, a build job makes the
+# distribution, a separate publish job creates the GitHub Release. Tags are per component in this
+# monorepo (Constitution X): windows-vX.Y.Z, matching <Version> in windows/Directory.Build.props.
+on:
+  push:
+    tags:
+      - "windows-v*.*.*"
+  # Manual runs must be started on a tag (choose it in "Use workflow from"); branches are refused.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # Builds, verifies and smoke-tests the installer and the portable ZIP (the same command as the CI
+  # installer job). No secrets: the build is unsigned until code signing is set up (research R11 of
+  # 004; Build-Installer.ps1 signs when HENTAIREADER_SIGN_COMMAND is set). It has no write access.
+  build:
+    if: startsWith(github.ref, 'refs/tags/windows-v')
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    outputs:
+      version: ${{ steps.version.outputs.name }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      # Only commits that reached main through a reviewed pull request are released.
+      - name: Check that the tag is on main
+        run: |
+          git fetch --no-tags origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::Tag $GITHUB_REF_NAME points to a commit that is not on main"
+            exit 1
+          fi
+
+      # The installer, file names and assemblies take their version from Directory.Build.props;
+      # a tag that says otherwise would publish a differently numbered build under its name.
+      - name: Check that the tag matches the app version
+        id: version
+        run: |
+          tag="${GITHUB_REF_NAME#windows-v}"
+          props=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' windows/Directory.Build.props)
+          if [ "$tag" != "$props" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match <Version>$props</Version> in windows/Directory.Build.props"
+            exit 1
+          fi
+          echo "name=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # Tests, publish, content verification, installer, portable ZIP and a real silent install /
+      # upgrade / downgrade / uninstall on the runner; a failed run leaves no installer and no ZIP.
+      - name: Build, verify and smoke-test the installer
+        shell: pwsh
+        run: pwsh windows/build/Build-Installer.ps1 -BootstrapTools -SmokeTest
+
+      # The SHA-256 files let users check the downloads; the release notes are the changelog section.
+      - name: Collect release files, write SHA-256 and notes
+        env:
+          VERSION: ${{ steps.version.outputs.name }}
+        run: |
+          mkdir release
+          for f in "HentaiReader-Setup-$VERSION-x64.exe" "HentaiReader-$VERSION-x64-portable.zip"; do
+            cp "artifacts/installer/$f" release/
+            (cd release && sha256sum "$f" > "$f.sha256")
+          done
+          awk -v head="## [$VERSION]" '
+            index($0, head) == 1 { on = 1; next }
+            on && index($0, "## [") == 1 { exit }
+            on { print }
+          ' windows/CHANGELOG.md > release/notes.md
+          if [ ! -s release/notes.md ]; then
+            echo "::error::windows/CHANGELOG.md has no section for $VERSION"
+            exit 1
+          fi
+          ls -l release
+
+      - name: Upload release files
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-windows
+          path: release/
+          if-no-files-found: error
+
+  # Publishes the release. Has write access but runs nothing from the repository.
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download release files
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-windows
+
+      # Release notes come from windows/CHANGELOG.md: generated notes would also list the Android
+      # pull requests merged since the previous tag of any component.
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
+        with:
+          name: Hentai Reader for Windows ${{ needs.build.outputs.version }}
+          body_path: notes.md
+          files: |
+            HentaiReader-Setup-*-x64.exe
+            HentaiReader-Setup-*-x64.exe.sha256
+            HentaiReader-*-x64-portable.zip
+            HentaiReader-*-x64-portable.zip.sha256
