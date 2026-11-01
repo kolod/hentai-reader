@@ -19,3 +19,8 @@ tools/runner/src/cli.ts text eol=lf
 *.jar binary
 *.dll binary
 *.exe binary
+
+# Android: shell scripts run on Linux CI; generated strings are compared byte for byte.
+android/gradlew text eol=lf
+android/gradlew.bat text eol=crlf
+android/app/src/main/res/**/strings_shared.xml text eol=lf

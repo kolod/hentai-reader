@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android-only strings (specs/007-android-app/contracts/l10n-android.md). Shared strings are generated into strings_shared.xml. -->
+<resources>
+    <string name="Nav_OpenMenu">Menü öffnen</string>
+    <string name="Reader_FirstPage">Erste Seite</string>
+    <string name="Reader_LastPage">Letzte Seite</string>
+    <string name="Settings_Downloads">Downloads</string>
+    <string name="Settings_KeepScreenOn">Bildschirm beim Lesen eingeschaltet lassen</string>
+    <string name="Settings_KeepScreenOn_Hint">Nach 10 Minuten ohne Berührung schaltet sich der Bildschirm trotzdem aus.</string>
+    <string name="Settings_WifiOnly">Nur über WLAN herunterladen</string>
+    <string name="Settings_WifiOnly_Hint">Downloads warten, solange mobile Daten genutzt werden, und laufen im WLAN weiter.</string>
+    <string name="Settings_CacheLocation">Speicherort des Caches</string>
+    <string name="Settings_CacheLocation_Internal">Interner Speicher</string>
+    <string name="Settings_CacheLocation_Card">SD-Karte</string>
+    <string name="Library_GrantAccess">Zugriff erlauben</string>
+    <string name="Library_NoAccess">Die App hat keinen Zugriff mehr auf diesen Ordner.</string>
+    <string name="Library_FolderMissing">Dieser Ordner ist nicht verfügbar (Karte entfernt oder Ordner gelöscht).</string>
+    <string name="Library_ChooseFolder_Prompt">Wähle einen Ordner für deine Bibliothek. Gespeicherte Galerien bleiben dort, auch wenn die App deinstalliert wird.</string>
+    <string name="Library_DeleteFromDevice_Body">Die Datei wird vom Gerät gelöscht. Das kann nicht rückgängig gemacht werden.</string>
+    <string name="Downloads_WaitingWifi">Wartet auf WLAN</string>
+    <string name="Downloads_StoppedBySystem">Vom System angehalten; wird beim Öffnen der App fortgesetzt</string>
+    <string name="Downloads_NotificationsOff">Benachrichtigungen sind aus: Downloads laufen nur, solange die App geöffnet ist.</string>
+    <string name="Notify_Channel_Downloads">Downloads</string>
+    <string name="Notify_Progress">%1$s / %2$s</string>
+    <plurals name="Notify_MoreQueued">
+        <item quantity="one">und %1$s weiterer in der Warteschlange</item>
+        <item quantity="other">und %1$s weitere in der Warteschlange</item>
+    </plurals>
+    <string name="Notify_Pause">Pausieren</string>
+    <string name="Notify_Resume">Fortsetzen</string>
+    <string name="Notify_Done">In der Bibliothek gespeichert</string>
+    <string name="Notify_Stopped">Download angehalten</string>
+    <string name="Storage_ReserveNotice">Der Speicher ist fast voll: Seiten werden vorerst nicht zwischengespeichert.</string>
+    <string name="Search_SaveDefault_Touch">Als Standardsuche dieser Quelle speichern (langes Drücken löscht sie)</string>
+    <string name="Search_DefaultSaved_Touch">Das ist die Standardsuche (langes Drücken löscht sie)</string>
+    <string name="Login_NoWebView_Android">Die System-WebView ist nicht verfügbar. Füge stattdessen deine Cookies ein.</string>
+    <string name="Paste_Hint_Android">Cookies als name=wert; name=wert oder als Inhalt einer cookies.txt einfügen. Sie werden verschlüsselt auf diesem Gerät gespeichert und nur an %1$s gesendet.</string>
+    <string name="Downloads_NoSpace_Android">Nicht genug freier Speicher auf dem Telefon, um diese Galerie zu speichern.</string>
+    <string name="Settings_About_Android">Über</string>
+    <string name="Settings_Version_Android">Version %1$s</string>
+    <string name="Settings_Licences_Android">Open-Source-Lizenzen</string>
+</resources>

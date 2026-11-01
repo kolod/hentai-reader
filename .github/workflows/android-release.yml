@@ -1,0 +1,159 @@
+name: Android release
+
+# Same release system as the other Android projects (circuitopedia): a tag starts it, a build job
+# in the "release" environment signs the APK, a separate publish job creates the GitHub Release.
+# Tags are per component in this monorepo (Constitution X): android-vX.Y.Z.
+on:
+  push:
+    tags:
+      - "android-v*.*.*"
+  # Manual runs must be started on a tag (choose it in "Use workflow from"); branches are refused.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # Builds and signs the APK. This is the only job that can read the signing secrets; it runs in
+  # the "release" environment, so every run needs an approval, and it has no write access.
+  build:
+    if: startsWith(github.ref, 'refs/tags/android-v')
+    runs-on: ubuntu-latest
+    environment: release
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      # Only commits that reached main through a reviewed pull request may be signed.
+      - name: Check that the tag is on main
+        run: |
+          git fetch --no-tags origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::Tag $GITHUB_REF_NAME points to a commit that is not on main"
+            exit 1
+          fi
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+
+      # Matches android/gradle/gradle-daemon-jvm.properties (JDK 25), so Gradle reuses it instead
+      # of downloading a toolchain.
+      - name: Set up JDK
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      # Read-only cache: a release build must not write a cache that other runs would restore.
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+        with:
+          cache-read-only: true
+
+      # The NDK and platform the build needs are installed by the Android Gradle plugin once the
+      # licenses are accepted.
+      - name: Accept Android SDK licenses
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
+
+      # The shared strings are generated from the Windows .resw files; the check needs Node.
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Check generated strings
+        working-directory: .
+        run: |
+          npm ci
+          npm run l10n:android -- --check
+
+      - name: Derive version name from tag
+        id: version
+        run: echo "name=${GITHUB_REF_NAME#android-v}" >> "$GITHUB_OUTPUT"
+
+      # The parity suite runs on the JVM against the desktop build of the APK's QuickJS.
+      - name: Run unit tests and the parity suite
+        run: ./gradlew :host:test --stacktrace
+
+      # Secrets go through env: — expanded inside run: they would be parsed as shell code.
+      - name: Decode signing keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: printf '%s' "$KEYSTORE_BASE64" | base64 -d > app/release.keystore.jks
+
+      - name: Write keystore.properties
+        env:
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          # .properties treats '\' as an escape character and drops leading spaces of a value.
+          esc() {
+            local v="${1//\\/\\\\}"
+            if [ "${v:0:1}" = " " ]; then v="\\$v"; fi
+            printf '%s' "$v"
+          }
+          {
+            echo "storeFile=release.keystore.jks"
+            echo "storePassword=$(esc "$STORE_PASSWORD")"
+            echo "keyAlias=$(esc "$KEY_ALIAS")"
+            echo "keyPassword=$(esc "$KEY_PASSWORD")"
+          } > app/keystore.properties
+
+      - name: Build signed release APK
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          VERSION_NAME: ${{ steps.version.outputs.name }}
+        run: |
+          ./gradlew :app:lintRelease :app:assembleRelease \
+            -PappVersionCode="$VERSION_CODE" \
+            -PappVersionName="$VERSION_NAME" \
+            --stacktrace
+
+      - name: Clean up signing files
+        if: always()
+        run: rm -f app/release.keystore.jks app/keystore.properties
+
+      # SC-012: the APK stays below 40 MB. The SHA-256 file lets users check the download.
+      - name: Rename release APK, check size, write SHA-256
+        run: |
+          mv app/build/outputs/apk/release/app-release.apk ../hentai-reader.apk
+          cd ..
+          size=$(stat -c %s hentai-reader.apk)
+          echo "APK size: $size bytes"
+          if [ "$size" -ge $((40 * 1024 * 1024)) ]; then echo "::error::APK is $size bytes, limit 40 MB"; exit 1; fi
+          sha256sum hentai-reader.apk > hentai-reader.apk.sha256
+
+      - name: Upload release APK
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-apk
+          path: |
+            hentai-reader.apk
+            hentai-reader.apk.sha256
+          if-no-files-found: error
+
+  # Publishes the release. Has write access but never sees the signing secrets.
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download release APK
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-apk
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
+        with:
+          files: |
+            hentai-reader.apk
+            hentai-reader.apk.sha256
+          generate_release_notes: true

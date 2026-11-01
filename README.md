@@ -19,6 +19,11 @@ Adult content. Personal use only.
 Site logic lives only in `sources/`; the apps provide the host API defined in `contract/`.
 Released scripts are published by CI to the separate `sources-dist` repository.
 
+## Android app
+
+Android 8.0 or newer. Releases are signed APKs on the GitHub Releases page (tags `android-vX.Y.Z`);
+build, test and signing instructions are in [android/README.md](android/README.md).
+
 ## Rules
 
 The project constitution is binding: [.specify/memory/constitution.md](.specify/memory/constitution.md).

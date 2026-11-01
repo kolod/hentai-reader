@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The window behind Compose: no action bar, edge to edge, background matching the theme so
+         no light frame shows in the dark theme. -->
+    <style name="Theme.HentaiReader" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="28" xmlns:tools="http://schemas.android.com/tools">shortEdges</item>
+    </style>
+    <color name="window_background">#FFFBFAFC</color>
+    <color name="launcher_background">#FF7A2E4F</color>
+</resources>

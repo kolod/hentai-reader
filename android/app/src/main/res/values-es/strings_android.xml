@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android-only strings (specs/007-android-app/contracts/l10n-android.md). Shared strings are generated into strings_shared.xml. -->
+<resources>
+    <string name="Nav_OpenMenu">Abrir menú</string>
+    <string name="Reader_FirstPage">Primera página</string>
+    <string name="Reader_LastPage">Última página</string>
+    <string name="Settings_Downloads">Descargas</string>
+    <string name="Settings_KeepScreenOn">Mantener la pantalla encendida al leer</string>
+    <string name="Settings_KeepScreenOn_Hint">La pantalla se apaga igualmente tras 10 minutos sin tocarla.</string>
+    <string name="Settings_WifiOnly">Descargar solo con Wi-Fi</string>
+    <string name="Settings_WifiOnly_Hint">Las descargas esperan mientras se usan datos móviles y continúan con Wi-Fi.</string>
+    <string name="Settings_CacheLocation">Ubicación de la caché</string>
+    <string name="Settings_CacheLocation_Internal">Almacenamiento interno</string>
+    <string name="Settings_CacheLocation_Card">Tarjeta SD</string>
+    <string name="Library_GrantAccess">Conceder acceso</string>
+    <string name="Library_NoAccess">La aplicación ya no tiene acceso a esta carpeta.</string>
+    <string name="Library_FolderMissing">Esta carpeta no está disponible (tarjeta extraída o carpeta eliminada).</string>
+    <string name="Library_ChooseFolder_Prompt">Elige una carpeta para tu biblioteca. Las galerías guardadas se quedan allí aunque se desinstale la aplicación.</string>
+    <string name="Library_DeleteFromDevice_Body">El archivo se eliminará del dispositivo. No se puede deshacer.</string>
+    <string name="Downloads_WaitingWifi">Esperando Wi-Fi</string>
+    <string name="Downloads_StoppedBySystem">Detenida por el sistema; continúa al abrir la aplicación</string>
+    <string name="Downloads_NotificationsOff">Las notificaciones están desactivadas: las descargas solo continúan con la aplicación abierta.</string>
+    <string name="Notify_Channel_Downloads">Descargas</string>
+    <string name="Notify_Progress">%1$s / %2$s</string>
+    <plurals name="Notify_MoreQueued">
+        <item quantity="one">y %1$s más en cola</item>
+        <item quantity="many">y %1$s más en cola</item>
+        <item quantity="other">y %1$s más en cola</item>
+    </plurals>
+    <string name="Notify_Pause">Pausar</string>
+    <string name="Notify_Resume">Reanudar</string>
+    <string name="Notify_Done">Guardado en la biblioteca</string>
+    <string name="Notify_Stopped">Descarga detenida</string>
+    <string name="Storage_ReserveNotice">El almacenamiento está casi lleno: por ahora no se guardan páginas en caché.</string>
+    <string name="Search_SaveDefault_Touch">Guardar como búsqueda predeterminada de esta fuente (una pulsación larga la borra)</string>
+    <string name="Search_DefaultSaved_Touch">Esta es la búsqueda predeterminada (una pulsación larga la borra)</string>
+    <string name="Login_NoWebView_Android">El WebView del sistema no está disponible. Pega tus cookies en su lugar.</string>
+    <string name="Paste_Hint_Android">Pega las cookies como nombre=valor; nombre=valor o el contenido de un archivo cookies.txt. Se guardan cifradas en este dispositivo y solo se envían a %1$s.</string>
+    <string name="Downloads_NoSpace_Android">No hay suficiente espacio libre en el teléfono para guardar esta galería.</string>
+    <string name="Settings_About_Android">Acerca de</string>
+    <string name="Settings_Version_Android">Versión %1$s</string>
+    <string name="Settings_Licences_Android">Licencias de código abierto</string>
+</resources>

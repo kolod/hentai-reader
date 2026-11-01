@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android-only strings (specs/007-android-app/contracts/l10n-android.md). Shared strings are generated into strings_shared.xml. -->
+<resources>
+    <string name="Nav_OpenMenu">Open menu</string>
+    <string name="Reader_FirstPage">First page</string>
+    <string name="Reader_LastPage">Last page</string>
+    <string name="Settings_Downloads">Downloads</string>
+    <string name="Settings_KeepScreenOn">Keep the screen on while reading</string>
+    <string name="Settings_KeepScreenOn_Hint">The screen still turns off after 10 minutes without a touch.</string>
+    <string name="Settings_WifiOnly">Download on Wi-Fi only</string>
+    <string name="Settings_WifiOnly_Hint">Downloads wait while the phone uses mobile data and continue on Wi-Fi.</string>
+    <string name="Settings_CacheLocation">Cache location</string>
+    <string name="Settings_CacheLocation_Internal">Internal storage</string>
+    <string name="Settings_CacheLocation_Card">SD card</string>
+    <string name="Library_GrantAccess">Grant access</string>
+    <string name="Library_NoAccess">The app no longer has access to this folder.</string>
+    <string name="Library_FolderMissing">This folder is not available (card removed or folder deleted).</string>
+    <string name="Library_ChooseFolder_Prompt">Choose a folder for your library. Saved galleries stay there even if the app is uninstalled.</string>
+    <string name="Library_DeleteFromDevice_Body">The file will be deleted from the device. This cannot be undone.</string>
+    <string name="Downloads_WaitingWifi">Waiting for Wi-Fi</string>
+    <string name="Downloads_StoppedBySystem">Stopped by the system; continues when the app is opened</string>
+    <string name="Downloads_NotificationsOff">Notifications are off: downloads continue only while the app is open.</string>
+    <string name="Notify_Channel_Downloads">Downloads</string>
+    <string name="Notify_Progress">%1$s / %2$s</string>
+    <plurals name="Notify_MoreQueued">
+        <item quantity="one">and %1$s more queued</item>
+        <item quantity="other">and %1$s more queued</item>
+    </plurals>
+    <string name="Notify_Pause">Pause</string>
+    <string name="Notify_Resume">Resume</string>
+    <string name="Notify_Done">Saved to the library</string>
+    <string name="Notify_Stopped">Download stopped</string>
+    <string name="Storage_ReserveNotice">Storage is almost full: pages are not cached for now.</string>
+    <string name="Search_SaveDefault_Touch">Save as this source\'s default search (long press clears it)</string>
+    <string name="Search_DefaultSaved_Touch">This is the default search (long press clears it)</string>
+    <string name="Login_NoWebView_Android">The system web view is not available. Paste your cookies instead.</string>
+    <string name="Paste_Hint_Android">Paste cookies as name=value; name=value or the content of a cookies.txt file. They are stored encrypted on this device and sent only to %1$s.</string>
+    <string name="Downloads_NoSpace_Android">Not enough free space on the phone to save this gallery.</string>
+    <string name="Settings_About_Android">About</string>
+    <string name="Settings_Version_Android">Version %1$s</string>
+    <string name="Settings_Licences_Android">Open-source licences</string>
+</resources>

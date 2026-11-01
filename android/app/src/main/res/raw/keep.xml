@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Contract vocabulary strings are looked up by name (ui/common/Strings.kt): keep them from
+     resource shrinking. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@string/Filter_*,@string/Sort_*,@string/Type_*,@string/Namespace_*,@string/Error_*,@string/Setting_*,@string/Time_*,@plurals/Time_*,@plurals/Gallery_*,@plurals/Search_*" />

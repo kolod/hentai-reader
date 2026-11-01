@@ -25,6 +25,7 @@ jobs:
       sources: ${{ github.event_name == 'workflow_dispatch' || steps.filter.outputs.sources == 'true' }}
       windows: ${{ github.event_name == 'workflow_dispatch' || steps.filter.outputs.windows == 'true' }}
       installer: ${{ github.event_name == 'workflow_dispatch' || steps.filter.outputs.installer == 'true' }}
+      android: ${{ github.event_name == 'workflow_dispatch' || steps.filter.outputs.android == 'true' }}
     steps:
       - uses: actions/checkout@v7
       - uses: dorny/paths-filter@v4
@@ -57,6 +58,16 @@ jobs:
               - *shared
               - *node
               - *dotnet
+            # The Android host packs contract/ and sources/ and generates its shared strings
+            # from the Windows .resw files.
+            android:
+              - *ci
+              - *shared
+              - android/**
+              - windows/src/HentaiReader.App/Strings/**
+              - tools/l10n/**
+              - package.json
+              - package-lock.json
 
   sources:
     needs: changes
@@ -129,3 +140,37 @@ jobs:
           name: hentai-reader-windows
           path: artifacts/installer/
           if-no-files-found: warn
+
+  # Android (007): the parity suite runs on the JVM against the desktop build of the APK's
+  # QuickJS (specs/007-android-app/contracts/parity-suite-android.md), then the app is built.
+  android:
+    needs: changes
+    if: needs.changes.outputs.android == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v4
+      - uses: gradle/actions/setup-gradle@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Shared strings are generated from the Windows .resw files
+        run: npm run l10n:android -- --check
+      - name: Host unit tests and parity suite, app build and lint
+        working-directory: android
+        run: ./gradlew :host:test :app:lintDebug :app:assembleDebug --console=plain
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-test-reports
+          path: |
+            android/host/build/reports/tests/
+            android/app/build/reports/
+          if-no-files-found: ignore
