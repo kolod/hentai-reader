@@ -45,7 +45,7 @@ throws on failure), `fixtures/` (recorded responses, plus `echo` and `delayMs` h
 `cookies`, `other`, `settings` for 1.1 tests). A host passes when `run()` resolves inside its own engine and every
 assertion holds. Format details: `specs/001-source-contract/contracts/fixtures-and-tests.md`.
 
-Reference host: `npm run runner -- contract-test`. Windows host: `dotnet test --project windows/tests/HentaiReader.Host.Tests` runs the same suite in Jint.
+Reference host: `npm run runner -- contract-test`. Windows host: `dotnet test --project windows/tests/HentaiReader.Host.Tests` runs the same suite in Jint. Android host: `./gradlew :host:test` (from `android/`) runs it in the APK's QuickJS build on the JVM.
 
 ## Hosts
 
@@ -53,6 +53,6 @@ Reference host: `npm run runner -- contract-test`. Windows host: `dotnet test --
 |------|---------------|--------|
 | `tools/runner` | QuickJS (WASM) / cheerio | reference |
 | `windows/src/HentaiReader.Host` | Jint / AngleSharp | 1.1.1 |
-| Android | QuickJS / Jsoup | planned |
+| `android/host` | QuickJS (same build as the runner) / jsoup | 1.2.1 |
 
-Both current hosts evaluate the same `prelude.js` and `host-glue.js`.
+All three hosts evaluate the same `prelude.js` and `host-glue.js`.
