@@ -72,6 +72,9 @@ import hentaireader.host.data.ArchiveState
 import hentaireader.app.ui.history.HistoryScreen
 import androidx.compose.runtime.LaunchedEffect
 import hentaireader.app.ui.search.SearchScreen
+import hentaireader.app.ui.search.DefaultSearchStar
+import hentaireader.app.ui.settings.SettingsScreen
+import hentaireader.app.ui.login.LoginScreen
 import hentaireader.app.ui.search.SearchViewModel
 
 // Section roots (one back stack each, as the Windows navigation items) and the screens below them.
@@ -80,6 +83,7 @@ import hentaireader.app.ui.search.SearchViewModel
 @Serializable data object LibraryRoute
 @Serializable data object DownloadsRoute
 @Serializable data object SettingsRoute
+@Serializable data class LoginRoute(val sourceId: String)
 @Serializable data class TagSearchRoute(val sourceId: String, val query: String)
 @Serializable data class GalleryRoute(val sourceId: String, val galleryId: String, val title: String)
 /** [page] = page to open at; -1 = continue at the saved position. */
@@ -167,7 +171,8 @@ fun AppNavigation(services: AppServices) {
                 composable<SourceRoute> { e ->
                     val id = e.toRoute<SourceRoute>().sourceId
                     val vm = viewModel(key = "search:$id") { SearchViewModel(services, id, null, createSavedStateHandle()) }
-                    SearchScreen(vm, services.thumbnails, onOpenGallery = { nav.openGallery(id, it) }, onBack = null)
+                    SearchScreen(vm, services.thumbnails, onOpenGallery = { nav.openGallery(id, it) }, onBack = null,
+                        star = { DefaultSearchStar(vm, prefs.defaultQueries) })
                 }
                 composable<TagSearchRoute> { e ->
                     val r = e.toRoute<TagSearchRoute>()
@@ -198,7 +203,8 @@ fun AppNavigation(services: AppServices) {
                 }
                 composable<LibraryRoute> { LibraryScreen(services) { item -> nav.openSaved(item) } }
                 composable<DownloadsRoute> { DownloadsScreen(services) }
-                composable<SettingsRoute> { Placeholder(stringResource(R.string.Nav_Settings)) }
+                composable<SettingsRoute> { SettingsScreen(services, onSignIn = { id -> nav.navigate(LoginRoute(id)) }) }
+                composable<LoginRoute> { e -> LoginScreen(services, e.toRoute<LoginRoute>().sourceId, onDone = { nav.popBackStack() }) }
             }
         }
     }
@@ -261,12 +267,3 @@ private fun DrawerItem(label: String, icon: androidx.compose.ui.graphics.vector.
         modifier = Modifier.padding(horizontal = 12.dp),
     )
 }
-
-/** Stand-in for screens built by later stories. */
-@Composable
-private fun Placeholder(title: String) {
-    Scaffold(topBar = { HrTopBar(title) }, contentWindowInsets = WindowInsets(0)) { padding ->
-        Box(Modifier.padding(padding).fillMaxSize())
-    }
-}
-

@@ -81,6 +81,8 @@ class AppServices(context: Context) {
     /** null while the bundled sources are being loaded. */
     val sources: StateFlow<List<SourceEntry>?> = _sources.asStateFlow()
 
+    private val vault by lazy { hentaireader.app.storage.CookieVault(File(dataDir, "cookies.bin")) }
+
     private val sessionLock = Mutex()
     private val sessions = HashMap<String, SourceSession>()
     /** Covers and thumbnails of every screen. */
@@ -141,8 +143,14 @@ class AppServices(context: Context) {
         sessions[id] ?: run {
             val bundle = bundles.first { it.id == id }
             val storage = withContext(Dispatchers.IO) { SourceStorage(File(dataDir, "storage/$id.json")) }
-            // Cookies are kept in memory until the encrypted cookie store (US6, T072) persists them.
-            val options = SessionOptions(transport, enforcePoliteness = true, storage = storage, scripts = contract, cookies = CookieJar())
+            // Cookies live only on the device, encrypted (007 FR-036); every change is saved.
+            val jar = withContext(Dispatchers.IO) {
+                CookieJar().apply {
+                    vault.load(id)?.let { runCatching { load(it) } }
+                    onChanged = { scope.launch(Dispatchers.IO) { vault.save(id, serialize()) } }
+                }
+            }
+            val options = SessionOptions(transport, enforcePoliteness = true, storage = storage, scripts = contract, cookies = jar)
             SourceSession.open(bundle.script, "$id.js", options).also { sessions[id] = it }
         }
     }
@@ -155,8 +163,58 @@ class AppServices(context: Context) {
     suspend fun pageCache(): PageCache = cacheLock.withLock {
         check(_prefs.value.adultConfirmed) { "nothing is written before the adult confirmation" }
         cache ?: withContext(Dispatchers.IO) {
-            PageCache(File(app.cacheDir, "pages"), _prefs.value.cacheLimitMb * 1024L * 1024)
-        }.also { cache = it }
+            val p = _prefs.value
+            PageCache(cacheRoot(p.cacheFolder) ?: File(app.cacheDir, "pages"), p.cacheLimitMb * 1024L * 1024,
+                moveFrom = p.cacheMoveFrom?.let { cacheRoot(it) ?: File(it) })
+        }.also { c ->
+            cache = c
+            c.onReserve = { reserveNotices.tryEmit(Unit) }
+            if (c.movingFrom != null) scope.launch { runMove(c) }
+        }
+    }
+
+    /** Raised once when a page was not cached because storage is nearly full (007 FR-020). */
+    val reserveNotices = kotlinx.coroutines.flow.MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+
+    /** Files still to move and all files while the page cache moves, else null (006 FR-024). */
+    val cacheMove = MutableStateFlow<Pair<Int, Int>?>(null)
+
+    /** Removable cards that can hold the cache: `card:<volume uuid>` → folder (007 FR-029). */
+    fun cardRoots(): Map<String, File> {
+        val storage = app.getSystemService(android.os.storage.StorageManager::class.java)
+        return app.externalCacheDirs.filterNotNull().drop(1).mapNotNull { dir ->
+            val volume = storage.getStorageVolume(dir) ?: return@mapNotNull null
+            val uuid = volume.uuid ?: return@mapNotNull null
+            if (volume.state != android.os.Environment.MEDIA_MOUNTED) null else "card:$uuid" to File(dir, "pages")
+        }.toMap()
+    }
+
+    /** The folder for a `CacheFolder` value: null = internal; a card that is not mounted gives null. */
+    private fun cacheRoot(value: String?): File? = when {
+        value == null -> File(app.cacheDir, "pages")
+        value.startsWith("card:") -> cardRoots()[value]
+        else -> null
+    }
+
+    /** Moves the page cache to internal storage (null) or a card; reading continues meanwhile. */
+    suspend fun moveCache(target: String?) {
+        val c = pageCache()
+        val folder = cacheRoot(target) ?: return
+        val from = _prefs.value.cacheFolder
+        withContext(Dispatchers.IO) { c.beginMove(folder) }
+        updatePrefs { it.copy(cacheFolder = target, cacheMoveFrom = c.movingFrom?.let { _ -> from ?: c.movingFrom!!.path }) }
+        scope.launch { runMove(c) }
+    }
+
+    private suspend fun runMove(c: PageCache) {
+        try {
+            while (c.moveStep(20)) cacheMove.value = c.moveProgress
+            updatePrefs { it.copy(cacheMoveFrom = null) }
+        } catch (e: Exception) {
+            // No space or the card is gone: unmoved pages stay readable where they are (006 FR-025).
+        } finally {
+            cacheMove.value = null
+        }
     }
 
     /** The local database, created on first use (after the adult confirmation). */

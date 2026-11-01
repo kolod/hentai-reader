@@ -33,4 +33,8 @@
     <string name="Notify_Done">Збережено в бібліотеку</string>
     <string name="Notify_Stopped">Завантаження зупинено</string>
     <string name="Storage_ReserveNotice">Пам’ять майже заповнена: сторінки тимчасово не кешуються.</string>
+    <string name="Search_SaveDefault_Touch">Зберегти як типовий пошук цього джерела (довге натискання скасовує)</string>
+    <string name="Search_DefaultSaved_Touch">Це типовий пошук (довге натискання скасовує)</string>
+    <string name="Login_NoWebView_Android">Системний WebView недоступний. Вставте файли cookie натомість.</string>
+    <string name="Paste_Hint_Android">Вставте cookie як name=value; name=value або вміст файлу cookies.txt. Вони зберігаються зашифрованими на цьому пристрої й надсилаються лише до %1$s.</string>
 </resources>

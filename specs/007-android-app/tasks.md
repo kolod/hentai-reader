@@ -346,21 +346,21 @@ the task.
 
 **Independent Test**: quickstart "Settings and accounts" and "Languages".
 
-- [ ] T071 [US6] `A/ui/settings/SettingsScreen.kt` + `SettingsViewModel.kt` per [android-ui.md](contracts/android-ui.md#settings-android-differences). Sections:
+- [X] T071 [US6] `A/ui/settings/SettingsScreen.kt` + `SettingsViewModel.kt` per [android-ui.md](contracts/android-ui.md#settings-android-differences). Sections:
   - language (six + System, applied at once);
   - start page; default searches (list with remove);
   - reader (preload 3–5, fit width, reading width, gap, keep screen on);
   - downloads (Wi-Fi only);
   - library folders (add with the picker, target, remove with Move/Keep, state);
   - per-source declared settings with translated labels (`Setting_<id>`).
-- [ ] T072 [P] [US6] Port `WH/Reading/LoginCookies.cs` → `H/reading/LoginCookies.kt` (which cookies prove sign-in, `shareWith`). `A/storage/CookieVault.kt`: AES-GCM with an Android Keystore key `hr_cookies`, `cookies.bin` in `noBackupFilesDir`, never logged (FR-036).
-- [ ] T073 [US6] `A/ui/login/LoginScreen.kt`:
+- [X] T072 [P] [US6] Port `WH/Reading/LoginCookies.cs` → `H/reading/LoginCookies.kt` (which cookies prove sign-in, `shareWith`). `A/storage/CookieVault.kt`: AES-GCM with an Android Keystore key `hr_cookies`, `cookies.bin` in `noBackupFilesDir`, never logged (FR-036).
+- [X] T073 [US6] `A/ui/login/LoginScreen.kt`:
   - `WebView` on `manifest.loginPage.url`, navigation limited to the login domains, other links to the system browser;
   - on the proving cookies, copy them into the source jar for the declared domains only, then clear WebView cookies and storage;
   - paste-cookies dialog validated by `getAccountStatus`; sign out deletes the cookies;
   - account state and image limit in settings (≤ 5 s, SC-014); ExHentai without access explained and blocked (005 FR-026 – FR-031).
-- [ ] T074 [US6] Star button in `A/ui/search/SearchScreen.kt` (006 FR-022, FR-023): tap saves the current query and filters as `DefaultQueries[sourceId]`; filled only while the current search equals it; **long press** clears it; opening the source runs the default search.
-- [ ] T075 [P] [US6] Cache section in `A/ui/settings/CacheSettings.kt`:
+- [X] T074 [US6] Star button in `A/ui/search/SearchScreen.kt` (006 FR-022, FR-023): tap saves the current query and filters as `DefaultQueries[sourceId]`; filled only while the current search equals it; **long press** clears it; opening the source runs the default search.
+- [X] T075 [P] [US6] Cache section in `A/ui/settings/CacheSettings.kt`:
   - limit (128–10240 MB) with current size and Clear cache (progress, settings and sign-ins untouched);
   - location Internal / SD card (only when a card is mounted, identified by volume UUID);
   - the move runs through `H/storage/CacheMover.kt` (port the Windows cache move incl. its tests: usable during the move, continues after restart, failure keeps the old root) with progress.

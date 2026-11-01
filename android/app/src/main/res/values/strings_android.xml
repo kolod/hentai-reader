@@ -31,4 +31,8 @@
     <string name="Notify_Done">Saved to the library</string>
     <string name="Notify_Stopped">Download stopped</string>
     <string name="Storage_ReserveNotice">Storage is almost full: pages are not cached for now.</string>
+    <string name="Search_SaveDefault_Touch">Save as this source\'s default search (long press clears it)</string>
+    <string name="Search_DefaultSaved_Touch">This is the default search (long press clears it)</string>
+    <string name="Login_NoWebView_Android">The system web view is not available. Paste your cookies instead.</string>
+    <string name="Paste_Hint_Android">Paste cookies as name=value; name=value or the content of a cookies.txt file. They are stored encrypted on this device and sent only to %1$s.</string>
 </resources>

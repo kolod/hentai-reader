@@ -82,6 +82,14 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.doubleOrNull
+import hentaireader.host.DefaultQuery
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.ExperimentalFoundationApi
 
 /**
  * A source's search (003 US2, 007 US2; contracts/android-ui.md "Search screen"): free text in the
@@ -293,3 +301,22 @@ private fun NumberField(value: Double?, label: String, modifier: Modifier, onCha
 
 private fun JsonObject.str(key: String) = (this[key] as? JsonPrimitive)?.contentOrNull
 
+
+/**
+ * The star of a source's search (006 FR-016, FR-017): tap saves the query and filters as the
+ * default search, filled while they equal it; long press clears it.
+ */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun DefaultSearchStar(vm: SearchViewModel, defaults: Map<String, DefaultQuery>) {
+    val saved = vm.isDefault(defaults)
+    val label = stringResource(if (saved) R.string.Search_DefaultSaved_Touch else R.string.Search_SaveDefault_Touch)
+    Box(
+        Modifier.size(48.dp).clip(CircleShape)
+            .combinedClickable(onClickLabel = label, onLongClick = { vm.clearDefault() }) { vm.saveDefault() },
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(if (saved) Icons.Filled.Star else Icons.Outlined.StarOutline, label,
+            tint = if (saved) MaterialTheme.colorScheme.primary else LocalContentColor.current)
+    }
+}

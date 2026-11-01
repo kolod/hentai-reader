@@ -11,6 +11,7 @@ import hentaireader.app.AppServices
 import hentaireader.app.ui.common.ErrorInfo
 import hentaireader.host.engine.LoadException
 import hentaireader.host.sources.SourceSession
+import hentaireader.host.DefaultQuery
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
@@ -123,7 +124,12 @@ class SearchViewModel(
                 val def = f.jsonObject
                 filters.add(FilterState(def["id"]!!.jsonPrimitive.content, def["kind"]!!.jsonPrimitive.content, def).apply { reset() })
             }
-            saved.get<String>(KEY_FILTERS)?.let { applyFilters(Json.parseToJsonElement(it).jsonObject) }
+            val restored = saved.get<String>(KEY_FILTERS)
+            if (restored != null) applyFilters(Json.parseToJsonElement(restored).jsonObject)
+            else if (initialText == null && saved.get<String>(KEY_TEXT) == null) {
+                // Opening a source runs its default search (006 FR-017).
+                services.prefs.value.defaultQueries[sourceId]?.let { query = it.text; applyFilters(it.filters) }
+            }
             session = s
             search(restorePages = saved.get<Int>(KEY_PAGES) ?: 1)
         }
@@ -141,6 +147,18 @@ class SearchViewModel(
     }
 
     fun resetFilters() = filters.forEach { it.reset() }
+
+    /** Whether the query and filters equal the saved default search (the star is filled). */
+    fun isDefault(defaults: Map<String, DefaultQuery>): Boolean =
+        defaults[sourceId]?.let { it.text == query.trim() && it.filters == currentFilters() } == true
+
+    /** Saves the current query and filters as the source's default search (006 FR-016). */
+    fun saveDefault() = viewModelScope.launch {
+        val q = DefaultQuery(query.trim(), currentFilters())
+        services.updatePrefs { it.copy(defaultQueries = it.defaultQueries + (sourceId to q)) }
+    }
+
+    fun clearDefault() = viewModelScope.launch { services.updatePrefs { it.copy(defaultQueries = it.defaultQueries - sourceId) } }
 
     /** Starts a new search; the one still running is abandoned. */
     fun search(restorePages: Int = 1) {

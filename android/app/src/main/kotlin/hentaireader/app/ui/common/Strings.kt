@@ -43,6 +43,8 @@ class Strings(private val context: Context) {
 
     fun number(n: Number): String = NumberFormat.getIntegerInstance(locale).format(n)
 
+    fun size(bytes: Long): String = android.text.format.Formatter.formatShortFileSize(context, bytes)
+
     fun decimal(n: Double, digits: Int = 1): String =
         NumberFormat.getNumberInstance(locale).apply { maximumFractionDigits = digits; minimumFractionDigits = digits }.format(n)
 

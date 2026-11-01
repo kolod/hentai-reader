@@ -32,4 +32,8 @@
     <string name="Notify_Done">Enregistré dans la bibliothèque</string>
     <string name="Notify_Stopped">Téléchargement arrêté</string>
     <string name="Storage_ReserveNotice">Le stockage est presque plein : les pages ne sont plus mises en cache pour l’instant.</string>
+    <string name="Search_SaveDefault_Touch">Enregistrer comme recherche par défaut de cette source (un appui long l’efface)</string>
+    <string name="Search_DefaultSaved_Touch">C’est la recherche par défaut (un appui long l’efface)</string>
+    <string name="Login_NoWebView_Android">La WebView du système n’est pas disponible. Collez vos cookies à la place.</string>
+    <string name="Paste_Hint_Android">Collez les cookies sous la forme nom=valeur; nom=valeur ou le contenu d’un fichier cookies.txt. Ils sont chiffrés sur cet appareil et envoyés uniquement à %1$s.</string>
 </resources>

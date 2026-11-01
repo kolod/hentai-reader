@@ -31,4 +31,8 @@
     <string name="Notify_Done">In der Bibliothek gespeichert</string>
     <string name="Notify_Stopped">Download angehalten</string>
     <string name="Storage_ReserveNotice">Der Speicher ist fast voll: Seiten werden vorerst nicht zwischengespeichert.</string>
+    <string name="Search_SaveDefault_Touch">Als Standardsuche dieser Quelle speichern (langes Drücken löscht sie)</string>
+    <string name="Search_DefaultSaved_Touch">Das ist die Standardsuche (langes Drücken löscht sie)</string>
+    <string name="Login_NoWebView_Android">Die System-WebView ist nicht verfügbar. Füge stattdessen deine Cookies ein.</string>
+    <string name="Paste_Hint_Android">Cookies als name=wert; name=wert oder als Inhalt einer cookies.txt einfügen. Sie werden verschlüsselt auf diesem Gerät gespeichert und nur an %1$s gesendet.</string>
 </resources>
