@@ -31,6 +31,11 @@ object Immersive {
         hideBars(activity)
     }
 
+    /** Shows the status and navigation bars until [hideBars] (the reader's toolbar is shown). */
+    fun showBars(activity: Activity) {
+        WindowInsetsControllerCompat(activity.window, activity.window.decorView).show(WindowInsetsCompat.Type.systemBars())
+    }
+
     /** Called again on resume and on focus gain: dialogs and other apps may have shown the bars. */
     fun hideBars(activity: Activity) {
         WindowInsetsControllerCompat(activity.window, activity.window.decorView).apply {

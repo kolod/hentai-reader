@@ -1,6 +1,7 @@
 package hentaireader.app.ui.reader
 
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -38,6 +39,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -46,6 +48,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -55,17 +58,22 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import hentaireader.app.R
+import hentaireader.app.system.Immersive
 import hentaireader.app.system.KeepScreenOn
 import hentaireader.app.ui.common.ErrorInfo
 import hentaireader.app.ui.common.ErrorPanel
 import hentaireader.app.ui.common.rememberStrings
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.drop
 
 /**
  * The reader screen (005 US1–US5, 007 US3; contracts/android-ui.md "Reader"): the strip takes the
  * whole screen, no navigation pane, no top bar. A tap shows the toolbar (back, title, go to page,
- * fit width, gaps, first and last page; page indicator and scrubber at the bottom); it hides
- * 3 s after the last interaction. [actions] adds the save button (US4).
+ * fit width, gaps, first and last page; page indicator and scrubber at the bottom) together with
+ * the system bars, so the system Back button is there too and the toolbars sit clear of the bars;
+ * both hide 3 s after the last interaction. While scrolling without the toolbar, a small
+ * "current / total" indicator shows. [actions] adds the save button (US4).
  */
 @Composable
 fun ReaderScreen(
@@ -84,6 +92,24 @@ fun ReaderScreen(
             toolbar = false
         }
     }
+    // The system bars follow the toolbar; leaving the reader hides them again.
+    val activity = LocalActivity.current
+    LaunchedEffect(toolbar) {
+        activity ?: return@LaunchedEffect
+        if (toolbar) Immersive.showBars(activity) else Immersive.hideBars(activity)
+    }
+    DisposableEffect(activity) { onDispose { activity?.let { Immersive.hideBars(it) } } }
+
+    // The page indicator while scrolling: shown on every scroll step, hidden 1.5 s after the last.
+    var scrolling by remember { mutableStateOf(false) }
+    LaunchedEffect(vm) {
+        snapshotFlow { vm.scrollY }.drop(1).collectLatest {
+            scrolling = true
+            delay(1_500)
+            scrolling = false
+        }
+    }
+
     LifecycleEventEffect(Lifecycle.Event.ON_STOP) { vm.saveNow() }
     BackHandler {
         vm.saveNow()
@@ -114,6 +140,9 @@ fun ReaderScreen(
         }
         AnimatedVisibility(toolbar && session != null, Modifier.align(Alignment.BottomCenter), enter = fadeIn(), exit = fadeOut()) {
             BottomToolbar(vm, touched = { lastTouch = System.currentTimeMillis() })
+        }
+        AnimatedVisibility(scrolling && !toolbar && session != null, Modifier.align(Alignment.BottomCenter), enter = fadeIn(), exit = fadeOut()) {
+            PageIndicator(vm)
         }
     }
 
@@ -172,6 +201,21 @@ private fun BottomToolbar(vm: ReaderViewModel, touched: () -> Unit) {
                 )
             }
         }
+    }
+}
+
+/** "57 / 312" over the strip while scrolling, clear of the cutout and any shown bar. */
+@Composable
+private fun PageIndicator(vm: ReaderViewModel) {
+    val strings = rememberStrings()
+    Surface(
+        Modifier.windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.displayCutout).only(WindowInsetsSides.Bottom))
+            .padding(bottom = 16.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
+        shape = MaterialTheme.shapes.extraLarge,
+    ) {
+        Text(stringResource(R.string.Reader_PageOf, strings.number(vm.currentPage + 1), strings.number(vm.pageCount)),
+            Modifier.padding(horizontal = 14.dp, vertical = 6.dp), style = MaterialTheme.typography.labelLarge)
     }
 }
 
