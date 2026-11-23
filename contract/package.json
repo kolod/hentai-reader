@@ -7,7 +7,7 @@
     "schema": "ts-json-schema-generator --path host-api.d.ts --type \"*\" --out schema/contract.schema.json --no-type-check --expose export"
   },
   "devDependencies": {
-    "ts-json-schema-generator": "^2.4.0",
+    "ts-json-schema-generator": "^2.10.0",
     "typescript": "^6.0.3"
   }
 }
