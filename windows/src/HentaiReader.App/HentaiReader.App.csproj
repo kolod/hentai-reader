@@ -25,12 +25,12 @@
     <!-- The meta-package brings AI, ML, Search and Widgets components (~50 MB) the app never uses.
          ExcludeAssets does not flow to dependencies, so the ML runtime is excluded on its own
          (specs/004-windows-installer research R2). Versions = those the meta-package resolves. -->
-    <PackageReference Include="Microsoft.WindowsAppSDK.AI" Version="2.5.5" ExcludeAssets="all" />
-    <PackageReference Include="Microsoft.WindowsAppSDK.ML" Version="2.1.94" ExcludeAssets="all" />
-    <PackageReference Include="Microsoft.WindowsAppSDK.Search" Version="2.5.5" ExcludeAssets="all" />
-    <PackageReference Include="Microsoft.WindowsAppSDK.Widgets" Version="2.0.5" ExcludeAssets="all" />
-    <PackageReference Include="Microsoft.Windows.AI.MachineLearning" Version="2.1.74" ExcludeAssets="all" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2705" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.AI" Version="2.7.0" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.ML" Version="2.7.0" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Search" Version="2.7.0" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Widgets" Version="2.7.0" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.Windows.AI.MachineLearning" Version="2.5.96" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2957" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.13" />
   </ItemGroup>
